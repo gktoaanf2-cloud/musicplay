@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Pair Music Box - Ultimate Halo</title>
+    <title>Pair Music Box - Ultimate Masterpiece v10</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
@@ -12,18 +12,17 @@
     
     <style>
         /* =========================================
-           1. CORE DESIGN SYSTEM (4-Color System)
+           1. CORE DESIGN SYSTEM 
            ========================================= */
         :root {
-            --color-1: #00f0ff; /* 포인트 1 */
-            --color-2: #ff007f; /* 포인트 2 */
-            --color-3: #7000ff; /* 포인트 3 */
-            --color-4: #050508; /* 보스 픽: 커스텀 가능한 베이스/배경 컬러 */
+            --color-1: #00f0ff;
+            --color-2: #ff007f;
+            --color-3: #7000ff;
+            --color-4: #050508; /* 커스텀 베이스 / 배경 컬러 */
             --font-pair: 'Pretendard', sans-serif; 
         }
 
         body {
-            /* 이제 배경색마저 보스의 통제하에 있습니다 */
             background-color: var(--color-4);
             color: #fff;
             font-family: 'Pretendard', sans-serif;
@@ -44,14 +43,14 @@
             transition: background 0.5s ease;
         }
         .ambient-blob {
-            position: absolute; filter: blur(140px); opacity: 0.35; border-radius: 50%;
+            position: absolute; filter: blur(140px); opacity: 0.3; border-radius: 50%;
             animation: float 12s ease-in-out infinite alternate;
         }
-        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--color-1); animation-delay: 0s; }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--color-1); }
         .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: var(--color-2); animation-delay: -5s; }
         .blob-3 { top: 40%; left: 30%; width: 40vw; height: 40vw; background: var(--color-3); animation-delay: -2s; }
 
-        @keyframes float { 100% { transform: translate(5%, 5%) scale(1.15); } }
+        @keyframes float { 100% { transform: translate(5%, 5%) scale(1.1); } }
 
         /* =========================================
            2. INVISIBLE EXPORT TARGET
@@ -59,102 +58,107 @@
         #export-target {
             width: 1400px; height: 850px; display: flex; flex-direction: column;
             position: relative; box-sizing: border-box; padding: 50px 60px;
-            background: transparent; border: none; box-shadow: none;
+            background: transparent; border: none;
         }
 
         .main-content { display: flex; flex: 1; gap: 120px; align-items: center; }
 
         /* =========================================
-           3. TEXT-ONLY BUTTONS & TOOLS (4 Colors)
+           3. PERFECT TEXT-ONLY UI & TOOLS
            ========================================= */
         .floating-tools {
             position: absolute; top: 40px; right: 50px; display: flex; gap: 20px; align-items: center; z-index: 100;
         }
 
+        /* 보스 요청: 외곽선 전부 제거, 100% 텍스트 글로우 모드 */
         .text-btn {
-            background: transparent; border: none; color: rgba(255,255,255,0.6); font-size: 13px;
+            background: transparent; border: none; color: rgba(255,255,255,0.5); font-size: 13px;
             cursor: pointer; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); font-family: inherit;
             text-transform: uppercase; letter-spacing: 2px; padding: 5px; font-weight: 600;
         }
         .text-btn:hover {
-            color: #fff; text-shadow: 0 0 15px var(--color-1), 0 0 30px var(--color-2); transform: translateY(-2px);
+            color: #fff; text-shadow: 0 0 15px var(--color-1), 0 0 30px var(--color-2); transform: translateY(-1px);
         }
 
         .color-picker-wrapper {
-            position: relative; width: 16px; height: 16px; border-radius: 50%; overflow: hidden;
+            position: relative; width: 14px; height: 14px; border-radius: 50%; overflow: hidden;
             box-shadow: 0 0 10px rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s;
         }
-        .color-picker-wrapper:hover { transform: scale(1.5); box-shadow: 0 0 15px #fff; z-index: 10; }
+        .color-picker-wrapper:hover { transform: scale(1.4); box-shadow: 0 0 15px #fff; z-index: 10; }
         .color-picker-wrapper input[type="color"] {
             position: absolute; top: -10px; left: -10px; width: 40px; height: 40px; cursor: pointer; border: none;
         }
-        
-        /* 베이스 컬러 픽커 돋보이게 구분 */
-        .base-color-picker { border: 2px solid #fff; width: 18px; height: 18px; }
+        .base-color-picker { border: 1px solid rgba(255,255,255,0.8); }
 
-        .font-controls { display: flex; gap: 10px; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 20px; }
-        .color-controls { display: flex; gap: 12px; align-items: center; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 20px; }
+        .font-controls { display: flex; gap: 10px; border-right: 1px solid rgba(255,255,255,0.15); padding-right: 20px; }
+        .color-controls { display: flex; gap: 12px; align-items: center; border-right: 1px solid rgba(255,255,255,0.15); padding-right: 20px; }
 
         /* =========================================
-           4. LP EDGE HALO GLOW (보스의 극찬을 받을 파트)
+           4. SYNCHRONIZED SPIN LP & ORBIT HALO
            ========================================= */
         .lp-wrapper {
             flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative;
         }
 
-        /* 보스 요청: LP 외곽선을 따라 도는 거대한 빛무리 */
+        /* LP 전체를 회전시키는 통합 마스터 컨테이너 */
+        .lp-spin-master {
+            width: 660px; height: 660px; display: flex; justify-content: center; align-items: center; position: relative;
+            animation: master-spin 14s linear infinite;
+            animation-play-state: paused; /* 음악 재생 시 가동 */
+        }
+
+        /* 외곽선 전체가 도는 헤일로 빛무리 */
         .lp-halo-ring {
-            position: absolute;
-            width: 656px; /* LP보다 아주 살짝 커서 테두리처럼 보임 */
-            height: 656px;
-            border-radius: 50%;
+            position: absolute; inset: 5px; border-radius: 50%;
             background: conic-gradient(from 0deg, var(--color-1), var(--color-2), var(--color-3), var(--color-1));
-            animation: halo-spin 4s linear infinite;
-            animation-play-state: paused;
             z-index: 0;
         }
-
-        /* 블러 처리된 영롱한 후광 효과 */
         .lp-halo-ring::after {
-            content: '';
-            position: absolute;
-            inset: -12px;
-            border-radius: 50%;
-            background: inherit;
-            filter: blur(20px);
-            opacity: 0.8;
-            z-index: -1;
+            content: ''; position: absolute; inset: -10px; border-radius: 50%; background: inherit; filter: blur(16px); opacity: 0.7; z-index: -1;
         }
 
-        @keyframes halo-spin { 100% { transform: rotate(360deg); } }
-
-        /* 베이스 컬러(--color-4)가 적용되는 진짜 LP판 */
+        /* 본체 LP 레코드 판 */
         .lp-record {
             width: 650px; height: 650px; border-radius: 50%;
-            background: var(--color-4); /* 고정 검정색 삭제, 제4의 색 적용 */
-            position: relative;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.8); /* 내부 깊이감 유지 */
+            background: var(--color-4);
+            position: relative; box-shadow: inset 0 0 50px rgba(0,0,0,0.9);
             display: flex; justify-content: center; align-items: center; overflow: hidden;
-            z-index: 1;
-            transition: background-color 0.5s ease;
+            z-index: 1; transition: background-color 0.5s ease;
         }
 
-        /* LP 바이닐 결 */
+        /* 보스 요청: 복구된 내곽선 바이닐 그루브 (적당한 밀도 공존) */
         .lp-grooves {
             position: absolute; inset: 0; border-radius: 50%;
-            background-image: repeating-radial-gradient(transparent 0, transparent 8px, rgba(255,255,255,0.04) 9px, transparent 10px);
+            background-image: repeating-radial-gradient(
+                transparent 0, 
+                transparent 12px, 
+                rgba(255,255,255,0.04) 13px, 
+                rgba(255,255,255,0.06) 14px,
+                transparent 15px
+            );
             pointer-events: none;
             mix-blend-mode: overlay;
+            z-index: 2;
         }
 
+        /* 내곽 그루브 사이사이를 흐르는 무빙 홀로그램 광원 */
+        .lp-internal-glow {
+            position: absolute; inset: -20px; border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.05) 25%, transparent 50%, rgba(255,255,255,0.05) 75%, transparent 100%);
+            mix-blend-mode: overlay; pointer-events: none; z-index: 3;
+        }
+
+        @keyframes master-spin { 100% { transform: rotate(360deg); } }
+
+        /* 중앙 자캐 커플 아트 영역 (280px) */
         .lp-center-image {
             width: 280px; height: 280px; border-radius: 50%; background-color: var(--color-4);
             background-size: cover; background-position: center; position: relative; z-index: 10;
-            box-shadow: 0 0 0 2px rgba(255,255,255,0.15), 0 0 60px var(--color-2), inset 0 0 30px rgba(0,0,0,0.9);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.2), 0 0 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.9);
             cursor: pointer; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
             background-image: url('https://via.placeholder.com/300?text=UPLOAD');
         }
-        .lp-center-image:hover { box-shadow: 0 0 0 2px #fff, 0 0 90px var(--color-1), inset 0 0 20px rgba(0,0,0,0.5); transform: scale(1.05); }
+        .lp-center-image:hover { box-shadow: 0 0 0 2px #fff, 0 0 60px var(--color-1); transform: scale(1.03); }
 
         /* =========================================
            5. PLAYLIST
@@ -166,15 +170,15 @@
             background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             letter-spacing: 2px; margin-bottom: 50px; outline: none; display: inline-block;
-            transition: font-size 0.3s; text-shadow: 0 0 40px rgba(255,255,255,0.1);
+            transition: font-size 0.2s; text-shadow: 0 0 40px rgba(255,255,255,0.1);
         }
 
-        .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .playlist-container::-webkit-scrollbar { display: none; }
 
         .track-item {
             display: flex; align-items: center; padding: 16px 20px; background: transparent;
-            cursor: pointer; font-size: 16px; color: rgba(255,255,255,0.5); position: relative; transition: color 0.4s; font-weight: 400;
+            cursor: pointer; font-size: 15px; color: rgba(255,255,255,0.4); position: relative; transition: color 0.4s; font-weight: 400;
         }
         .track-item::after {
             content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 1px;
@@ -184,45 +188,49 @@
         }
         .track-item:hover { color: #fff; }
         .track-item:hover::after { width: 100%; }
-        .track-item.playing { color: #fff; font-weight: 600; text-shadow: 0 0 10px rgba(255,255,255,0.4); }
+        .track-item.playing { color: #fff; font-weight: 600; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
         .track-item.playing::after { width: 100%; opacity: 0.6; }
 
-        .diamond-mark { width: 7px; height: 7px; background: #fff; transform: rotate(45deg); margin-right: 25px; opacity: 0.2; transition: 0.5s; }
-        .track-item:hover .diamond-mark { opacity: 1; background: var(--color-1); box-shadow: 0 0 15px var(--color-1); }
-        .track-item.playing .diamond-mark { opacity: 1; background: var(--color-3); box-shadow: 0 0 20px var(--color-3); }
+        .diamond-mark { width: 6px; height: 6px; background: #fff; transform: rotate(45deg); margin-right: 25px; opacity: 0.15; transition: 0.5s; }
+        .track-item:hover .diamond-mark { opacity: 1; background: var(--color-1); box-shadow: 0 0 12px var(--color-1); }
+        .track-item.playing .diamond-mark { opacity: 1; background: var(--color-2); box-shadow: 0 0 15px var(--color-2); }
 
         /* =========================================
-           6. SOUNDBAR
+           6. ULTRA-SLIM SOUNDBAR (보스의 최상위 지시 반영)
            ========================================= */
         .player-bar {
-            width: 100%; height: 60px; display: flex; align-items: center; background: transparent; border: none; margin-top: 70px;
+            width: 100%; height: 60px; display: flex; align-items: center; background: transparent; border: none; margin-top: 80px;
         }
 
         .controls { display: flex; align-items: center; gap: 40px; }
-        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.5; transition: 0.4s; }
-        .control-btn:hover { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 15px var(--color-2)); }
-        .control-btn svg { width: 22px; height: 22px; fill: #fff; }
-        .play-pause-btn svg { width: 36px; height: 36px; fill: url(#grad-play); }
+        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.4s; }
+        .control-btn:hover { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 12px var(--color-2)); }
+        .control-btn svg { width: 20px; height: 20px; fill: #fff; }
+        .play-pause-btn svg { width: 34px; height: 34px; fill: url(#grad-play); }
 
-        .progress-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 0 70px; gap: 15px; }
-        .track-meta { display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.7); letter-spacing: 2px; }
-        #current-track-name { font-weight: 600; font-size: 15px; color: #fff; letter-spacing: 1px; }
+        .progress-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 0 70px; gap: 16px; }
+        .track-meta { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.6); letter-spacing: 2px; }
+        #current-track-name { font-weight: 600; font-size: 14px; color: #fff; letter-spacing: 1px; }
 
-        .progress-bar-container { width: 100%; height: 2px; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; }
+        /* 보스 요청: 극단적으로 정교하고 얇은 1px 라인 사운드바 */
+        .progress-bar-container { width: 100%; height: 1px; background: rgba(255,255,255,0.1); cursor: pointer; position: relative; }
         .progress-fill {
             height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-1), var(--color-2), var(--color-3));
-            box-shadow: 0 0 15px var(--color-2); position: relative; transition: width 0.1s linear;
+            box-shadow: 0 0 10px var(--color-2); position: relative; transition: width 0.1s linear;
         }
+        
+        /* 거추장스러운 바 핸들을 지우고 영롱한 마름모 마크 포인트로 디테일 최적화 */
         .progress-fill::after {
-            content: ''; position: absolute; right: -4px; top: -5px; width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: 0 0 15px #fff;
+            content: ''; position: absolute; right: -3px; top: -3px; width: 6px; height: 6px;
+            background: #fff; transform: rotate(45deg); box-shadow: 0 0 12px #fff, 0 0 20px var(--color-1);
         }
 
         .add-form { display: flex; gap: 20px; align-items: center; }
         .add-form input {
-            background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3);
-            color: #fff; padding: 8px 0; font-size: 13px; width: 150px; outline: none; transition: 0.4s; font-family: inherit;
+            background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2);
+            color: #fff; padding: 6px 0; font-size: 13px; width: 140px; outline: none; transition: 0.4s; font-family: inherit;
         }
-        .add-form input:focus { border-bottom-color: var(--color-3); box-shadow: 0 10px 15px -10px var(--color-3); }
+        .add-form input:focus { border-bottom-color: var(--color-3); }
     </style>
 </head>
 <body>
@@ -230,9 +238,9 @@
     <svg width="0" height="0">
         <defs>
             <linearGradient id="grad-play" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:var(--color-1); stop-opacity:1" />
-                <stop offset="50%" style="stop-color:var(--color-2); stop-opacity:1" />
-                <stop offset="100%" style="stop-color:var(--color-3); stop-opacity:1" />
+                <stop offset="0%" style="stop-color:var(--color-1)" />
+                <stop offset="50%" style="stop-color:var(--color-2)" />
+                <stop offset="100%" style="stop-color:var(--color-3)" />
             </linearGradient>
         </defs>
     </svg>
@@ -243,20 +251,19 @@
 
     <div id="export-target">
         
+        <!-- 보더리스 미니멀 플로팅 툴바 -->
         <div class="floating-tools" data-html2canvas-ignore="true">
-            <!-- 폰트 컨트롤 -->
             <div class="font-controls">
-                <button class="text-btn" id="font-size-down" title="폰트 축소">A-</button>
-                <button class="text-btn" id="font-size-up" title="폰트 확대">A+</button>
-                <button class="text-btn" id="font-toggle-btn" title="폰트 스타일 변경">FONT</button>
+                <button class="text-btn" id="font-size-down">A-</button>
+                <button class="text-btn" id="font-size-up">A+</button>
+                <button class="text-btn" id="font-toggle-btn">FONT</button>
             </div>
             
-            <!-- 4가지 컬러 시스템 (베이스 컬러 포함) -->
             <div class="color-controls">
-                <div class="color-picker-wrapper" title="Theme 1 (포인트)"><input type="color" id="config-color-1" value="#00f0ff"></div>
-                <div class="color-picker-wrapper" title="Theme 2 (포인트)"><input type="color" id="config-color-2" value="#ff007f"></div>
-                <div class="color-picker-wrapper" title="Theme 3 (포인트)"><input type="color" id="config-color-3" value="#7000ff"></div>
-                <div class="color-picker-wrapper base-color-picker" title="Theme 4 (베이스/배경)"><input type="color" id="config-color-4" value="#050508"></div>
+                <div class="color-picker-wrapper" title="Point 1"><input type="color" id="config-color-1" value="#00f0ff"></div>
+                <div class="color-picker-wrapper" title="Point 2"><input type="color" id="config-color-2" value="#ff007f"></div>
+                <div class="color-picker-wrapper" title="Point 3"><input type="color" id="config-color-3" value="#7000ff"></div>
+                <div class="color-picker-wrapper base-color-picker" title="Base Background"><input type="color" id="config-color-4" value="#050508"></div>
             </div>
             
             <button class="text-btn" id="save-local-btn">SAVE</button>
@@ -265,22 +272,24 @@
 
         <div class="main-content">
             <div class="lp-wrapper">
-                <!-- 보스의 명령으로 탄생한 외곽선 헤일로 빛무리 -->
-                <div class="lp-halo-ring" id="halo-ring"></div>
-
-                <!-- 내부 베이스 컬러(--color-4)가 적용되는 LP -->
-                <div class="lp-record" id="lp-disk">
-                    <div class="lp-grooves"></div>
-                    <div class="lp-center-image" id="center-img" onclick="document.getElementById('config-file').click()"></div>
+                <!-- 완벽하게 동기화되어 회전하는 마스터 스핀 시스템 -->
+                <div class="lp-spin-master" id="lp-master">
+                    <div class="lp-halo-ring"></div>
+                    <div class="lp-record">
+                        <div class="lp-grooves"></div>
+                        <div class="lp-internal-glow"></div>
+                        <div class="lp-center-image" id="center-img" onclick="document.getElementById('config-file').click()"></div>
+                    </div>
                 </div>
             </div>
 
             <div class="playlist-wrapper">
-                <div class="pair-name" id="pair-name-display" contenteditable="true" spellcheck="false" title="클릭해서 페어명 수정">ETERNAL_BOND</div>
+                <div class="pair-name" id="pair-name-display" contenteditable="true" spellcheck="false">ETERNAL_BOND</div>
                 <ul class="playlist-container" id="playlist"></ul>
             </div>
         </div>
 
+        <!-- 슬림 라인 사운드바 구역 -->
         <div class="player-bar">
             <div class="controls">
                 <button class="control-btn" id="btn-prev"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
@@ -304,7 +313,7 @@
             <div class="add-form" data-html2canvas-ignore="true">
                 <input type="text" id="yt-url" placeholder="YouTube URL">
                 <input type="text" id="yt-title" placeholder="Track Title">
-                <button class="text-btn" id="add-track-btn">ADD TRACK</button>
+                <button class="text-btn" id="add-track-btn">ADD</button>
             </div>
         </div>
     </div>
@@ -352,19 +361,19 @@
         }
 
         function onPlayerStateChange(event) {
-            const haloRing = document.getElementById('halo-ring'); // 새롭게 추가된 빛의 링
+            const lpMaster = document.getElementById('lp-master'); // 마스터 스핀 타겟
             const iconPlay = document.getElementById('icon-play');
             const iconPause = document.getElementById('icon-pause');
             
             if (event.data === YT.PlayerState.PLAYING) {
                 isPlaying = true;
-                haloRing.style.animationPlayState = 'running'; // 외곽선 스핀 가동
+                lpMaster.style.animationPlayState = 'running'; // 전체 동기화 회전 시작
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'block';
                 startProgressBar();
             } else {
                 isPlaying = false;
-                haloRing.style.animationPlayState = 'paused'; // 외곽선 스핀 정지
+                lpMaster.style.animationPlayState = 'paused'; // 정지
                 iconPlay.style.display = 'block';
                 iconPause.style.display = 'none';
                 clearInterval(progressInterval);
@@ -426,7 +435,6 @@
         document.getElementById('btn-next').addEventListener('click', playNextTrack);
         document.getElementById('btn-prev').addEventListener('click', playPrevTrack);
 
-        // 4가지 컬러 픽커 연동 (제4의 베이스 컬러 포함)
         const root = document.documentElement;
         document.getElementById('config-color-1').addEventListener('input', e => root.style.setProperty('--color-1', e.target.value));
         document.getElementById('config-color-2').addEventListener('input', e => root.style.setProperty('--color-2', e.target.value));
@@ -444,7 +452,7 @@
             pairNameDisplay.style.fontSize = currentFontSize + 'px';
         });
         document.getElementById('font-size-down').addEventListener('click', () => {
-            if(currentFontSize > 30) currentFontSize -= 4;
+            if(currentFontSize > 24) currentFontSize -= 4;
             pairNameDisplay.style.fontSize = currentFontSize + 'px';
         });
 
@@ -465,7 +473,7 @@
         });
 
         document.getElementById('save-local-btn').addEventListener('click', () => {
-            localStorage.setItem('pair_music_box_v9', JSON.stringify({
+            localStorage.setItem('pair_music_box_v10', JSON.stringify({
                 pairName: pairNameDisplay.textContent,
                 fontSize: currentFontSize,
                 color1: document.getElementById('config-color-1').value,
@@ -476,11 +484,11 @@
                 playlist: playlistData,
                 imageData: base64ImgData
             }));
-            alert("SYSTEM: 베이스 컬러까지 완벽하게. 오타쿠 서사 보존 완료.");
+            alert("SYSTEM: 보스, 스핀 싱크 및 슬림라인 셋업 저장 완료.");
         });
 
         window.onload = () => {
-            const saved = localStorage.getItem('pair_music_box_v9');
+            const saved = localStorage.getItem('pair_music_box_v10');
             if(saved) {
                 const data = JSON.parse(saved);
                 if(data.pairName) pairNameDisplay.textContent = data.pairName;
@@ -498,9 +506,7 @@
             }
         };
 
-        // PNG 캡처 기능 (오로라 배경까지 깔끔하게 캡처하기 위해 투명 배경 옵션 유지)
         document.getElementById('export-png-btn').addEventListener('click', () => {
-            // 배경 컬러를 현재의 제4테마색(var(--color-4))으로 명시적으로 지정
             const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--color-4').trim();
             html2canvas(document.getElementById('export-target'), {
                 useCORS: true, backgroundColor: bgColor, scale: 2
