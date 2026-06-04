@@ -2,74 +2,100 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Pair Music Box - Ultimate Hologram</title>
+    <title>Pair Music Box - The Ultimate Masterpiece</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- 절대 진리의 폰트: 프리텐다드 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <style>
         /* =========================================
-           1. CORE DESIGN SYSTEM & HOLOGRAPHIC VARIABLES
+           1. CORE DESIGN SYSTEM (Absolute Transparency)
            ========================================= */
         :root {
             --color-1: #00f0ff;
             --color-2: #ff007f;
-            --bg-dark: #020203; /* 심연의 블랙 */
-            
-            /* 영롱한 글래스모피즘 홀로그램 */
-            --glass-bg: rgba(255, 255, 255, 0.015);
-            --glass-border: rgba(255, 255, 255, 0.05);
-            --glass-blur: blur(20px);
-            
-            --dynamic-holo: conic-gradient(
-                from 0deg, 
-                var(--color-1) 0%, transparent 25%, 
-                var(--color-2) 50%, transparent 75%, 
-                var(--color-1) 100%
-            );
+            --bg-dark: #000000;
         }
 
         body {
             background-color: var(--bg-dark);
-            /* 미세한 노이즈 텍스처로 고급스러움 극대화 */
-            background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 80%);
+            background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 70%);
             color: #fff;
             font-family: 'Pretendard', sans-serif;
             margin: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
             font-weight: 300;
         }
 
         /* =========================================
-           2. INVISIBLE EXPORT TARGET (경계선 완전 삭제)
+           2. INVISIBLE EXPORT TARGET
            ========================================= */
         #export-target {
-            width: 1300px;
-            /* 사각형 배경과 테두리를 완벽하게 날림 */
-            background: transparent;
-            border: none;
+            width: 1400px;
+            height: 800px;
             display: flex;
             flex-direction: column;
             position: relative;
-            margin-top: 20px;
-            padding: 20px;
             box-sizing: border-box;
+            padding: 40px;
         }
 
         .main-content {
             display: flex;
             flex: 1;
-            padding: 0 40px 40px 40px;
-            gap: 80px;
+            gap: 100px;
             align-items: center;
         }
 
         /* =========================================
-           3. MASSIVE GLASS HOLOGRAPHIC LP (650px)
+           3. FLOATING COMPACT TOOLS (Top Right)
+           ========================================= */
+        .floating-tools {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .tool-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.6);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.4s;
+            letter-spacing: 1px;
+            font-family: inherit;
+        }
+
+        .tool-btn:hover {
+            border-color: var(--color-1);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .color-picker-wrapper {
+            position: relative;
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+        }
+        
+        .color-picker-wrapper input[type="color"] {
+            position: absolute; top: -10px; left: -10px; width: 50px; height: 50px; cursor: pointer; border: none;
+        }
+
+        /* =========================================
+           4. HOLOGRAPHIC LP WITH GROOVES
            ========================================= */
         .lp-wrapper {
             flex: 0 0 650px;
@@ -83,52 +109,73 @@
             width: 650px;
             height: 650px;
             border-radius: 50%;
+            background-color: #030303;
             position: relative;
-            /* 투명한 유리 질감과 홀로그램의 결합 */
-            background: 
-                repeating-radial-gradient(rgba(0,0,0,0.2) 0, rgba(0,0,0,0.5) 2px, transparent 3px, rgba(0,0,0,0.2) 4px),
-                var(--dynamic-holo);
-            background-blend-mode: screen;
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 0 80px rgba(0,0,0,0.9),
-                        inset 0 0 40px rgba(255,255,255,0.05);
+            box-shadow: 0 0 60px rgba(0,0,0,0.9), inset 0 0 30px rgba(255,255,255,0.05);
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: spin 10s linear infinite;
-            animation-play-state: paused;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* 글로우 빛 반사 오버레이 */
-        .lp-record::after {
-            content: '';
+        /* 바이닐 내부 선 (Grooves) - 적당한 밀도 */
+        .lp-grooves {
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 30%, transparent 70%, rgba(255,255,255,0.05) 100%);
+            background-image: repeating-radial-gradient(
+                transparent 0,
+                transparent 15px,
+                rgba(255,255,255,0.03) 16px,
+                transparent 17px
+            );
             pointer-events: none;
         }
 
+        /* 빙글빙글 도는 홀로그램 빛 애니메이션 */
+        .lp-hologram-light {
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(
+                from 0deg, 
+                transparent 0%, 
+                rgba(0, 240, 255, 0.4) 20%, 
+                transparent 40%, 
+                transparent 60%, 
+                rgba(255, 0, 127, 0.4) 80%, 
+                transparent 100%
+            );
+            mix-blend-mode: screen;
+            animation: holo-spin 6s linear infinite;
+            animation-play-state: paused;
+            pointer-events: none;
+        }
+
+        @keyframes holo-spin { 100% { transform: rotate(360deg); } }
+
         .lp-center-image {
-            width: 220px;
-            height: 220px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
-            background-color: #000;
+            background-color: #111;
             background-size: cover;
             background-position: center;
             position: relative;
             z-index: 10;
-            /* 중심부 홀로그램 링 */
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.1),
-                        0 0 30px var(--color-1), 
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.1),
+                        0 0 40px var(--color-1), 
                         inset 0 0 20px rgba(0,0,0,0.8);
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .lp-center-image:hover {
+            box-shadow: 0 0 0 2px #fff, 0 0 60px var(--color-2), inset 0 0 20px rgba(0,0,0,0.8);
+        }
 
         /* =========================================
-           4. HOLOGRAPHIC PLAYLIST & DIAMOND GLOW
+           5. PLAYLIST (Slow Glow Underline)
            ========================================= */
         .playlist-wrapper {
             flex: 1;
@@ -136,204 +183,162 @@
             flex-direction: column;
             justify-content: center;
             height: 100%;
-            padding-right: 20px;
         }
 
+        /* 직접 클릭해서 수정 가능한 페어명 (인라인 에디트) */
         .pair-name {
-            font-size: 54px;
+            font-size: 60px;
             font-weight: 900;
             background: linear-gradient(135deg, var(--color-1), #fff, var(--color-2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
-            margin-bottom: 40px;
-            text-shadow: 0 0 30px rgba(255,255,255,0.1);
+            letter-spacing: 4px;
+            margin-bottom: 50px;
+            outline: none;
+            display: inline-block;
+            transition: 0.3s;
         }
+        .pair-name:focus { text-shadow: 0 0 20px rgba(255,255,255,0.3); }
 
         .playlist-container {
             list-style: none;
             padding: 0;
             margin: 0;
-            max-height: 400px;
+            max-height: 450px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 5px;
         }
-
-        .playlist-container::-webkit-scrollbar { width: 3px; }
-        .playlist-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        .playlist-container::-webkit-scrollbar { display: none; }
 
         .track-item {
             display: flex;
             align-items: center;
-            padding: 18px 25px;
-            /* 유리 질감 타일 디자인 */
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            padding: 15px 20px;
+            background: transparent; /* 사각형 껍데기 삭제 */
             cursor: pointer;
             font-size: 16px;
-            font-weight: 300;
-            color: #aaa;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #888;
             position: relative;
-            overflow: hidden;
+            transition: color 0.4s;
         }
 
-        .track-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            transform: translateX(10px);
-            border-color: rgba(255,255,255,0.15);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        /* 마우스 오버 시 느리게 그어지는 글로우 하단 선 */
+        .track-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--color-1), var(--color-2));
+            box-shadow: 0 0 10px var(--color-1), 0 0 20px var(--color-2);
+            transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        /* 재생 중인 곡의 압도적 홀로그램 효과 */
-        .track-item.playing {
-            color: #fff;
-            background: linear-gradient(90deg, rgba(255,255,255,0.08) 0%, transparent 100%);
-            border-left: 1px solid var(--color-1);
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-weight: 600;
-            box-shadow: inset 0 0 20px rgba(255,255,255,0.02);
-        }
+        .track-item:hover { color: #fff; }
+        .track-item:hover::after { width: 100%; }
 
-        /* 보스 요청: 마름모꼴 글로우 마크 */
-        .track-item .diamond-mark {
-            width: 8px;
-            height: 8px;
+        .track-item.playing { color: #fff; font-weight: 600; }
+        .track-item.playing::after { width: 100%; opacity: 0.5; }
+
+        .diamond-mark {
+            width: 6px; height: 6px;
             background: #fff;
             transform: rotate(45deg);
-            margin-right: 20px;
-            opacity: 0.3;
-            transition: 0.4s;
+            margin-right: 25px;
+            opacity: 0.2;
+            transition: 0.6s;
         }
-
         .track-item:hover .diamond-mark {
-            opacity: 0.8;
+            opacity: 1;
             background: var(--color-1);
-            box-shadow: 0 0 10px var(--color-1), 0 0 20px var(--color-2);
+            box-shadow: 0 0 15px var(--color-1);
         }
-
         .track-item.playing .diamond-mark {
             opacity: 1;
-            background: #fff;
-            box-shadow: 0 0 15px var(--color-1), 0 0 30px var(--color-2);
+            background: var(--color-2);
+            box-shadow: 0 0 20px var(--color-2);
         }
 
         /* =========================================
-           5. FLOATING PLAYER BAR & PROGRESS ANIMATION
+           6. TRANSPARENT FLOATING PLAYER BAR
            ========================================= */
         .player-bar {
-            width: calc(100% - 80px);
-            margin: 0 auto;
-            height: 90px;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
+            width: 100%;
+            height: 60px;
             display: flex;
             align-items: center;
-            padding: 0 40px;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            background: transparent; /* 껍데기 삭제 */
+            border: none;
+            margin-top: 20px;
         }
 
-        /* 컨트롤러 아이콘 */
-        .controls { display: flex; align-items: center; gap: 30px; width: 200px; }
-        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.6; transition: 0.3s; display: flex; justify-content: center; }
-        .control-btn:hover { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px #fff); }
-        .control-btn svg { width: 22px; height: 22px; fill: #fff; }
-        .play-pause-btn svg { width: 34px; height: 34px; fill: url(#grad-play); }
+        .controls { display: flex; align-items: center; gap: 40px; }
+        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.5; transition: 0.4s; }
+        .control-btn:hover { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 10px var(--color-1)); }
+        .control-btn svg { width: 20px; height: 20px; fill: #fff; }
+        .play-pause-btn svg { width: 32px; height: 32px; fill: url(#grad-play); }
 
-        /* 진행 바 (Progress Bar) */
         .progress-wrapper {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            margin: 0 40px;
-            gap: 10px;
+            margin: 0 60px;
+            gap: 12px;
         }
 
         .track-meta {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
-            color: #ddd;
-            letter-spacing: 1px;
+            font-size: 12px;
+            color: #aaa;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
         
-        #current-track-name { font-weight: 500; font-size: 15px; color: #fff; }
+        #current-track-name { font-weight: 600; font-size: 14px; color: #fff; letter-spacing: 1px; }
 
         .progress-bar-container {
             width: 100%;
-            height: 4px;
+            height: 2px;
             background: rgba(255,255,255,0.1);
-            border-radius: 2px;
             cursor: pointer;
             position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            width: 0%; /* JS로 실시간 업데이트 */
+            width: 0%;
             background: linear-gradient(90deg, var(--color-1), var(--color-2));
-            border-radius: 2px;
+            box-shadow: 0 0 15px var(--color-1);
             position: relative;
-            box-shadow: 0 0 10px var(--color-1);
             transition: width 0.1s linear;
         }
-        
-        /* 프로그레스 바 끝에 달린 빛나는 핸들 */
+
         .progress-fill::after {
-            content: '';
-            position: absolute;
-            right: -4px;
-            top: -3px;
-            width: 10px;
-            height: 10px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #fff;
+            content: ''; position: absolute; right: -3px; top: -4px; width: 10px; height: 10px;
+            background: #fff; border-radius: 50%; box-shadow: 0 0 10px #fff;
         }
 
-        /* 우측 폼 영역 */
-        .add-form { display: flex; gap: 15px; width: 350px; justify-content: flex-end; }
+        .add-form { display: flex; gap: 20px; align-items: center; }
         .add-form input {
             background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2);
-            color: #fff; padding: 5px; font-size: 13px; width: 120px; outline: none; transition: 0.3s; font-family: inherit;
+            color: #fff; padding: 8px 0; font-size: 13px; width: 150px; outline: none; transition: 0.4s; font-family: inherit;
         }
-        .add-form input:focus { border-bottom-color: var(--color-1); }
-        .add-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
-            color: #fff; padding: 6px 16px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-weight: 500;
-        }
-        .add-btn:hover { background: #fff; color: #000; box-shadow: 0 0 15px rgba(255,255,255,0.5); }
-
-        /* =========================================
-           6. CONFIG PANEL
-           ========================================= */
-        .config-panel {
-            width: 1300px; margin-top: 30px; padding: 25px 40px;
-            background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border);
-            border-radius: 20px; display: flex; gap: 35px; align-items: center; box-sizing: border-box; font-size: 14px;
-        }
-        .config-group { display: flex; align-items: center; gap: 12px; color: #bbb; }
-        .config-group input[type="text"] { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px 15px; border-radius: 8px; font-family: inherit; }
-        .config-group input[type="color"] { border: none; background: transparent; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; padding: 0; }
-        .config-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-        .config-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); }
+        .add-form input:focus { border-bottom-color: var(--color-1); box-shadow: 0 10px 10px -10px var(--color-1); }
         
-        .btn-action { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px 25px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-family: inherit; font-weight: 500; }
-        .btn-action:hover { background: #fff; color: #000; }
+        .add-btn {
+            background: transparent; color: rgba(255,255,255,0.5); font-size: 12px; border: none; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
+        }
+        .add-btn:hover { color: #fff; text-shadow: 0 0 10px var(--color-1); }
     </style>
 </head>
 <body>
 
-    <!-- 아이콘 그라데이션 소스 -->
     <svg width="0" height="0">
         <defs>
             <linearGradient id="grad-play" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -343,26 +348,35 @@
         </defs>
     </svg>
 
-    <!-- [투명 캡처 타겟] -->
     <div id="export-target">
+        
+        <!-- 보스의 디렉팅: 컴팩트 플로팅 툴바 (캡처 시 자동 숨김) -->
+        <div class="floating-tools" data-html2canvas-ignore="true">
+            <div class="color-picker-wrapper" title="Theme 1"><input type="color" id="config-color-1" value="#00f0ff"></div>
+            <div class="color-picker-wrapper" title="Theme 2"><input type="color" id="config-color-2" value="#ff007f"></div>
+            <button class="tool-btn" id="save-local-btn">SAVE</button>
+            <button class="tool-btn" id="export-png-btn" style="border-color: var(--color-1); color: var(--color-1);">EXPORT PNG</button>
+        </div>
+
         <div class="main-content">
-            <!-- 650px 압도적 크기의 유리질감 홀로그램 LP -->
+            <!-- 650px LP판 + 바이닐 선 + 스피닝 홀로그램 -->
             <div class="lp-wrapper">
                 <div class="lp-record" id="lp-disk">
-                    <div class="lp-center-image" id="center-img" style="background-image: url('https://via.placeholder.com/220?text=OC+PAIR');"></div>
+                    <div class="lp-grooves"></div>
+                    <div class="lp-hologram-light"></div>
+                    <!-- 중앙 이미지를 누르면 바로 이미지 업로드 창이 뜨도록 직관적 설계 -->
+                    <div class="lp-center-image" id="center-img" style="background-image: url('https://via.placeholder.com/200?text=CLICK+TO+UPLOAD');" onclick="document.getElementById('config-file').click()"></div>
                 </div>
             </div>
 
-            <!-- 투명한 홀로그램 플레이리스트 -->
+            <!-- 투명 플레이리스트 & 인라인 에디팅 페어명 -->
             <div class="playlist-wrapper">
-                <div class="pair-name" id="pair-name-display">ETERNAL_BOND</div>
-                <ul class="playlist-container" id="playlist">
-                    <!-- 자바스크립트로 렌더링 -->
-                </ul>
+                <div class="pair-name" id="pair-name-display" contenteditable="true" spellcheck="false" title="클릭해서 페어명 수정">ETERNAL_BOND</div>
+                <ul class="playlist-container" id="playlist"></ul>
             </div>
         </div>
 
-        <!-- 부유하는 하단 재생 컨트롤 바 -->
+        <!-- 껍데기를 벗어던진 하단 투명 컨트롤 바 -->
         <div class="player-bar">
             <div class="controls">
                 <button class="control-btn" id="btn-prev"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
@@ -373,7 +387,6 @@
                 <button class="control-btn" id="btn-next"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
             </div>
 
-            <!-- 실시간 프로그레스 바 -->
             <div class="progress-wrapper">
                 <div class="track-meta">
                     <span id="current-track-name">NO TRACK SELECTED</span>
@@ -384,29 +397,16 @@
                 </div>
             </div>
 
-            <div class="add-form">
-                <input type="text" id="yt-url" placeholder="YouTube Link">
+            <div class="add-form" data-html2canvas-ignore="true">
+                <input type="text" id="yt-url" placeholder="YouTube URL">
                 <input type="text" id="yt-title" placeholder="Track Title">
-                <button class="add-btn" id="add-track-btn">ADD</button>
+                <button class="add-btn" id="add-track-btn">ADD TRACK</button>
             </div>
         </div>
     </div>
 
-    <!-- 설정 영역 -->
-    <div class="config-panel">
-        <div class="config-group"><label>NAME</label><input type="text" id="config-pair-name" placeholder="페어명"></div>
-        <div class="config-group" style="margin-left:auto;"><label>THEME 1</label><input type="color" id="config-color-1" value="#00f0ff"></div>
-        <div class="config-group"><label>THEME 2</label><input type="color" id="config-color-2" value="#ff007f"></div>
-        <div class="config-group" style="margin-left: 20px;">
-            <button class="btn-action" onclick="document.getElementById('config-file').click()">이미지 업로드</button>
-            <input type="file" id="config-file" accept="image/*" style="display: none;">
-        </div>
-        <div style="margin-left: 20px; display: flex; gap: 15px;">
-            <button class="btn-action" id="save-local-btn">데이터 저장</button>
-            <button class="btn-action" id="export-png-btn" style="border: 1px solid var(--color-1); color: var(--color-1);">PNG 내보내기</button>
-        </div>
-    </div>
-
+    <!-- 숨겨진 시스템 요소들 -->
+    <input type="file" id="config-file" accept="image/*" style="display: none;">
     <div id="youtube-player" style="display:none; position:absolute;"></div>
 
     <script>
@@ -420,12 +420,10 @@
         let currentPlayingIndex = -1;
         let isPlaying = false;
         let progressInterval;
+        let base64ImgData = "https://via.placeholder.com/200?text=OC+PAIR";
 
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', {
-                height: '0', width: '0',
-                events: { 'onStateChange': onPlayerStateChange }
-            });
+            player = new YT.Player('youtube-player', { height: '0', width: '0', events: { 'onStateChange': onPlayerStateChange } });
         }
 
         function formatTime(seconds) {
@@ -435,36 +433,34 @@
             return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
 
-        // 재생바 애니메이션 코어 루프
         function startProgressBar() {
             clearInterval(progressInterval);
             progressInterval = setInterval(() => {
-                if (player && isPlaying && player.getCurrentTime && player.getDuration) {
+                if (player && isPlaying && player.getCurrentTime) {
                     const current = player.getCurrentTime();
                     const duration = player.getDuration();
                     if(duration > 0) {
-                        const percent = (current / duration) * 100;
-                        document.getElementById('progress-fill').style.width = percent + '%';
+                        document.getElementById('progress-fill').style.width = (current / duration) * 100 + '%';
                         document.getElementById('time-display').textContent = `${formatTime(current)} / ${formatTime(duration)}`;
                     }
                 }
-            }, 500);
+            }, 200);
         }
 
         function onPlayerStateChange(event) {
-            const lpDisk = document.getElementById('lp-disk');
+            const holoLight = document.querySelector('.lp-hologram-light');
             const iconPlay = document.getElementById('icon-play');
             const iconPause = document.getElementById('icon-pause');
             
             if (event.data === YT.PlayerState.PLAYING) {
                 isPlaying = true;
-                lpDisk.style.animationPlayState = 'running';
+                holoLight.style.animationPlayState = 'running';
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'block';
                 startProgressBar();
             } else {
                 isPlaying = false;
-                lpDisk.style.animationPlayState = 'paused';
+                holoLight.style.animationPlayState = 'paused';
                 iconPlay.style.display = 'block';
                 iconPause.style.display = 'none';
                 clearInterval(progressInterval);
@@ -472,33 +468,26 @@
             if (event.data === YT.PlayerState.ENDED) playNextTrack();
         }
 
-        // 프로그레스 바 클릭 시 시간 이동 기능
         document.getElementById('progress-bar').addEventListener('click', (e) => {
-            if (player && player.getDuration && duration > 0) {
+            if (player && player.getDuration) {
                 const rect = e.currentTarget.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const percent = clickX / rect.width;
-                const duration = player.getDuration();
-                player.seekTo(duration * percent, true);
+                const percent = (e.clientX - rect.left) / rect.width;
+                player.seekTo(player.getDuration() * percent, true);
                 document.getElementById('progress-fill').style.width = (percent * 100) + '%';
             }
         });
 
         function extractVideoID(url) {
-            const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
-            const match = url.match(regExp);
+            const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
             return (match && match[1].length === 11) ? match[1] : null;
         }
 
         document.getElementById('add-track-btn').addEventListener('click', () => {
-            const urlInput = document.getElementById('yt-url');
-            const titleInput = document.getElementById('yt-title');
-            const videoId = extractVideoID(urlInput.value);
-            let title = titleInput.value.trim() || "UNKNOWN TRACK";
-            if (!videoId) return alert("유효한 유튜브 링크가 아닙니다!");
-
+            const videoId = extractVideoID(document.getElementById('yt-url').value);
+            const title = document.getElementById('yt-title').value.trim() || "UNKNOWN TRACK";
+            if (!videoId) return alert("유효한 유튜브 링크가 아닙니다.");
             playlistData.push({ videoId, title });
-            urlInput.value = ''; titleInput.value = '';
+            document.getElementById('yt-url').value = ''; document.getElementById('yt-title').value = '';
             renderPlaylist();
         });
 
@@ -509,12 +498,7 @@
                 const li = document.createElement('li');
                 li.className = 'track-item';
                 if (index === currentPlayingIndex) li.classList.add('playing');
-                
-                // 보스 요청: 마름모 아이콘 추가
-                li.innerHTML = `
-                    <div class="diamond-mark"></div>
-                    <span>${String(index + 1).padStart(2, '0')} &nbsp;&nbsp;&nbsp; ${track.title}</span>
-                `;
+                li.innerHTML = `<div class="diamond-mark"></div><span>${String(index + 1).padStart(2, '0')} &nbsp;&nbsp;&nbsp; ${track.title}</span>`;
                 li.addEventListener('click', () => playTrack(index));
                 listContainer.appendChild(li);
             });
@@ -528,15 +512,8 @@
             renderPlaylist();
         }
 
-        function playNextTrack() {
-            if (playlistData.length === 0) return;
-            playTrack(currentPlayingIndex + 1 >= playlistData.length ? 0 : currentPlayingIndex + 1);
-        }
-
-        function playPrevTrack() {
-            if (playlistData.length === 0) return;
-            playTrack(currentPlayingIndex - 1 < 0 ? playlistData.length - 1 : currentPlayingIndex - 1);
-        }
+        function playNextTrack() { playTrack(currentPlayingIndex + 1 >= playlistData.length ? 0 : currentPlayingIndex + 1); }
+        function playPrevTrack() { playTrack(currentPlayingIndex - 1 < 0 ? playlistData.length - 1 : currentPlayingIndex - 1); }
 
         document.getElementById('btn-play-pause').addEventListener('click', () => {
             if(currentPlayingIndex === -1 && playlistData.length > 0) playTrack(0);
@@ -548,51 +525,57 @@
         const root = document.documentElement;
         document.getElementById('config-color-1').addEventListener('input', e => root.style.setProperty('--color-1', e.target.value));
         document.getElementById('config-color-2').addEventListener('input', e => root.style.setProperty('--color-2', e.target.value));
-        document.getElementById('config-pair-name').addEventListener('input', e => {
-            document.getElementById('pair-name-display').textContent = e.target.value.trim() || "ETERNAL_BOND";
-        });
         
+        // 인라인 텍스트 편집 감지 및 로컬 저장소 동기화 대비
+        const pairNameDisplay = document.getElementById('pair-name-display');
+        pairNameDisplay.addEventListener('blur', () => {
+            if(pairNameDisplay.textContent.trim() === '') pairNameDisplay.textContent = 'ETERNAL_BOND';
+        });
+
         document.getElementById('config-file').addEventListener('change', e => {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = event => document.getElementById('center-img').style.backgroundImage = `url('${event.target.result}')`;
+                reader.onload = event => {
+                    base64ImgData = event.target.result;
+                    document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`;
+                };
                 reader.readAsDataURL(file);
             }
         });
 
         document.getElementById('save-local-btn').addEventListener('click', () => {
-            localStorage.setItem('pair_music_box_v5', JSON.stringify({
-                pairName: document.getElementById('config-pair-name').value,
+            localStorage.setItem('pair_music_box_v6', JSON.stringify({
+                pairName: pairNameDisplay.textContent,
                 color1: document.getElementById('config-color-1').value,
                 color2: document.getElementById('config-color-2').value,
                 playlist: playlistData,
-                imageData: document.getElementById('center-img').style.backgroundImage.slice(5, -2) // Extract base64
+                imageData: base64ImgData
             }));
-            alert("✅ 보스, 설정이 로컬 디바이스에 완벽하게 백업되었습니다.");
+            alert("SYSTEM: 오타쿠 서사 보존 완료.");
         });
 
         window.onload = () => {
-            const saved = localStorage.getItem('pair_music_box_v5');
+            const saved = localStorage.getItem('pair_music_box_v6');
             if(saved) {
                 const data = JSON.parse(saved);
-                if(data.pairName) { document.getElementById('config-pair-name').value = data.pairName; document.getElementById('pair-name-display').textContent = data.pairName; }
+                if(data.pairName) pairNameDisplay.textContent = data.pairName;
                 if(data.color1) { document.getElementById('config-color-1').value = data.color1; root.style.setProperty('--color-1', data.color1); }
                 if(data.color2) { document.getElementById('config-color-2').value = data.color2; root.style.setProperty('--color-2', data.color2); }
-                if(data.imageData && data.imageData !== 'https://via.placeholder.com/220?text=OC+PAIR') {
-                    document.getElementById('center-img').style.backgroundImage = `url('${data.imageData}')`;
+                if(data.imageData) {
+                    base64ImgData = data.imageData;
+                    document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`;
                 }
                 if(data.playlist) { playlistData = data.playlist; renderPlaylist(); }
             }
         };
 
         document.getElementById('export-png-btn').addEventListener('click', () => {
-            // 배경 없이 투명하게 렌더링하기 위한 html2canvas 옵션 세팅
             html2canvas(document.getElementById('export-target'), {
-                useCORS: true, backgroundColor: null, scale: 2
+                useCORS: true, backgroundColor: '#000000', scale: 2
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `pair_hologram_box.png`;
+                link.download = `${pairNameDisplay.textContent}_music_box.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
