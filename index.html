@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Pair Music Box - Cosmic Narrative</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pair Music Box - Galactic Orbit</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
@@ -12,22 +13,19 @@
     
     <style id="core-styles">
         /* =========================================
-           1. CORE DESIGN SYSTEM (Cosmic Nebula)
+           1. CORE DESIGN SYSTEM (Monochrome Cosmic)
            ========================================= */
         :root {
-            /* 보스의 지시: 우주 느낌의 감각적인 홀로그램 기본색 */
-            --color-1: #8a2be2; /* Deep Purple */
-            --color-2: #4169e1; /* Royal Blue */
-            --color-3: #00ffff; /* Cyan Glow */
-            --color-4: #080812; /* Deep Space Dark */
+            /* 흑백/무채색 우주 기반의 기본 세팅 */
+            --color-1: #ffffff; /* White */
+            --color-2: #cccccc; /* Silver */
+            --color-3: #888888; /* Gray */
+            --color-4: #030305; /* Deep Space Black */
             --font-pair: 'Pretendard', sans-serif; 
         }
 
         body {
             background-color: var(--color-4);
-            /* 우주의 별가루(Star-dust) 느낌 미세 노이즈 패턴 */
-            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
             color: #fff;
             font-family: 'Pretendard', sans-serif;
             margin: 0;
@@ -39,20 +37,28 @@
             font-weight: 300;
         }
 
-        /* 앰비언트 우주 성운(Nebula) 효과 */
-        .ambient-background {
-            position: absolute; inset: 0; overflow: hidden; z-index: 0; 
-            background: var(--color-4); pointer-events: none;
+        /* 미세한 별가루 떨어지는 애니메이션 */
+        .stardust-container {
+            position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
         }
-        .ambient-blob {
-            position: absolute; filter: blur(140px); opacity: 0.4; border-radius: 50%;
-            animation: float 15s ease-in-out infinite alternate; mix-blend-mode: screen;
+        .stardust-layer {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image:
+                radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1.5px 1.5px at 150px 150px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 300px 80px, rgba(255,255,255,0.4), transparent),
+                radial-gradient(2px 2px at 450px 250px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 600px 30px, rgba(255,255,255,0.5), transparent);
+            background-repeat: repeat; background-size: 800px 400px;
+            animation: stardust-fall 40s linear infinite; opacity: 0.6;
         }
-        .blob-1 { top: -10%; left: 0%; width: 55vw; height: 55vw; background: var(--color-1); }
-        .blob-2 { bottom: -10%; right: -10%; width: 65vw; height: 65vw; background: var(--color-2); animation-delay: -5s; }
-        .blob-3 { top: 40%; left: 20%; width: 45vw; height: 45vw; background: var(--color-3); animation-delay: -2s; }
-
-        @keyframes float { 100% { transform: translate(3%, 3%) scale(1.05); } }
+        .stardust-layer:nth-child(2) {
+            background-size: 500px 300px; animation-duration: 60s; opacity: 0.3; transform: rotate(15deg);
+        }
+        @keyframes stardust-fall {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(400px) rotate(0deg); }
+        }
 
         /* =========================================
            2. EXPORT TARGET
@@ -60,72 +66,76 @@
         #export-target {
             width: 1400px; height: 850px; display: flex; flex-direction: column;
             position: relative; box-sizing: border-box; padding: 50px 60px;
-            /* 캡처를 위한 완벽한 내부 컨테이닝 */
-            background-color: transparent; 
-            z-index: 10;
+            background-color: transparent; z-index: 10;
         }
 
         .main-content { display: flex; flex: 1; gap: 120px; align-items: center; position: relative; z-index: 10; }
 
         /* =========================================
-           3. TOOLS & UI 
+           3. TOOLS & UI (보더 완전 삭제, 텍스트 글로우만)
            ========================================= */
         .floating-tools {
-            position: absolute; top: 40px; right: 50px; display: flex; gap: 15px; align-items: center; z-index: 100;
-            background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            position: absolute; top: 40px; right: 50px; display: flex; gap: 20px; align-items: center; z-index: 100;
         }
+        
         .text-btn {
-            background: transparent; border: none; color: rgba(255,255,255,0.7); font-size: 12px;
-            cursor: pointer; transition: 0.4s; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
+            background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 11px;
+            cursor: pointer; transition: 0.4s; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; padding: 0;
         }
-        .text-btn:hover { color: #fff; text-shadow: 0 0 10px var(--color-1); transform: translateY(-1px); }
+        .text-btn:hover { color: #fff; text-shadow: 0 0 10px var(--color-1), 0 0 20px var(--color-2); }
 
         .color-picker-wrapper {
-            position: relative; width: 16px; height: 16px; border-radius: 50%; overflow: hidden;
-            box-shadow: 0 0 10px rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s;
+            position: relative; width: 14px; height: 14px; border-radius: 50%; overflow: hidden;
+            cursor: pointer; transition: 0.3s;
+            /* 보더 삭제 */ border: none; box-shadow: 0 0 5px rgba(255,255,255,0.1);
         }
-        .color-picker-wrapper:hover { transform: scale(1.4); box-shadow: 0 0 15px #fff; z-index: 10; }
+        .color-picker-wrapper:hover { transform: scale(1.3); box-shadow: 0 0 15px var(--color-1); }
         .color-picker-wrapper input[type="color"] {
             position: absolute; top: -10px; left: -10px; width: 40px; height: 40px; cursor: pointer; border: none;
         }
-        .font-controls, .color-controls { display: flex; gap: 12px; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 15px; align-items: center;}
+        .font-controls, .color-controls { display: flex; gap: 15px; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px; align-items: center;}
 
         /* =========================================
-           4. COSMIC HOLOGRAPHIC LP
+           4. MONOCHROME LP & GEOMETRY
            ========================================= */
         .lp-wrapper { flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative; }
 
-        .lp-spin-master {
-            width: 660px; height: 660px; display: flex; justify-content: center; align-items: center; position: relative;
-            animation: master-spin 12s linear infinite; animation-play-state: paused;
+        /* 기하학적 문양 (천문학도 / 궤도) */
+        .sacred-geometry {
+            position: absolute; inset: -50px; 
+            background-image: url("data:image/svg+xml,%3Csvg width='750' height='750' viewBox='0 0 750 750' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23ffffff' stroke-width='1' fill='none' stroke-opacity='0.04'%3E%3Ccircle cx='375' cy='375' r='350'/%3E%3Ccircle cx='375' cy='375' r='280'/%3E%3Ccircle cx='375' cy='375' r='180'/%3E%3Cpath d='M375 25v700M25 375h700M127 127l496 496M127 623l496-496'/%3E%3C/g%3E%3C/svg%3E");
+            background-position: center; background-repeat: no-repeat; pointer-events: none; z-index: 0;
+            animation: master-spin 60s linear infinite reverse;
         }
 
-        /* 투명한 유리질감 우주 헤일로 */
+        .lp-spin-master {
+            width: 660px; height: 660px; display: flex; justify-content: center; align-items: center; position: relative;
+            animation: master-spin 12s linear infinite; animation-play-state: paused; z-index: 1;
+        }
+
         .lp-halo-ring {
-            position: absolute; inset: 0px; border-radius: 50%;
+            position: absolute; inset: 5px; border-radius: 50%;
             background: conic-gradient(from 0deg, var(--color-1), transparent 20%, var(--color-2) 40%, transparent 60%, var(--color-3) 80%, var(--color-1));
-            opacity: 0.8; filter: blur(15px); z-index: 0;
-            box-shadow: 0 0 40px var(--color-1), inset 0 0 30px var(--color-2);
+            opacity: 0.6; filter: blur(10px); z-index: 0;
         }
 
         .lp-record {
             width: 650px; height: 650px; border-radius: 50%;
-            /* 유리질감 극대화 */
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(20px);
-            position: relative; box-shadow: inset 0 0 80px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(15px);
+            position: relative; box-shadow: inset 0 0 80px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05);
             display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 1;
         }
 
         .lp-grooves {
             position: absolute; inset: 0; border-radius: 50%;
-            background-image: repeating-radial-gradient(transparent 0, transparent 10px, rgba(255,255,255,0.05) 11px, rgba(255,255,255,0.08) 12px, transparent 13px);
+            background-image: repeating-radial-gradient(transparent 0, transparent 10px, rgba(255,255,255,0.03) 11px, rgba(255,255,255,0.05) 12px, transparent 13px);
             pointer-events: none; z-index: 2;
         }
 
         .lp-internal-glow {
             position: absolute; inset: -20px; border-radius: 50%;
-            background: conic-gradient(from 90deg, transparent 0%, rgba(255,255,255,0.2) 25%, transparent 50%, rgba(255,255,255,0.2) 75%, transparent 100%);
-            opacity: 0.7; pointer-events: none; z-index: 3; filter: blur(6px); mix-blend-mode: overlay;
+            background: conic-gradient(from 90deg, transparent 0%, rgba(255,255,255,0.1) 25%, transparent 50%, rgba(255,255,255,0.1) 75%, transparent 100%);
+            opacity: 0.5; pointer-events: none; z-index: 3; filter: blur(4px); mix-blend-mode: screen;
         }
 
         @keyframes master-spin { 100% { transform: rotate(360deg); } }
@@ -133,10 +143,10 @@
         .lp-center-image {
             width: 290px; height: 290px; border-radius: 50%; background-color: var(--color-4);
             background-size: cover; background-position: center; position: relative; z-index: 10;
-            box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 0 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.9);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.9);
             cursor: pointer; transition: 0.5s; background-image: url('https://via.placeholder.com/300?text=UPLOAD');
         }
-        .lp-center-image:hover { box-shadow: 0 0 0 2px #fff, 0 0 80px var(--color-1); transform: scale(1.03); }
+        .lp-center-image:hover { box-shadow: 0 0 0 1px #fff, 0 0 60px var(--color-1); transform: scale(1.02); }
 
         /* =========================================
            5. PLAYLIST
@@ -145,53 +155,64 @@
 
         .pair-name {
             font-family: var(--font-pair); font-size: 68px; font-weight: 700;
-            background: linear-gradient(135deg, var(--color-1), #fff, var(--color-3));
+            background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             letter-spacing: 2px; margin-bottom: 50px; outline: none; display: inline-block;
-            transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));
+            transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
         }
 
-        .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
         .playlist-container::-webkit-scrollbar { display: none; }
 
         .track-item {
-            display: flex; align-items: center; padding: 16px 20px; background: transparent;
-            cursor: pointer; font-size: 15px; color: rgba(255,255,255,0.5); position: relative; transition: color 0.4s; font-weight: 400;
+            display: flex; align-items: center; padding: 14px 20px; background: transparent;
+            cursor: pointer; font-size: 14px; color: rgba(255,255,255,0.4); position: relative; transition: color 0.4s; font-weight: 300; letter-spacing: 1px;
         }
         .track-item::after {
             content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 1px;
             background: linear-gradient(90deg, var(--color-1), var(--color-3));
-            box-shadow: 0 0 10px var(--color-1), 0 0 20px var(--color-3); transition: width 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 0 10px var(--color-1); transition: width 0.7s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .track-item:hover { color: #fff; }
         .track-item:hover::after { width: 100%; }
-        .track-item.playing { color: #fff; font-weight: 600; text-shadow: 0 0 15px rgba(255,255,255,0.5); }
-        .track-item.playing::after { width: 100%; opacity: 0.7; }
+        .track-item.playing { color: #fff; font-weight: 500; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
+        .track-item.playing::after { width: 100%; opacity: 0.5; }
 
-        .diamond-mark { width: 6px; height: 6px; background: #fff; transform: rotate(45deg); margin-right: 25px; opacity: 0.2; transition: 0.5s; }
-        .track-item:hover .diamond-mark { opacity: 1; background: var(--color-1); box-shadow: 0 0 15px var(--color-1); }
-        .track-item.playing .diamond-mark { opacity: 1; background: var(--color-2); box-shadow: 0 0 15px var(--color-2); }
+        .diamond-mark { width: 5px; height: 5px; background: #fff; transform: rotate(45deg); margin-right: 20px; opacity: 0.15; transition: 0.5s; }
+        .track-item:hover .diamond-mark { opacity: 1; background: var(--color-1); box-shadow: 0 0 10px var(--color-1); }
+        .track-item.playing .diamond-mark { opacity: 1; background: var(--color-2); box-shadow: 0 0 10px var(--color-2); }
 
         /* =========================================
-           6. ULTRA-SLIM SOUNDBAR
+           6. ULTRA-SLIM SOUNDBAR & VOLUME
            ========================================= */
-        .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 10; }
-        .controls { display: flex; align-items: center; gap: 40px; }
-        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.5; transition: 0.4s; }
-        .control-btn:hover { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 15px var(--color-3)); }
-        .control-btn svg { width: 22px; height: 22px; fill: #fff; }
-        .play-pause-btn svg { width: 36px; height: 36px; fill: url(#grad-play); }
+        .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 10; gap: 20px;}
+        .controls { display: flex; align-items: center; gap: 30px; }
+        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.4s; }
+        .control-btn:hover { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 10px var(--color-1)); }
+        .control-btn svg { width: 18px; height: 18px; fill: #fff; }
+        .play-pause-btn svg { width: 32px; height: 32px; fill: url(#grad-play); }
 
-        .progress-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; margin: 0 70px; gap: 16px; }
-        .track-meta { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.7); letter-spacing: 2px; }
-        #current-track-name { font-weight: 600; font-size: 14px; color: #fff; letter-spacing: 1px; }
+        .progress-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+        .track-meta { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 2px; }
+        #current-track-name { font-weight: 500; font-size: 13px; color: #fff; letter-spacing: 1px; }
 
-        .progress-bar-container { width: 100%; height: 1px; background: rgba(255,255,255,0.2); cursor: pointer; position: relative; }
-        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-1), var(--color-3)); box-shadow: 0 0 15px var(--color-1); position: relative; transition: width 0.1s linear; }
-        .progress-fill::after { content: ''; position: absolute; right: -3px; top: -3px; width: 6px; height: 6px; background: #fff; transform: rotate(45deg); box-shadow: 0 0 15px #fff, 0 0 25px var(--color-2); }
+        .progress-bar-container { width: 100%; height: 1px; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; }
+        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-1), var(--color-3)); box-shadow: 0 0 10px var(--color-1); position: relative; transition: width 0.1s linear; }
+        .progress-fill::after { content: ''; position: absolute; right: -3px; top: -3px; width: 5px; height: 5px; background: #fff; transform: rotate(45deg); box-shadow: 0 0 10px #fff, 0 0 15px var(--color-1); }
 
-        .add-form { display: flex; gap: 20px; align-items: center; }
-        .add-form input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 6px 0; font-size: 13px; width: 120px; outline: none; transition: 0.4s; font-family: inherit; }
+        /* 볼륨 컨트롤 추가 */
+        .volume-wrapper { display: flex; align-items: center; gap: 10px; margin-left: 15px; opacity: 0.6; transition: 0.3s; }
+        .volume-wrapper:hover { opacity: 1; }
+        .volume-wrapper svg { width: 14px; height: 14px; fill: #fff; }
+        .volume-slider { 
+            -webkit-appearance: none; width: 60px; height: 1px; background: rgba(255,255,255,0.2); outline: none; cursor: pointer;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 6px; height: 6px; background: #fff; transform: rotate(45deg); box-shadow: 0 0 10px var(--color-1);
+        }
+
+        .add-form { display: flex; gap: 15px; align-items: center; margin-left: auto;}
+        .add-form input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 0; font-size: 12px; width: 110px; outline: none; transition: 0.4s; font-family: inherit; }
         .add-form input:focus { border-bottom-color: var(--color-1); box-shadow: 0 10px 10px -10px var(--color-1); }
     </style>
 </head>
@@ -206,8 +227,9 @@
         </defs>
     </svg>
 
-    <div class="ambient-background" id="bg-aurora">
-        <div class="ambient-blob blob-1"></div><div class="ambient-blob blob-2"></div><div class="ambient-blob blob-3"></div>
+    <div class="stardust-container" id="bg-stardust">
+        <div class="stardust-layer"></div>
+        <div class="stardust-layer"></div>
     </div>
 
     <div id="export-target">
@@ -220,19 +242,20 @@
             </div>
             
             <div class="color-controls">
-                <div class="color-picker-wrapper" title="Color 1"><input type="color" id="config-color-1" value="#8a2be2"></div>
-                <div class="color-picker-wrapper" title="Color 2"><input type="color" id="config-color-2" value="#4169e1"></div>
-                <div class="color-picker-wrapper" title="Color 3"><input type="color" id="config-color-3" value="#00ffff"></div>
-                <div class="color-picker-wrapper" title="Background" style="border:1px solid #fff;"><input type="color" id="config-color-4" value="#080812"></div>
+                <div class="color-picker-wrapper"><input type="color" id="config-color-1" value="#ffffff"></div>
+                <div class="color-picker-wrapper"><input type="color" id="config-color-2" value="#cccccc"></div>
+                <div class="color-picker-wrapper"><input type="color" id="config-color-3" value="#888888"></div>
+                <div class="color-picker-wrapper"><input type="color" id="config-color-4" value="#030305"></div>
             </div>
             
             <button class="text-btn" id="save-local-btn">SAVE</button>
             <button class="text-btn" id="export-png-btn">IMG</button>
-            <button class="text-btn" id="export-html-btn" style="color: var(--color-3);">HTML SHARE</button>
+            <button class="text-btn" id="export-html-btn" style="color: var(--color-2);">HTML SHARE</button>
         </div>
 
         <div class="main-content">
             <div class="lp-wrapper">
+                <div class="sacred-geometry"></div>
                 <div class="lp-spin-master" id="lp-master">
                     <div class="lp-halo-ring"></div>
                     <div class="lp-record">
@@ -268,6 +291,11 @@
                     <div class="progress-fill" id="progress-fill"></div>
                 </div>
             </div>
+            
+            <div class="volume-wrapper">
+                <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="100">
+            </div>
 
             <div class="add-form" data-html2canvas-ignore="true" id="add-track-form">
                 <input type="text" id="yt-url" placeholder="YouTube URL">
@@ -287,15 +315,21 @@
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         let player, progressInterval;
-        // 뷰어 HTML에서 에러가 안 나도록 var 사용 또는 선언 확인
-        if (typeof playlistData === 'undefined') {
-            window.playlistData = [];
-        }
+        if (typeof playlistData === 'undefined') { window.playlistData = []; }
         let currentPlayingIndex = -1;
         let isPlaying = false;
 
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', { height: '0', width: '0', events: { 'onStateChange': onPlayerStateChange } });
+            player = new YT.Player('youtube-player', { 
+                height: '0', width: '0', 
+                events: { 'onStateChange': onPlayerStateChange, 'onReady': onPlayerReady } 
+            });
+        }
+
+        function onPlayerReady(event) {
+            // 초기 볼륨 셋팅
+            const vol = document.getElementById('volume-slider').value;
+            player.setVolume(vol);
         }
 
         function formatTime(seconds) {
@@ -349,7 +383,11 @@
             }
         });
 
-        // 뷰어 환경에서도 클릭 작동하게 이벤트 위임
+        // 볼륨 슬라이더 이벤트
+        document.getElementById('volume-slider').addEventListener('input', (e) => {
+            if(player && player.setVolume) player.setVolume(e.target.value);
+        });
+
         document.getElementById('playlist').addEventListener('click', (e) => {
             const trackItem = e.target.closest('.track-item');
             if(trackItem) {
@@ -438,24 +476,19 @@
             }
         });
 
-        // ----------------------------------------------------
-        // [핵심] 이미지 짤림 완벽 차단! (스크롤 초기화 및 절대 렌더링)
-        // ----------------------------------------------------
+        // 캡처 영역 스크롤 버그 해결 & 별가루 포함
         document.getElementById('export-png-btn').addEventListener('click', async () => {
-            window.scrollTo(0, 0); // 화면 스크롤 좌표 완전 초기화
+            window.scrollTo(0, 0); 
             const target = document.getElementById('export-target');
-            const aurora = document.getElementById('bg-aurora');
+            const stardust = document.getElementById('bg-stardust');
             
-            // 캡처하는 순간 타겟에 오로라 배경을 임시 삽입
-            target.insertBefore(aurora.cloneNode(true), target.firstChild);
+            target.insertBefore(stardust.cloneNode(true), target.firstChild);
             
             try {
                 const canvas = await html2canvas(target, {
                     useCORS: true, 
                     backgroundColor: getComputedStyle(root).getPropertyValue('--color-4').trim(), 
-                    scale: 2,
-                    scrollX: 0, scrollY: 0,
-                    width: 1400, height: 850
+                    scale: 2, scrollX: 0, scrollY: 0, width: 1400, height: 850
                 });
                 
                 const link = document.createElement('a');
@@ -463,19 +496,16 @@
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             } finally {
-                // 캡처 후 임시 오로라 삭제
                 target.removeChild(target.firstChild);
             }
         });
 
-        // ----------------------------------------------------
-        // [완벽한 HTML 내보내기] 오토 스케일링(반응형) 탑재 뷰어
-        // ----------------------------------------------------
+        // 공유용 HTML 추출 로직
         document.getElementById('export-html-btn').addEventListener('click', () => {
-            const c1 = root.style.getPropertyValue('--color-1') || '#8a2be2';
-            const c2 = root.style.getPropertyValue('--color-2') || '#4169e1';
-            const c3 = root.style.getPropertyValue('--color-3') || '#00ffff';
-            const c4 = root.style.getPropertyValue('--color-4') || '#080812';
+            const c1 = root.style.getPropertyValue('--color-1') || '#ffffff';
+            const c2 = root.style.getPropertyValue('--color-2') || '#cccccc';
+            const c3 = root.style.getPropertyValue('--color-3') || '#888888';
+            const c4 = root.style.getPropertyValue('--color-4') || '#030305';
             const fp = root.style.getPropertyValue('--font-pair') || "'Pretendard', sans-serif";
 
             const htmlContent = `
@@ -493,13 +523,9 @@
         :root { --color-1: ${c1}; --color-2: ${c2}; --color-3: ${c3}; --color-4: ${c4}; --font-pair: ${fp}; }
         html, body { width: 100%; height: 100%; margin: 0; display: flex; justify-content: center; align-items: center; background: var(--color-4); overflow: hidden; }
         
-        /* 뷰어용 반응형 래퍼 */
         #viewer-wrapper {
-            width: 1400px; height: 850px;
-            transform-origin: center center;
-            position: relative;
+            width: 1400px; height: 850px; transform-origin: center center; position: relative;
         }
-
         ${document.getElementById('core-styles').innerHTML}
     </style>
 </head>
@@ -514,14 +540,15 @@
         </defs>
     </svg>
 
-    <div class="ambient-background">
-        <div class="ambient-blob blob-1"></div><div class="ambient-blob blob-2"></div><div class="ambient-blob blob-3"></div>
+    <div class="stardust-container">
+        <div class="stardust-layer"></div><div class="stardust-layer"></div>
     </div>
 
     <div id="viewer-wrapper">
         <div id="export-target" style="padding:0; width:100%; height:100%;">
             <div class="main-content">
                 <div class="lp-wrapper">
+                    <div class="sacred-geometry"></div>
                     <div class="lp-spin-master" id="lp-master">
                         <div class="lp-halo-ring"></div>
                         <div class="lp-record">
@@ -559,6 +586,11 @@
                         <div class="progress-fill" id="progress-fill"></div>
                     </div>
                 </div>
+                
+                <div class="volume-wrapper" style="margin-left: auto;">
+                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="100">
+                </div>
             </div>
         </div>
     </div>
@@ -566,10 +598,8 @@
     <div id="youtube-player" style="display:none; position:absolute;"></div>
     
     <script>
-        // 에러 없는 안전한 데이터 주입
         window.playlistData = ${JSON.stringify(window.playlistData)};
         
-        // 브라우저 크기에 맞게 자동 축소/확대 (반응형 핏)
         function resizeFit() {
             const wrapper = document.getElementById('viewer-wrapper');
             const scale = Math.min(window.innerWidth / 1400, window.innerHeight / 850);
@@ -590,7 +620,7 @@
             a.download = `${pairNameDisplay.textContent}_CosmicViewer.html`;
             a.click();
             URL.revokeObjectURL(url);
-            alert("✨ 보스! 뷰어용 HTML이 완성되었습니다. Netlify에 던져 넣기만 하시면 됩니다!");
+            alert("✨ 파트너! 완성된 HTML입니다. 우주의 기운을 담아 공유해 봐!");
         });
     </script>
 </body>
