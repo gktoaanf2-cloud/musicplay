@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pair Music Box - Eternal Core</title>
+    <title>Pair Music Box - Narrative Rewriter</title>
     
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +28,10 @@
             min-height: 100vh; overflow: hidden; font-weight: 300; transition: background-color 0.5s ease;
         }
 
+        /* 캡처 시 강제 고정용 클래스 */
+        body.capturing { justify-content: flex-start !important; align-items: flex-start !important; }
+        .capturing #export-target { transform: none !important; position: absolute !important; top: 0 !important; left: 0 !important; margin: 0 !important; background-color: var(--color-4) !important; }
+
         .stardust-container { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
         .stardust-wrapper { position: absolute; inset: -50%; width: 200%; height: 200%; }
         .stardust-layer { position: absolute; inset: 0; background-repeat: repeat; }
@@ -42,7 +46,7 @@
         /* =========================================
            2. MAIN LAYOUT
            ========================================= */
-        #export-target { width: 1400px; height: 850px; display: flex; flex-direction: column; position: relative; box-sizing: border-box; padding: 50px 60px; z-index: 10; }
+        #export-target { width: 1400px; height: 850px; display: flex; flex-direction: column; position: relative; box-sizing: border-box; padding: 50px 60px; background-color: transparent; z-index: 10; }
         .main-content { display: flex; flex: 1; gap: 120px; align-items: center; position: relative; z-index: 10; }
 
         /* =========================================
@@ -81,7 +85,7 @@
         .lp-center-image:hover { box-shadow: 0 0 0 2px #fff, 0 0 60px var(--color-1); transform: scale(1.02); }
 
         /* =========================================
-           5. PLAYLIST
+           5. PLAYLIST (수정 버튼 등 액션 바)
            ========================================= */
         .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; }
         .sub-title { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 6px; text-transform: uppercase; margin-bottom: 5px; outline: none; font-weight: 500; transition: 0.3s; }
@@ -90,7 +94,13 @@
 
         .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
         .playlist-container::-webkit-scrollbar { display: none; }
-        .track-item { display: flex; align-items: center; padding: 14px 20px; background: transparent; cursor: pointer; font-size: 14px; color: rgba(255,255,255,0.4); position: relative; transition: color 0.4s; font-weight: 300; letter-spacing: 1px; }
+        
+        .track-item { 
+            display: flex; align-items: center; padding: 14px 20px; background: transparent; 
+            cursor: pointer; font-size: 14px; color: rgba(255,255,255,0.4); position: relative; transition: color 0.4s; font-weight: 300; letter-spacing: 1px; 
+            justify-content: space-between; 
+        }
+        .track-info { display: flex; align-items: center; flex: 1; }
         .track-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 1px; background: linear-gradient(90deg, var(--color-1), var(--color-3)); box-shadow: 0 0 10px var(--color-1); transition: width 0.7s cubic-bezier(0.19, 1, 0.22, 1); }
         .track-item:hover { color: #fff; }
         .track-item:hover::after { width: 100%; }
@@ -100,6 +110,18 @@
         .diamond-mark { width: 4px; height: 4px; background: #fff; transform: rotate(45deg); margin-right: 20px; opacity: 0.15; transition: 0.5s; }
         .track-item:hover .diamond-mark { opacity: 1; background: var(--color-1); box-shadow: 0 0 8px var(--color-1); }
         .track-item.playing .diamond-mark { opacity: 1; background: var(--color-2); box-shadow: 0 0 8px var(--color-2); }
+
+        /* [보스 픽: 리스트 관리 버튼 CSS - 수정 버튼 추가!] */
+        .track-actions { display: flex; gap: 8px; opacity: 0; transition: 0.3s; transform: translateX(10px); }
+        .track-item:hover .track-actions { opacity: 1; transform: translateX(0); }
+        .action-btn { 
+            background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 10px; 
+            cursor: pointer; padding: 4px; transition: 0.3s; font-family: inherit; font-weight: bold;
+        }
+        .action-btn:hover { color: var(--color-1); text-shadow: 0 0 8px var(--color-1); transform: scale(1.2); }
+        /* 수정 버튼 전용 컬러 */
+        .action-btn.edit-btn:hover { color: var(--color-3); text-shadow: 0 0 8px var(--color-3); }
+        .action-btn.del-btn:hover { color: #ff3366; text-shadow: 0 0 8px #ff3366; }
 
         /* =========================================
            6. SOUNDBAR
@@ -131,61 +153,29 @@
         .add-form { display: flex; gap: 15px; align-items: center; margin-left: auto;}
         .add-form input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 0; font-size: 12px; width: 110px; outline: none; transition: 0.4s; font-family: inherit; }
         .add-form input:focus { border-bottom-color: var(--color-1); box-shadow: 0 10px 10px -10px var(--color-1); }
+        
+        /* 업데이트 모드일 때 버튼 스타일 */
+        .add-btn.updating { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
 
         /* =========================================
-           7. SYSTEM TERMINAL MODAL (보스 픽: 기하학 터미널 팝업)
+           7. SYSTEM TERMINAL MODAL (GUIDE)
            ========================================= */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
-            display: flex; justify-content: center; align-items: center; z-index: 1000;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
-        
-        .modal-content {
-            background: linear-gradient(135deg, rgba(15, 15, 20, 0.85) 0%, rgba(5, 5, 10, 0.7) 100%);
-            backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 50px 40px; width: 500px; position: relative;
-            /* 핵심: 직각과 45도로 깎인 사이버펑크 모서리 (Chamfered Edge) */
-            clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px));
-            transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
-        }
+        .modal-content { background: linear-gradient(135deg, rgba(15, 15, 20, 0.85) 0%, rgba(5, 5, 10, 0.7) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 50px 40px; width: 500px; position: relative; clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px)); transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: inset 0 0 30px rgba(255,255,255,0.05); }
         .modal-overlay.show .modal-content { transform: scale(1); }
-        
-        /* SF 기하학적 데코 라인 */
-        .modal-content::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, var(--color-1), transparent);
-        }
-        .modal-content::after {
-            content: ''; position: absolute; bottom: 0; right: 0; width: 100%; height: 2px;
-            background: linear-gradient(-90deg, var(--color-3), transparent);
-        }
+        .modal-content::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, var(--color-1), transparent); }
+        .modal-content::after { content: ''; position: absolute; bottom: 0; right: 0; width: 100%; height: 2px; background: linear-gradient(-90deg, var(--color-3), transparent); }
         .modal-deco { position: absolute; right: 0; top: 0; width: 30px; height: 30px; background: rgba(255,255,255,0.1); clip-path: polygon(100% 0, 100% 100%, 0 0); }
         .modal-deco-2 { position: absolute; left: 0; bottom: 0; width: 30px; height: 30px; background: rgba(255,255,255,0.1); clip-path: polygon(0 100%, 100% 100%, 0 0); }
-
-        .modal-close {
-            position: absolute; top: 25px; right: 25px; background: transparent; border: 1px solid rgba(255,255,255,0.2);
-            color: rgba(255,255,255,0.6); font-size: 12px; cursor: pointer; transition: 0.3s;
-            padding: 5px 10px; font-family: 'Courier New', monospace; letter-spacing: 1px; z-index: 10;
-        }
+        .modal-close { position: absolute; top: 25px; right: 25px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); font-size: 12px; cursor: pointer; transition: 0.3s; padding: 5px 10px; font-family: 'Courier New', monospace; letter-spacing: 1px; z-index: 10; }
         .modal-close:hover { background: var(--color-2); color: #000; border-color: var(--color-2); box-shadow: 0 0 15px var(--color-2); }
-        
-        .modal-content h2 {
-            margin: 0 0 25px 0; font-size: 18px; letter-spacing: 4px; color: #fff;
-            text-shadow: 0 0 15px var(--color-1); border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 15px;
-            display: flex; align-items: center; gap: 10px; font-weight: 600;
-        }
+        .modal-content h2 { margin: 0 0 25px 0; font-size: 18px; letter-spacing: 4px; color: #fff; text-shadow: 0 0 15px var(--color-1); border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 15px; display: flex; align-items: center; gap: 10px; font-weight: 600; }
         .modal-content h2::before { content: '■'; color: var(--color-1); font-size: 10px; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0.3; } }
-
         .modal-content ol { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px; }
         .modal-content li { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; display: flex; gap: 15px; align-items: flex-start; }
-        .modal-content li span { 
-            color: var(--color-4); background: var(--color-1); font-weight: bold; 
-            padding: 2px 8px; font-size: 11px; letter-spacing: 1px; box-shadow: 0 0 10px var(--color-1);
-        }
+        .modal-content li span { color: var(--color-4); background: var(--color-1); font-weight: bold; padding: 2px 8px; font-size: 11px; letter-spacing: 1px; box-shadow: 0 0 10px var(--color-1); }
         .modal-content a { color: var(--color-1); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); transition: 0.3s; font-weight: 500;}
         .modal-content a:hover { color: #fff; border-bottom-color: #fff; text-shadow: 0 0 10px var(--color-1); }
     </style>
@@ -207,25 +197,25 @@
         <div class="stardust-wrapper" style="transform: rotate(-10deg);"><div class="stardust-layer layer-3"></div></div>
     </div>
 
+    <!-- 터미널 가이드 팝업 -->
     <div id="guide-modal" class="modal-overlay" data-html2canvas-ignore="true">
         <div class="modal-content">
-            <div class="modal-deco"></div>
-            <div class="modal-deco-2"></div>
+            <div class="modal-deco"></div><div class="modal-deco-2"></div>
             <button class="modal-close" id="modal-close-btn">[CLOSE]</button>
             <h2>SYSTEM_GUIDE // DEPLOY</h2>
             <ol>
-                <li><span>01</span> <div><b>서사 세팅:</b> 페어명, 색상, 유튜브 링크, 이미지를 설정합니다. (수정 즉시 로컬 캐시에 오토 세이브)</div></li>
-                <li><span>02</span> <div><b>HTML 추출:</b> 우측 상단의 <b style="color:var(--color-3);">[HTML SHARE]</b> 버튼을 눌러 공유용 뷰어 HTML 파일을 다운로드합니다.</div></li>
-                <li><span>03</span> <div><b>호스팅 연동:</b> <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop (app.netlify.com/drop)</a> 터미널에 접속합니다. (로그인 불필요)</div></li>
-                <li><span>04</span> <div><b>데이터 전송:</b> 다운로드한 HTML 파일을 화면 중앙 타겟 영역에 드래그 앤 드롭합니다.</div></li>
-                <li><span>05</span> <div><b>서사 공유:</b> 생성된 URL 링크를 복사하여 모두에게 플레이 리스트를 공개해보세요.</div></li>
+                <li><span>01</span> <div><b>서사 세팅:</b> 페어명, 색상, 유튜브 링크, 이미지를 설정합니다.</div></li>
+                <li><span>02</span> <div><b>트랙 제어:</b> 곡에 마우스를 올려 <b style="color:#fff;">[ ✎수정 / ▲▼이동 / ✕삭제 ]</b> 할 수 있습니다.</div></li>
+                <li><span>03</span> <div><b>HTML 추출:</b> 우측 상단의 <b style="color:var(--color-3);">[HTML SHARE]</b> 버튼을 눌러 공유용 뷰어를 다운로드합니다.</div></li>
+                <li><span>04</span> <div><b>호스팅 연동:</b> <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop (app.netlify.com/drop)</a> 터미널에 접속하여 파일을 드래그 앤 드롭합니다.</div></li>
+                <li><span>05</span> <div><b>서사 공유:</b> 생성된 URL 링크를 앤오님께 전송합니다.</div></li>
             </ol>
         </div>
     </div>
 
     <div id="export-target">
         
-        <div class="floating-tools" id="editor-tools">
+        <div class="floating-tools" id="editor-tools" data-html2canvas-ignore="true">
             <button class="text-btn" id="guide-btn" title="시스템 배포 가이드" style="color: #fff; text-shadow: 0 0 10px #fff; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 15px;">GUIDE</button>
             
             <div class="font-controls">
@@ -304,18 +294,20 @@
                 <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="100">
             </div>
 
-            <div class="add-form" id="add-track-form">
+            <div class="add-form" id="add-track-form" data-html2canvas-ignore="true">
                 <input type="text" id="yt-url" placeholder="YouTube URL">
                 <input type="text" id="yt-title" placeholder="Track Title">
-                <button class="text-btn" id="add-track-btn">ADD</button>
+                <button class="text-btn add-btn" id="add-track-btn">ADD</button>
             </div>
         </div>
     </div>
 
+    <!-- 숨겨진 시스템 I/O -->
     <input type="file" id="config-file" accept="image/*" style="display: none;">
     <input type="file" id="import-json-file" accept=".json" style="display: none;">
     <div id="youtube-player" style="display:none; position:absolute;"></div>
 
+    <!-- CORE LOGIC: 에디터/뷰어 공통 로직 -->
     <script id="core-logic">
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
@@ -405,12 +397,19 @@
             e.currentTarget.classList.toggle('active', isLooping);
         });
 
+        // ==========================================
+        // [재생, 이동, 수정, 삭제 통합 이벤트 위임]
+        // ==========================================
         document.getElementById('playlist').addEventListener('click', (e) => {
             const trackItem = e.target.closest('.track-item');
-            if(trackItem) {
-                const index = Array.from(trackItem.parentNode.children).indexOf(trackItem);
-                playTrack(index);
-            }
+            if(!trackItem) return;
+            const index = Array.from(trackItem.parentNode.children).indexOf(trackItem);
+
+            if(e.target.closest('.edit-btn')) { editTrack(e, index); } 
+            else if (e.target.closest('.up-btn')) { moveTrackUp(e, index); } 
+            else if (e.target.closest('.down-btn')) { moveTrackDown(e, index); } 
+            else if (e.target.closest('.del-btn')) { deleteTrack(e, index); } 
+            else { playTrack(index); }
         });
 
         function playTrack(index) {
@@ -435,43 +434,91 @@
         });
         document.getElementById('btn-next').addEventListener('click', playNextTrack);
         document.getElementById('btn-prev').addEventListener('click', playPrevTrack);
+
+        // --- 리스트 관리 로직 ---
+        function moveTrackUp(e, index) {
+            e.stopPropagation();
+            if(index === 0) return;
+            const temp = window.playlistData[index - 1];
+            window.playlistData[index - 1] = window.playlistData[index];
+            window.playlistData[index] = temp;
+
+            if (currentPlayingIndex === index) currentPlayingIndex--;
+            else if (currentPlayingIndex === index - 1) currentPlayingIndex++;
+            
+            if(typeof renderPlaylistUI === 'function') renderPlaylistUI();
+            if(typeof autoSave === 'function') autoSave();
+        }
+
+        function moveTrackDown(e, index) {
+            e.stopPropagation();
+            if(index === window.playlistData.length - 1) return;
+            const temp = window.playlistData[index + 1];
+            window.playlistData[index + 1] = window.playlistData[index];
+            window.playlistData[index] = temp;
+
+            if (currentPlayingIndex === index) currentPlayingIndex++;
+            else if (currentPlayingIndex === index + 1) currentPlayingIndex--;
+            
+            if(typeof renderPlaylistUI === 'function') renderPlaylistUI();
+            if(typeof autoSave === 'function') autoSave();
+        }
+
+        function deleteTrack(e, index) {
+            e.stopPropagation();
+            window.playlistData.splice(index, 1);
+
+            if (currentPlayingIndex === index) {
+                if(player && player.stopVideo) player.stopVideo();
+                currentPlayingIndex = -1;
+                document.getElementById('current-track-name').textContent = "NO TRACK SELECTED";
+                document.getElementById('time-display').textContent = "0:00 / 0:00";
+                document.getElementById('progress-fill').style.width = '0%';
+            } else if (currentPlayingIndex > index) {
+                currentPlayingIndex--;
+            }
+            
+            if(typeof renderPlaylistUI === 'function') renderPlaylistUI();
+            if(typeof autoSave === 'function') autoSave();
+        }
+
+        // 보스 픽: 폼 변환 수정 기능
+        let editingTrackIndex = -1;
+        function editTrack(e, index) {
+            e.stopPropagation();
+            editingTrackIndex = index;
+            document.getElementById('yt-title').value = window.playlistData[index].title;
+            document.getElementById('yt-url').value = "https://youtu.be/" + window.playlistData[index].videoId;
+            
+            const addBtn = document.getElementById('add-track-btn');
+            addBtn.textContent = "UPDATE";
+            addBtn.classList.add('updating');
+        }
     </script>
 
+    <!-- EDITOR LOGIC (편집 전용 시스템) -->
     <script id="editor-logic">
+        const guideModal = document.getElementById('guide-modal');
+        document.getElementById('guide-btn').addEventListener('click', () => { guideModal.style.display = 'flex'; setTimeout(() => guideModal.classList.add('show'), 10); });
+        document.getElementById('modal-close-btn').addEventListener('click', () => { guideModal.classList.remove('show'); setTimeout(() => guideModal.style.display = 'none', 400); });
+
         let base64ImgData = "https://via.placeholder.com/300?text=UPLOAD";
         let currentFontSize = 68;
         let isBodoni = false;
         const root = document.documentElement;
 
-        // 터미널 가이드 모달 제어 로직
-        const guideModal = document.getElementById('guide-modal');
-        document.getElementById('guide-btn').addEventListener('click', () => {
-            guideModal.style.display = 'flex';
-            setTimeout(() => guideModal.classList.add('show'), 10);
-        });
-        document.getElementById('modal-close-btn').addEventListener('click', () => {
-            guideModal.classList.remove('show');
-            setTimeout(() => guideModal.style.display = 'none', 400);
-        });
-
         function getSiteData() {
             return {
                 pairName: document.getElementById('pair-name-display').textContent,
                 subTitle: document.getElementById('sub-title-display').textContent,
-                fontSize: currentFontSize,
-                color1: document.getElementById('config-color-1').value,
-                color2: document.getElementById('config-color-2').value,
-                color3: document.getElementById('config-color-3').value,
-                color4: document.getElementById('config-color-4').value,
-                isBodoni: isBodoni,
-                playlist: window.playlistData,
-                imageData: base64ImgData
+                fontSize: currentFontSize, color1: document.getElementById('config-color-1').value,
+                color2: document.getElementById('config-color-2').value, color3: document.getElementById('config-color-3').value,
+                color4: document.getElementById('config-color-4').value, isBodoni: isBodoni,
+                playlist: window.playlistData, imageData: base64ImgData
             };
         }
 
-        function saveLocal() {
-            try { localStorage.setItem('pair_music_box_v22', JSON.stringify(getSiteData())); } catch(e) { console.warn(e); }
-        }
+        function autoSave() { try { localStorage.setItem('pair_music_box_v24', JSON.stringify(getSiteData())); } catch(e) {} }
 
         function applyDataToUI(data) {
             if(data.pairName) document.getElementById('pair-name-display').textContent = data.pairName;
@@ -483,18 +530,7 @@
             if(data.color4) { document.getElementById('config-color-4').value = data.color4; root.style.setProperty('--color-4', data.color4); }
             if(data.isBodoni) { isBodoni = true; root.style.setProperty('--font-pair', "'Bodoni Moda', serif"); }
             if(data.imageData) { base64ImgData = data.imageData; document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`; }
-            if(data.playlist) { 
-                window.playlistData = data.playlist; 
-                const listContainer = document.getElementById('playlist');
-                listContainer.innerHTML = '';
-                window.playlistData.forEach((track, index) => {
-                    const li = document.createElement('li');
-                    li.className = 'track-item';
-                    if (index === currentPlayingIndex) li.classList.add('playing');
-                    li.innerHTML = `<div class="diamond-mark"></div><span>${String(index + 1).padStart(2, '0')} &nbsp;&nbsp;&nbsp; ${track.title}</span>`;
-                    listContainer.appendChild(li);
-                });
-            }
+            if(data.playlist) { window.playlistData = data.playlist; renderPlaylistUI(); }
         }
 
         function extractVideoID(url) {
@@ -502,44 +538,87 @@
             return (match && match[1].length === 11) ? match[1] : null;
         }
 
+        function renderPlaylistUI() {
+            const listContainer = document.getElementById('playlist');
+            listContainer.innerHTML = '';
+            const isViewer = document.getElementById('editor-tools') === null;
+
+            window.playlistData.forEach((track, index) => {
+                const li = document.createElement('li');
+                li.className = 'track-item';
+                if (index === currentPlayingIndex) li.classList.add('playing');
+                
+                let innerHtmlStr = `
+                    <div class="track-info">
+                        <div class="diamond-mark"></div>
+                        <span class="track-title">${String(index + 1).padStart(2, '0')} &nbsp;&nbsp;&nbsp; ${track.title}</span>
+                    </div>`;
+                
+                // 뷰어가 아닐 때만 컨트롤 삽입
+                if(!isViewer) {
+                    innerHtmlStr += `
+                    <div class="track-actions">
+                        <button class="action-btn edit-btn" title="수정">✎</button>
+                        <button class="action-btn up-btn" title="위로">▲</button>
+                        <button class="action-btn down-btn" title="아래로">▼</button>
+                        <button class="action-btn del-btn" title="삭제">✕</button>
+                    </div>`;
+                }
+                li.innerHTML = innerHtmlStr;
+                listContainer.appendChild(li);
+            });
+        }
+
+        // Add & Update 트랙 통합 처리
         document.getElementById('add-track-btn').addEventListener('click', () => {
-            const videoId = extractVideoID(document.getElementById('yt-url').value);
+            const urlInput = document.getElementById('yt-url').value;
             const title = document.getElementById('yt-title').value.trim() || "UNKNOWN TRACK";
-            if (!videoId) return alert("유효한 유튜브 링크가 아닙니다.");
-            window.playlistData.push({ videoId, title });
-            document.getElementById('yt-url').value = ''; document.getElementById('yt-title').value = '';
             
-            applyDataToUI(getSiteData());
-            saveLocal();
+            let finalId = urlInput.length === 11 ? urlInput : extractVideoID(urlInput);
+            if (!finalId) return alert("유효한 유튜브 링크가 아닙니다.");
+            
+            if (editingTrackIndex > -1) {
+                // 수정 모드
+                window.playlistData[editingTrackIndex] = { videoId: finalId, title };
+                
+                if (currentPlayingIndex === editingTrackIndex && player && player.loadVideoById) {
+                    player.loadVideoById(finalId);
+                    document.getElementById('current-track-name').textContent = title;
+                }
+                
+                editingTrackIndex = -1;
+                const addBtn = document.getElementById('add-track-btn');
+                addBtn.textContent = "ADD";
+                addBtn.classList.remove('updating');
+            } else {
+                // 추가 모드
+                window.playlistData.push({ videoId: finalId, title });
+            }
+            
+            document.getElementById('yt-url').value = ''; document.getElementById('yt-title').value = '';
+            renderPlaylistUI(); autoSave();
         });
 
-        ['1', '2', '3', '4'].forEach(num => {
-            document.getElementById(`config-color-${num}`).addEventListener('input', e => { root.style.setProperty(`--color-${num}`, e.target.value); saveLocal(); });
-        });
-        
-        document.getElementById('font-toggle-btn').addEventListener('click', () => {
-            isBodoni = !isBodoni; root.style.setProperty('--font-pair', isBodoni ? "'Bodoni Moda', serif" : "'Pretendard', sans-serif"); saveLocal();
-        });
-
-        document.getElementById('font-size-up').addEventListener('click', () => { if(currentFontSize < 120) currentFontSize += 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; saveLocal(); });
-        document.getElementById('font-size-down').addEventListener('click', () => { if(currentFontSize > 24) currentFontSize -= 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; saveLocal(); });
-
-        document.getElementById('pair-name-display').addEventListener('blur', (e) => { if(e.target.textContent.trim() === '') e.target.textContent = 'COSMIC_BOND'; saveLocal(); });
-        document.getElementById('sub-title-display').addEventListener('blur', (e) => { if(e.target.textContent.trim() === '') e.target.textContent = 'RECORD OF OUR GALAXY'; saveLocal(); });
+        ['1', '2', '3', '4'].forEach(num => { document.getElementById(`config-color-${num}`).addEventListener('input', e => { root.style.setProperty(`--color-${num}`, e.target.value); autoSave(); }); });
+        document.getElementById('font-toggle-btn').addEventListener('click', () => { isBodoni = !isBodoni; root.style.setProperty('--font-pair', isBodoni ? "'Bodoni Moda', serif" : "'Pretendard', sans-serif"); autoSave(); });
+        document.getElementById('font-size-up').addEventListener('click', () => { if(currentFontSize < 120) currentFontSize += 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); });
+        document.getElementById('font-size-down').addEventListener('click', () => { if(currentFontSize > 24) currentFontSize -= 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); });
+        document.getElementById('pair-name-display').addEventListener('blur', (e) => { if(e.target.textContent.trim() === '') e.target.textContent = 'COSMIC_BOND'; autoSave(); });
+        document.getElementById('sub-title-display').addEventListener('blur', (e) => { if(e.target.textContent.trim() === '') e.target.textContent = 'RECORD OF OUR GALAXY'; autoSave(); });
 
         document.getElementById('config-file').addEventListener('change', e => {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = event => { base64ImgData = event.target.result; document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`; saveLocal(); };
+                reader.onload = event => { base64ImgData = event.target.result; document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`; autoSave(); };
                 reader.readAsDataURL(file);
             }
             e.target.value = '';
         });
 
+        // JSON DATA I/O
         document.getElementById('export-json-btn').addEventListener('click', () => {
-            saveLocal(); const data = getSiteData();
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            autoSave(); const data = getSiteData(); const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${data.pairName}_Data.json`; a.click(); URL.revokeObjectURL(url);
         });
 
@@ -548,21 +627,38 @@
             const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = event => {
-                try {
-                    const parsed = JSON.parse(event.target.result); applyDataToUI(parsed);
-                    try { saveLocal(); alert("✨ 성공적으로 서사 데이터를 복원했습니다."); } catch(err) { alert("⚠️ 데이터는 정상적으로 불러왔지만, 이미지 용량이 커서 브라우저 캐시에 자동 저장되지는 않았습니다."); }
-                } catch(err) { alert("❌ 파일 형식이 잘못되었거나 손상되었습니다."); }
+                let parsed;
+                try { parsed = JSON.parse(event.target.result); } catch(err) { alert("❌ 파일 형식이 잘못되었거나 손상되었습니다."); e.target.value = ''; return; }
+                try { applyDataToUI(parsed); } catch(err) { alert("❌ 데이터 적용 중 오류가 발생했습니다."); e.target.value = ''; return; }
+                try { autoSave(); alert("✨ 성공적으로 서사 데이터를 복원했습니다."); } catch(err) { alert("⚠️ 데이터는 정상적으로 불러왔지만, 이미지 용량이 커서 브라우저 캐시에 자동 저장되지는 않았습니다."); }
                 e.target.value = '';
             };
             reader.readAsText(file);
         });
 
-        window.onload = () => { const saved = localStorage.getItem('pair_music_box_v22'); if(saved) { try { applyDataToUI(JSON.parse(saved)); } catch(e) {} } };
+        window.onload = () => {
+            const saved = localStorage.getItem('pair_music_box_v24');
+            if(saved) { try { applyDataToUI(JSON.parse(saved)); } catch(e) {} }
+            else { renderPlaylistUI(); }
+        };
 
+        // HTML SHARE 추출
         document.getElementById('export-html-btn').addEventListener('click', () => {
-            saveLocal();
+            autoSave();
             const data = getSiteData();
             const fp = data.isBodoni ? "'Bodoni Moda', serif" : "'Pretendard', sans-serif";
+            
+            // 뷰어 환경용 HTML 태그를 별도로 구성 (삭제 버튼 등 제거)
+            let viewerPlaylistHtml = '';
+            data.playlist.forEach((track, index) => {
+                viewerPlaylistHtml += `
+                    <li class="track-item">
+                        <div class="track-info">
+                            <div class="diamond-mark"></div>
+                            <span class="track-title">${String(index + 1).padStart(2, '0')} &nbsp;&nbsp;&nbsp; ${track.title}</span>
+                        </div>
+                    </li>`;
+            });
 
             const htmlContent = `
 <!DOCTYPE html>
@@ -621,7 +717,7 @@
                     <div class="sub-title">${data.subTitle}</div>
                     <div class="pair-name" id="pair-name-display" style="font-size: ${data.fontSize}px;">${data.pairName}</div>
                     <ul class="playlist-container" id="playlist">
-                        ${document.getElementById('playlist').innerHTML}
+                        ${viewerPlaylistHtml}
                     </ul>
                 </div>
             </div>
@@ -661,12 +757,14 @@
     
     <script>
         window.playlistData = ${JSON.stringify(data.playlist)};
+        
         function resizeFit() {
             const wrapper = document.getElementById('viewer-wrapper');
             const scale = Math.min(window.innerWidth / 1400, window.innerHeight / 850);
             wrapper.style.transform = 'scale(' + (scale > 1 ? 1 : scale) + ')';
         }
         window.addEventListener('resize', resizeFit); resizeFit();
+
         ${document.getElementById('core-logic').innerHTML}
     <\/script>
 </body>
