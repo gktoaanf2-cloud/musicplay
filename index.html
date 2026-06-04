@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <title>Pair Music Box</title>
     <style>
-        /* 1. 테마 변수 세팅 (유저가 나중에 색상을 바꿀 수 있도록) */
+        /* =========================================
+           1. DESIGN SYSTEM & VARIABLES
+           ========================================= */
         :root {
-            --theme-color: #d4af37; /* 기본 테마: 무기미도 느낌의 바랜 골드 */
+            --theme-color: #d4af37; /* 무기미도 느낌의 바랜 골드 */
             --bg-color: #0b0b0e;
             --line-color: rgba(255, 255, 255, 0.15);
         }
@@ -14,7 +16,7 @@
         body {
             background-color: var(--bg-color);
             color: #fff;
-            font-family: 'Courier New', Courier, monospace; /* 타자기 느낌의 폰트 */
+            font-family: 'Courier New', Courier, monospace; /* 타자기/터미널 느낌 */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,7 +25,9 @@
             overflow: hidden;
         }
 
-        /* 2. 니어 오토마타 스타일의 메인 컨테이너 (얇은 선과 깔끔한 여백) */
+        /* =========================================
+           2. MAIN CONTAINER (Thin-line & Chamfered)
+           ========================================= */
         .container {
             display: flex;
             width: 900px;
@@ -31,11 +35,13 @@
             border: 1px solid var(--line-color);
             position: relative;
             background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 100%);
-            /* 45도 깎인 모서리 포인트 */
+            /* 45도 깎인 모서리 (사이버펑크 느낌) */
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
         }
 
-        /* 좌측: LP판 영역 */
+        /* =========================================
+           3. LP RECORD & HOLOGRAM
+           ========================================= */
         .lp-section {
             flex: 1;
             display: flex;
@@ -45,12 +51,11 @@
             position: relative;
         }
 
-        /* 3. 대망의 홀로그램 LP판 */
         .lp-record {
             width: 300px;
             height: 300px;
             border-radius: 50%;
-            /* LP판 특유의 결 + 홀로그램 그라데이션 */
+            /* LP판 결 + 홀로그램 그라데이션 */
             background: 
                 repeating-radial-gradient(
                     #111 0, 
@@ -69,23 +74,28 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: spin 5s linear infinite; /* 빙글빙글 회전 */
-            animation-play-state: paused; /* 기본은 정지, 노래 틀면 running으로 변경 */
+            animation: spin 5s linear infinite; /* 무한 회전 애니메이션 */
+            animation-play-state: paused; /* 초기 상태는 정지 */
         }
 
-        /* 중앙 페어 이미지 컷아웃 */
         .lp-center-image {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background-image: url('https://via.placeholder.com/100'); /* 나중에 유저 업로드 이미지로 교체 */
+            background-image: url('https://via.placeholder.com/100'); /* 임시 이미지 */
             background-size: cover;
             background-position: center;
             border: 3px solid var(--theme-color);
             z-index: 10;
         }
 
-        /* 우측: 플레이리스트 및 페어명 영역 */
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* =========================================
+           4. PLAYLIST & UI CONTROLS
+           ========================================= */
         .playlist-section {
             flex: 1;
             padding: 30px;
@@ -104,14 +114,85 @@
             margin-bottom: 20px;
         }
 
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
+        .control-panel {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .control-panel input {
+            background: transparent;
+            border: 1px solid var(--line-color);
+            color: #fff;
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .control-panel input:focus {
+            border-color: var(--theme-color);
+        }
+
+        #yt-url { flex: 2; }
+        #yt-title { flex: 1; }
+
+        .control-panel button {
+            background: transparent;
+            border: 1px solid var(--theme-color);
+            color: var(--theme-color);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            padding: 0 15px;
+            transition: all 0.3s;
+        }
+
+        .control-panel button:hover {
+            background: var(--theme-color);
+            color: var(--bg-color);
+        }
+
+        .playlist-container {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid var(--line-color);
+            padding: 10px;
+        }
+
+        /* 스크롤바 숨기기 */
+        .playlist-container::-webkit-scrollbar { display: none; }
+
+        .track-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px dashed var(--line-color);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .track-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            padding-left: 15px;
+            border-left: 3px solid var(--theme-color);
+        }
+
+        .track-item.playing {
+            color: var(--theme-color);
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <div class="container" id="export-target">
+        
         <div class="lp-section">
             <div class="lp-record" id="lp-disk">
                 <div class="lp-center-image" id="center-img"></div>
@@ -120,11 +201,122 @@
 
         <div class="playlist-section">
             <div class="pair-name" id="pair-name-display">Pair_Name_Here</div>
-            <div style="flex-grow: 1; border: 1px dashed var(--line-color); display: flex; align-items: center; justify-content: center; color: gray;">
-                [ Music List & Soundbar Area ]
+            
+            <div class="control-panel">
+                <input type="text" id="yt-url" placeholder="YouTube Link (ex: https://youtu.be/...)">
+                <input type="text" id="yt-title" placeholder="Track Title">
+                <button id="add-track-btn">[ ADD_TRACK ]</button>
             </div>
+
+            <ul class="playlist-container" id="playlist">
+                </ul>
+
+            <div id="youtube-player" style="display:none; position:absolute;"></div>
         </div>
     </div>
 
+    <script>
+        // 1. 유튜브 IFrame API 비동기 로드
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        let player;
+        let playlistData = [];
+        let currentPlayingIndex = -1;
+
+        // API 준비 완료 시 실행
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            console.log("[SYSTEM] Audio Engine Online.");
+        }
+
+        // 2. 플레이어 상태 감지 -> LP판 애니메이션 제어
+        function onPlayerStateChange(event) {
+            const lpDisk = document.getElementById('lp-disk');
+            
+            if (event.data === YT.PlayerState.PLAYING) {
+                lpDisk.style.animationPlayState = 'running'; // 재생 시 회전
+            } else {
+                lpDisk.style.animationPlayState = 'paused'; // 정지 시 멈춤
+            }
+
+            if (event.data === YT.PlayerState.ENDED) {
+                playNextTrack(); // 곡 끝나면 다음 곡으로
+            }
+        }
+
+        // 3. 유튜브 주소에서 영상 ID만 쏙 빼오는 마법의 정규식
+        function extractVideoID(url) {
+            const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+            const match = url.match(regExp);
+            return (match && match[1].length === 11) ? match[1] : null;
+        }
+
+        // 4. 트랙 추가 버튼 이벤트
+        document.getElementById('add-track-btn').addEventListener('click', () => {
+            const urlInput = document.getElementById('yt-url');
+            const titleInput = document.getElementById('yt-title');
+            const videoId = extractVideoID(urlInput.value);
+            let title = titleInput.value.trim();
+
+            if (!videoId) {
+                alert("파트너, 유튜브 링크가 유효하지 않아! 다시 확인해줘.");
+                return;
+            }
+
+            if (!title) title = "Unknown Track " + (playlistData.length + 1);
+
+            playlistData.push({ videoId, title });
+            urlInput.value = '';
+            titleInput.value = '';
+
+            renderPlaylist();
+        });
+
+        // 5. 플레이리스트 화면에 그리기
+        function renderPlaylist() {
+            const listContainer = document.getElementById('playlist');
+            listContainer.innerHTML = '';
+
+            playlistData.forEach((track, index) => {
+                const li = document.createElement('li');
+                li.className = 'track-item';
+                if (index === currentPlayingIndex) li.classList.add('playing');
+                
+                li.innerHTML = `<span>▶ ${track.title}</span>`;
+                
+                li.addEventListener('click', () => playTrack(index));
+                listContainer.appendChild(li);
+            });
+        }
+
+        // 6. 음악 재생 함수
+        function playTrack(index) {
+            if (index < 0 || index >= playlistData.length) return;
+            
+            currentPlayingIndex = index;
+            player.loadVideoById(playlistData[index].videoId);
+            renderPlaylist();
+        }
+
+        function playNextTrack() {
+            if (playlistData.length === 0) return;
+            let nextIndex = currentPlayingIndex + 1;
+            if (nextIndex >= playlistData.length) nextIndex = 0;
+            playTrack(nextIndex);
+        }
+    </script>
 </body>
 </html>
