@@ -204,11 +204,11 @@
             <button class="modal-close" id="modal-close-btn">[CLOSE]</button>
             <h2>SYSTEM_GUIDE // DEPLOY</h2>
             <ol>
-                <li><span>01</span> <div><b>서사 세팅:</b> 페어명, 색상, 유튜브 링크, 이미지를 설정합니다.</div></li>
-                <li><span>02</span> <div><b>트랙 제어:</b> 곡에 마우스를 올려 <b style="color:#fff;">[ ✎수정 / ▲▼이동 / ✕삭제 ]</b> 할 수 있습니다.</div></li>
+                <li><span>01</span> <div><b>세팅:</b> 페어명, 색상, 유튜브 링크, 이미지를 설정합니다.</div></li>
+                <li><span>02</span> <div><b>트랙 조작:</b> 곡에 마우스를 올려 <b style="color:#fff;">[ ✎수정 / ▲▼이동 / ✕삭제 ]</b> 할 수 있습니다.</div></li>
                 <li><span>03</span> <div><b>HTML 추출:</b> 우측 상단의 <b style="color:var(--color-3);">[HTML SHARE]</b> 버튼을 눌러 공유용 뷰어를 다운로드합니다.</div></li>
-                <li><span>04</span> <div><b>호스팅 연동:</b> <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop (app.netlify.com/drop)</a> 터미널에 접속하여 파일을 드래그 앤 드롭합니다.</div></li>
-                <li><span>05</span> <div><b>서사 공유:</b> 생성된 URL 링크를 앤오님께 전송합니다.</div></li>
+                <li><span>04</span> <div><b>호스팅 연동:</b> <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop (app.netlify.com/drop)</a> 사이트에 접속하여 파일을 드래그 앤 드롭합니다.</div></li>
+                <li><span>05</span> <div><b>서사 공유:</b> 생성된 URL 링크를 눌러 완성된 플레이 리스트에 접속합니다.</div></li>
             </ol>
         </div>
     </div>
@@ -630,7 +630,7 @@
                 let parsed;
                 try { parsed = JSON.parse(event.target.result); } catch(err) { alert("❌ 파일 형식이 잘못되었거나 손상되었습니다."); e.target.value = ''; return; }
                 try { applyDataToUI(parsed); } catch(err) { alert("❌ 데이터 적용 중 오류가 발생했습니다."); e.target.value = ''; return; }
-                try { autoSave(); alert("✨ 성공적으로 서사 데이터를 복원했습니다."); } catch(err) { alert("⚠️ 데이터는 정상적으로 불러왔지만, 이미지 용량이 커서 브라우저 캐시에 자동 저장되지는 않았습니다."); }
+                try { autoSave(); alert("✨ 성공적으로 데이터를 복원했습니다."); } catch(err) { alert("⚠️ 데이터는 정상적으로 불러왔지만, 이미지 용량이 커서 브라우저 캐시에 자동 저장되지는 않았습니다."); }
                 e.target.value = '';
             };
             reader.readAsText(file);
