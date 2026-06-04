@@ -2,27 +2,43 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Pair Music Box</title>
+    <title>Pair Music Box v2.0</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* =========================================
            1. DESIGN SYSTEM & VARIABLES
            ========================================= */
         :root {
-            --theme-color: #d4af37; /* 무기미도 느낌의 바랜 골드 */
-            --bg-color: #0b0b0e;
+            --theme-color: #d4af37; /* 기본: 무기미도 골드 */
+            --bg-color: #0d0d12;
             --line-color: rgba(255, 255, 255, 0.15);
+            /* 홀로그램 기본 그라데이션 */
+            --holo-gradient: conic-gradient(
+                from 0deg, 
+                rgba(255,0,0,0.15), rgba(255,255,0,0.15), rgba(0,255,0,0.15), 
+                rgba(0,255,255,0.15), rgba(0,0,255,0.15), rgba(255,0,255,0.15), rgba(255,0,0,0.15)
+            );
         }
 
         body {
             background-color: var(--bg-color);
             color: #fff;
-            font-family: 'Courier New', Courier, monospace; /* 타자기/터미널 느낌 */
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             overflow: hidden;
+        }
+
+        /* 전체 레이아웃 구획 */
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
         }
 
         /* =========================================
@@ -34,9 +50,21 @@
             height: 500px;
             border: 1px solid var(--line-color);
             position: relative;
-            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 100%);
-            /* 45도 깎인 모서리 (사이버펑크 느낌) */
+            background: #0d0d12;
+            /* 모서리 깎기 */
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+        }
+
+        /* 배경 미세한 그리드 디테일 (오타쿠 감성) */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: linear-gradient(var(--line-color) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            pointer-events: none;
         }
 
         /* =========================================
@@ -52,10 +80,11 @@
         }
 
         .lp-record {
-            width: 300px;
-            height: 300px;
+            width: 320px;
+            height: 320px;
             border-radius: 50%;
-            /* LP판 결 + 홀로그램 그라데이션 */
+            position: relative;
+            /* LP판 바이닐 바이브 + 홀로그램 그라데이션 */
             background: 
                 repeating-radial-gradient(
                     #111 0, 
@@ -63,30 +92,27 @@
                     #222 5px, 
                     #111 6px
                 ),
-                conic-gradient(
-                    from 0deg, 
-                    rgba(255,0,0,0.2), rgba(255,255,0,0.2), rgba(0,255,0,0.2), 
-                    rgba(0,255,255,0.2), rgba(0,0,255,0.2), rgba(255,0,255,0.2), rgba(255,0,0,0.2)
-                );
+                var(--holo-gradient);
             background-blend-mode: overlay;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 
-                        inset 0 0 20px var(--theme-color);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 
+                        inset 0 0 25px var(--theme-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: spin 5s linear infinite; /* 무한 회전 애니메이션 */
-            animation-play-state: paused; /* 초기 상태는 정지 */
+            animation: spin 6s linear infinite;
+            animation-play-state: paused; /* 음악 재생 시 돌아감 */
         }
 
         .lp-center-image {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            background-image: url('https://via.placeholder.com/100'); /* 임시 이미지 */
+            background-image: url('https://via.placeholder.com/110?text=NO+IMAGE'); 
             background-size: cover;
             background-position: center;
-            border: 3px solid var(--theme-color);
+            border: 2px solid var(--theme-color);
             z-index: 10;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
 
         @keyframes spin {
@@ -94,64 +120,69 @@
         }
 
         /* =========================================
-           4. PLAYLIST & UI CONTROLS
+           4. PLAYLIST SECTION
            ========================================= */
         .playlist-section {
             flex: 1;
-            padding: 30px;
+            padding: 40px;
             display: flex;
             flex-direction: column;
+            background: rgba(255,255,255,0.01);
         }
 
         .pair-name {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
             color: var(--theme-color);
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             border-bottom: 1px solid var(--line-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            padding-bottom: 12px;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
         }
 
+        /* 유튜브 입력 패널 */
         .control-panel {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
 
-        .control-panel input {
-            background: transparent;
+        .control-panel input, .config-panel input[type="text"] {
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--line-color);
             color: #fff;
             padding: 8px 12px;
             font-family: inherit;
             font-size: 12px;
             outline: none;
-            transition: border-color 0.3s;
         }
 
-        .control-panel input:focus {
+        .control-panel input:focus, .config-panel input[type="text"]:focus {
             border-color: var(--theme-color);
         }
 
         #yt-url { flex: 2; }
         #yt-title { flex: 1; }
 
-        .control-panel button {
+        button {
             background: transparent;
             border: 1px solid var(--theme-color);
             color: var(--theme-color);
             cursor: pointer;
             font-family: inherit;
             font-weight: bold;
-            padding: 0 15px;
+            padding: 8px 15px;
+            font-size: 11px;
+            letter-spacing: 1px;
             transition: all 0.3s;
         }
 
-        .control-panel button:hover {
+        button:hover {
             background: var(--theme-color);
-            color: var(--bg-color);
+            color: #000;
+            box-shadow: 0 0 10px var(--theme-color);
         }
 
         .playlist-container {
@@ -161,62 +192,138 @@
             flex-grow: 1;
             overflow-y: auto;
             border: 1px solid var(--line-color);
-            padding: 10px;
+            background: rgba(0,0,0,0.2);
         }
 
-        /* 스크롤바 숨기기 */
         .playlist-container::-webkit-scrollbar { display: none; }
 
         .track-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px;
+            padding: 12px;
             border-bottom: 1px dashed var(--line-color);
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.2s;
         }
 
         .track-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            padding-left: 15px;
+            background: rgba(255, 255, 255, 0.04);
+            padding-left: 18px;
             border-left: 3px solid var(--theme-color);
         }
 
         .track-item.playing {
             color: var(--theme-color);
             font-weight: bold;
+            background: rgba(255,255,255,0.02);
+            border-left: 3px solid var(--theme-color);
+        }
+
+        /* =========================================
+           5. CONFIGURATION PANEL (하단 커스텀 영역)
+           ========================================= */
+        .config-panel {
+            width: 900px;
+            border: 1px solid var(--line-color);
+            padding: 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            background: rgba(255,255,255,0.02);
+            font-size: 12px;
+        }
+
+        .config-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .config-panel input[type="color"] {
+            border: none;
+            background: transparent;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        /* 파일 업로드 커스텀 스타일 */
+        .file-upload-btn {
+            border: 1px dashed var(--line-color);
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .file-upload-btn:hover {
+            border-color: var(--theme-color);
+            color: var(--theme-color);
+        }
+
+        .action-buttons {
+            margin-left: auto; /* 버튼들을 우측 정렬 */
+            display: flex;
+            gap: 10px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="export-target">
-        
-        <div class="lp-section">
-            <div class="lp-record" id="lp-disk">
-                <div class="lp-center-image" id="center-img"></div>
+    <div class="wrapper">
+        <div class="container" id="export-target">
+            <div class="lp-section">
+                <div class="lp-record" id="lp-disk">
+                    <div class="lp-center-image" id="center-img"></div>
+                </div>
+            </div>
+
+            <div class="playlist-section">
+                <div class="pair-name" id="pair-name-display">PAIR_LOG_ONLINE</div>
+                
+                <div class="control-panel">
+                    <input type="text" id="yt-url" placeholder="유튜브 링크 입력 (https://...)">
+                    <input type="text" id="yt-title" placeholder="곡 제목">
+                    <button id="add-track-btn">[ ADD_TRACK ]</button>
+                </div>
+
+                <ul class="playlist-container" id="playlist">
+                    </ul>
+
+                <div id="youtube-player" style="display:none; position:absolute;"></div>
             </div>
         </div>
 
-        <div class="playlist-section">
-            <div class="pair-name" id="pair-name-display">Pair_Name_Here</div>
-            
-            <div class="control-panel">
-                <input type="text" id="yt-url" placeholder="YouTube Link (ex: https://youtu.be/...)">
-                <input type="text" id="yt-title" placeholder="Track Title">
-                <button id="add-track-btn">[ ADD_TRACK ]</button>
+        <div class="config-panel">
+            <div class="config-group">
+                <label>PAIR NAME:</label>
+                <input type="text" id="config-pair-name" placeholder="페어명 입력...">
             </div>
 
-            <ul class="playlist-container" id="playlist">
-                </ul>
+            <div class="config-group">
+                <label>THEME COLOR:</label>
+                <input type="color" id="config-theme-color" value="#d4af37">
+            </div>
 
-            <div id="youtube-player" style="display:none; position:absolute;"></div>
+            <div class="config-group">
+                <button id="toggle-holo-btn">[ HOLOGRAPHIC ON ]</button>
+            </div>
+
+            <div class="config-group">
+                <label class="file-upload-btn" for="config-file">[ SELECT IMAGE ]</label>
+                <input type="file" id="config-file" accept="image/*" style="display: none;">
+            </div>
+
+            <div class="action-buttons">
+                <button id="save-local-btn" style="border-color: #555; color: #aaa;">[ SAVE TO LOCAL ]</button>
+                <button id="export-png-btn" style="border-color: #00ffcc; color: #00ffcc;">[ EXPORT TO PNG ]</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // 1. 유튜브 IFrame API 비동기 로드
+        // --- 유튜브 IFrame API 비동기 초기화 ---
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -225,46 +332,38 @@
         let player;
         let playlistData = [];
         let currentPlayingIndex = -1;
+        let isHoloActive = true; 
+        let base64ImgData = ""; // 로컬 스토리지 보존용 이미지 스트링
 
-        // API 준비 완료 시 실행
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', {
-                height: '0',
-                width: '0',
+                height: '0', width: '0',
                 events: {
-                    'onReady': onPlayerReady,
+                    'onReady': () => console.log("[SYSTEM] Audio Core Online."),
                     'onStateChange': onPlayerStateChange
                 }
             });
         }
 
-        function onPlayerReady(event) {
-            console.log("[SYSTEM] Audio Engine Online.");
-        }
-
-        // 2. 플레이어 상태 감지 -> LP판 애니메이션 제어
         function onPlayerStateChange(event) {
             const lpDisk = document.getElementById('lp-disk');
-            
             if (event.data === YT.PlayerState.PLAYING) {
-                lpDisk.style.animationPlayState = 'running'; // 재생 시 회전
+                lpDisk.style.animationPlayState = 'running';
             } else {
-                lpDisk.style.animationPlayState = 'paused'; // 정지 시 멈춤
+                lpDisk.style.animationPlayState = 'paused';
             }
-
             if (event.data === YT.PlayerState.ENDED) {
-                playNextTrack(); // 곡 끝나면 다음 곡으로
+                playNextTrack();
             }
         }
 
-        // 3. 유튜브 주소에서 영상 ID만 쏙 빼오는 마법의 정규식
         function extractVideoID(url) {
             const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
             const match = url.match(regExp);
             return (match && match[1].length === 11) ? match[1] : null;
         }
 
-        // 4. 트랙 추가 버튼 이벤트
+        // --- 플레이리스트 제어 ---
         document.getElementById('add-track-btn').addEventListener('click', () => {
             const urlInput = document.getElementById('yt-url');
             const titleInput = document.getElementById('yt-title');
@@ -272,40 +371,31 @@
             let title = titleInput.value.trim();
 
             if (!videoId) {
-                alert("파트너, 유튜브 링크가 유효하지 않아! 다시 확인해줘.");
+                alert("유효한 유튜브 링크가 아닙니다, 파트너!");
                 return;
             }
-
-            if (!title) title = "Unknown Track " + (playlistData.length + 1);
+            if (!title) title = "TRACK " + (playlistData.length + 1);
 
             playlistData.push({ videoId, title });
-            urlInput.value = '';
-            titleInput.value = '';
-
+            urlInput.value = ''; titleInput.value = '';
             renderPlaylist();
         });
 
-        // 5. 플레이리스트 화면에 그리기
         function renderPlaylist() {
             const listContainer = document.getElementById('playlist');
             listContainer.innerHTML = '';
-
             playlistData.forEach((track, index) => {
                 const li = document.createElement('li');
                 li.className = 'track-item';
                 if (index === currentPlayingIndex) li.classList.add('playing');
-                
-                li.innerHTML = `<span>▶ ${track.title}</span>`;
-                
+                li.innerHTML = `<span>⚙ ${track.title}</span>`;
                 li.addEventListener('click', () => playTrack(index));
                 listContainer.appendChild(li);
             });
         }
 
-        // 6. 음악 재생 함수
         function playTrack(index) {
             if (index < 0 || index >= playlistData.length) return;
-            
             currentPlayingIndex = index;
             player.loadVideoById(playlistData[index].videoId);
             renderPlaylist();
@@ -317,6 +407,113 @@
             if (nextIndex >= playlistData.length) nextIndex = 0;
             playTrack(nextIndex);
         }
+
+        // =========================================
+        // 실시간 인터랙션 & 커스텀 세팅 동기화 로직
+        // =========================================
+
+        // 1. 실시간 페어명 미러링
+        const pairNameInput = document.getElementById('config-pair-name');
+        const pairNameDisplay = document.getElementById('pair-name-display');
+        pairNameInput.addEventListener('input', (e) => {
+            pairNameDisplay.textContent = e.target.value.trim() || "PAIR_LOG_ONLINE";
+        });
+
+        // 2. 실시간 테마 컬러 적용 (CSS 변수 컨트롤)
+        const themeColorInput = document.getElementById('config-theme-color');
+        themeColorInput.addEventListener('input', (e) => {
+            const color = e.target.value;
+            document.documentElement.style.setProperty('--theme-color', color);
+        });
+
+        // 3. 홀로그램 그라데이션 모드 스위칭
+        const toggleHoloBtn = document.getElementById('toggle-holo-btn');
+        toggleHoloBtn.addEventListener('click', () => {
+            isHoloActive = !isHoloActive;
+            const lpDisk = document.getElementById('lp-disk');
+            if(isHoloActive) {
+                toggleHoloBtn.textContent = "[ HOLOGRAPHIC ON ]";
+                document.documentElement.style.setProperty('--holo-gradient', `conic-gradient(from 0deg, rgba(255,0,0,0.15), rgba(255,255,0,0.15), rgba(0,255,0,0.15), rgba(0,255,255,0.15), rgba(0,0,255,0.15), rgba(255,0,255,0.15), rgba(255,0,0,0.15))`);
+            } else {
+                toggleHoloBtn.textContent = "[ HOLOGRAPHIC OFF ]";
+                document.documentElement.style.setProperty('--holo-gradient', `conic-gradient(from 0deg, rgba(0,0,0,0.4), rgba(0,0,0,0.4))`);
+            }
+        });
+
+        // 4. 로컬 이미지 업로드 및 프리뷰 처리
+        const fileInput = document.getElementById('config-file');
+        const centerImg = document.getElementById('center-img');
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    base64ImgData = event.target.result;
+                    centerImg.style.backgroundImage = `url('${base64ImgData}')`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 5. [핵심] LOCAL STORAGE 저장 메커니즘
+        document.getElementById('save-local-btn').addEventListener('click', () => {
+            const configData = {
+                pairName: pairNameInput.value,
+                themeColor: themeColorInput.value,
+                isHoloActive: isHoloActive,
+                playlist: playlistData,
+                imageData: base64ImgData
+            };
+            localStorage.setItem('pair_music_box_data', JSON.stringify(configData));
+            alert("🔒 시스템 설정 및 재생 목록이 디바이스에 백업되었습니다.");
+        });
+
+        // 6. 데이터 로드 자동 실행 함수
+        function loadSavedData() {
+            const saved = localStorage.getItem('pair_music_box_data');
+            if(saved) {
+                const data = JSON.parse(saved);
+                if(data.pairName) {
+                    pairNameInput.value = data.pairName;
+                    pairNameDisplay.textContent = data.pairName;
+                }
+                if(data.themeColor) {
+                    themeColorInput.value = data.themeColor;
+                    document.documentElement.style.setProperty('--theme-color', data.themeColor);
+                }
+                if(data.isHoloActive === false) {
+                    // 세이브가 오프 상태면 오프로 트리거
+                    toggleHoloBtn.click();
+                }
+                if(data.imageData) {
+                    base64ImgData = data.imageData;
+                    centerImg.style.backgroundImage = `url('${base64ImgData}')`;
+                }
+                if(data.playlist && data.playlist.length > 0) {
+                    playlistData = data.playlist;
+                    renderPlaylist();
+                }
+                console.log("[SYSTEM] Local Backup Restored successfully.");
+            }
+        }
+        window.onload = loadSavedData;
+
+        // 7. [핵심] HTML2CANVAS 기반 페어틀 이미지 파일 추출 및 다운로드
+        document.getElementById('export-png-btn').addEventListener('click', () => {
+            const target = document.getElementById('export-target');
+            
+            // 캡처하는 순간만큼은 모서리가 깎이지 않은 완전한 상태를 원하거나 깔끔하게 뽑기 위해 옵션 지정
+            html2canvas(target, {
+                useCORS: true, // 크로스 오리진 이미지 허용 옵션
+                backgroundColor: '#0d0d12', // 투명화 방지 배경 지정
+                scale: 2 // 해상도 2배 뻥튀기로 선명하게 추출
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `${pairNameDisplay.textContent.replace(/ /g, '_')}_music_box.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
     </script>
 </body>
 </html>
