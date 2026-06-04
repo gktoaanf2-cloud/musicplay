@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pair Music Box - Galactic Orbit</title>
+    <title>Pair Music Box - Eternal Core</title>
     
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,66 +22,36 @@
             --font-pair: 'Pretendard', sans-serif; 
         }
 
-        html, body {
+        body {
             background-color: var(--color-4);
             color: #fff;
             font-family: 'Pretendard', sans-serif;
-            margin: 0; padding: 0;
-            width: 100vw; height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
             overflow: hidden;
             font-weight: 300;
-            transition: background-color 0.5s ease;
         }
 
-        /* =========================================
-           2. 3D STARDUST ANIMATION (보스 요청: 반짝이는 우주 먼지)
-           ========================================= */
         .stardust-container { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-        .stardust-wrapper { position: absolute; inset: -50%; width: 200%; height: 200%; }
-        .stardust-layer { position: absolute; inset: 0; background-repeat: repeat; }
-
-        .layer-1 {
+        .stardust-layer {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
             background-image:
-                radial-gradient(2px 2px at 40px 60px, #fff, transparent),
-                radial-gradient(1.5px 1.5px at 150px 200px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(2.5px 2.5px at 300px 100px, #fff, transparent),
-                radial-gradient(1px 1px at 500px 300px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(3px 3px at 700px 150px, rgba(255,255,255,0.9), transparent);
-            background-size: 800px 500px;
-            animation: stardust-fall 40s linear infinite, stardust-twinkle 3s ease-in-out infinite alternate;
+                radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1.5px 1.5px at 150px 150px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 300px 80px, rgba(255,255,255,0.4), transparent),
+                radial-gradient(2px 2px at 450px 250px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 600px 30px, rgba(255,255,255,0.5), transparent);
+            background-repeat: repeat; background-size: 800px 400px;
+            animation: stardust-fall 40s linear infinite; opacity: 0.6;
         }
-        .layer-2 {
-            background-image:
-                radial-gradient(1.5px 1.5px at 80px 120px, #fff, transparent),
-                radial-gradient(2px 2px at 250px 350px, rgba(255,255,255,0.7), transparent),
-                radial-gradient(1px 1px at 400px 80px, #fff, transparent),
-                radial-gradient(2.5px 2.5px at 600px 400px, rgba(255,255,255,0.9), transparent);
-            background-size: 600px 450px;
-            animation: stardust-fall 50s linear infinite, stardust-twinkle 4s ease-in-out infinite alternate-reverse;
-        }
-        .layer-3 {
-            background-image:
-                radial-gradient(2px 2px at 100px 50px, #fff, transparent),
-                radial-gradient(1px 1px at 350px 250px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(3px 3px at 550px 120px, #fff, transparent);
-            background-size: 900px 600px;
-            animation: stardust-fall 60s linear infinite, stardust-twinkle 5s ease-in-out infinite alternate;
-        }
-
-        @keyframes stardust-fall {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(600px); }
-        }
-        @keyframes stardust-twinkle {
-            0% { opacity: 0.1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.1)); }
-            100% { opacity: 1; filter: drop-shadow(0 0 10px #fff); }
-        }
+        .stardust-layer:nth-child(2) { background-size: 500px 300px; animation-duration: 60s; opacity: 0.3; transform: rotate(15deg); }
+        @keyframes stardust-fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(400px) rotate(0deg); } }
 
         /* =========================================
-           3. MAIN LAYOUT
+           2. EXPORT TARGET
            ========================================= */
         #export-target {
             width: 1400px; height: 850px; display: flex; flex-direction: column;
@@ -92,7 +62,7 @@
         .main-content { display: flex; flex: 1; gap: 120px; align-items: center; position: relative; z-index: 10; }
 
         /* =========================================
-           4. TOOLS & UI 
+           3. TOOLS & UI 
            ========================================= */
         .floating-tools { position: absolute; top: 40px; right: 50px; display: flex; gap: 20px; align-items: center; z-index: 100; }
         
@@ -101,7 +71,6 @@
             cursor: pointer; transition: 0.4s; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; padding: 0;
         }
         .text-btn:hover { color: #fff; text-shadow: 0 0 10px var(--color-1), 0 0 20px var(--color-2); }
-        .text-btn.active { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
 
         .color-picker-wrapper {
             position: relative; width: 14px; height: 14px; border-radius: 2px; overflow: hidden;
@@ -113,10 +82,10 @@
             position: absolute; top: -15px; left: -15px; width: 45px; height: 45px; cursor: pointer; border: none;
             transform: rotate(-45deg);
         }
-        .font-controls, .color-controls { display: flex; gap: 15px; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px; align-items: center;}
+        .font-controls, .color-controls, .data-controls { display: flex; gap: 15px; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px; align-items: center;}
 
         /* =========================================
-           5. HOLOGRAPHIC LP & WAVE RIPPLES
+           4. HOLOGRAPHIC LP & WAVE RIPPLES
            ========================================= */
         .lp-wrapper { flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative; }
 
@@ -181,7 +150,7 @@
         .lp-center-image:hover { box-shadow: 0 0 0 1px #fff, 0 0 60px var(--color-1); transform: scale(1.02); }
 
         /* =========================================
-           6. PLAYLIST & SUB-TITLE
+           5. PLAYLIST & SUB-TITLE
            ========================================= */
         .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; }
 
@@ -221,7 +190,7 @@
         .track-item.playing .diamond-mark { opacity: 1; background: var(--color-2); box-shadow: 0 0 8px var(--color-2); }
 
         /* =========================================
-           7. ULTRA-SLIM SOUNDBAR & REPEAT
+           6. ULTRA-SLIM SOUNDBAR & REPEAT
            ========================================= */
         .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 10; gap: 20px;}
         .controls { display: flex; align-items: center; gap: 25px; }
@@ -264,9 +233,7 @@
     </svg>
 
     <div class="stardust-container" id="bg-stardust">
-        <div class="stardust-wrapper" style="transform: rotate(0deg);"><div class="stardust-layer layer-1"></div></div>
-        <div class="stardust-wrapper" style="transform: rotate(15deg);"><div class="stardust-layer layer-2"></div></div>
-        <div class="stardust-wrapper" style="transform: rotate(-10deg);"><div class="stardust-layer layer-3"></div></div>
+        <div class="stardust-layer"></div><div class="stardust-layer"></div>
     </div>
 
     <div id="export-target">
@@ -285,7 +252,12 @@
                 <div class="color-picker-wrapper"><input type="color" id="config-color-4" value="#030305"></div>
             </div>
             
-            <button class="text-btn" id="save-local-btn">SAVE</button>
+            <!-- 보스 요청: JSON 데이터 내보내기/불러오기 -->
+            <div class="data-controls">
+                <button class="text-btn" id="export-json-btn">DATA OUT</button>
+                <button class="text-btn" id="import-json-btn">DATA IN</button>
+            </div>
+
             <button class="text-btn" id="export-html-btn" style="color: var(--color-2);">HTML SHARE</button>
         </div>
 
@@ -352,7 +324,9 @@
         </div>
     </div>
 
+    <!-- 숨겨진 시스템 요소 -->
     <input type="file" id="config-file" accept="image/*" style="display: none;">
+    <input type="file" id="import-json-file" accept=".json" style="display: none;">
     <div id="youtube-player" style="display:none; position:absolute;"></div>
 
     <script id="core-logic">
@@ -366,6 +340,10 @@
         let currentPlayingIndex = -1;
         let isPlaying = false;
         let isLooping = false;
+        let base64ImgData = "https://via.placeholder.com/300?text=UPLOAD";
+        let currentFontSize = 68;
+        let isBodoni = false;
+        const root = document.documentElement;
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', { 
@@ -488,12 +466,100 @@
         });
         document.getElementById('btn-next').addEventListener('click', playNextTrack);
         document.getElementById('btn-prev').addEventListener('click', playPrevTrack);
-    </script>
 
-    <!-- EDITOR LOGIC -->
-    <script id="editor-logic">
-        let base64ImgData = "https://via.placeholder.com/300?text=UPLOAD";
-        let currentFontSize = 68;
+        // ==========================================
+        // [AUTO-SAVE ENGINE] - 로컬 스토리지 실시간 동기화
+        // ==========================================
+        function autoSave() {
+            const data = {
+                pairName: document.getElementById('pair-name-display').textContent,
+                subTitle: document.getElementById('sub-title-display').textContent,
+                fontSize: currentFontSize,
+                color1: document.getElementById('config-color-1').value,
+                color2: document.getElementById('config-color-2').value,
+                color3: document.getElementById('config-color-3').value,
+                color4: document.getElementById('config-color-4').value,
+                isBodoni: isBodoni,
+                playlist: window.playlistData,
+                imageData: base64ImgData
+            };
+            localStorage.setItem('pair_music_box_v17', JSON.stringify(data));
+        }
+
+        function renderPlaylist() {
+            const listContainer = document.getElementById('playlist');
+            listContainer.innerHTML = '';
+            window.playlistData.forEach((track, index) => {
+                const li = document.createElement('li');
+                li.className = 'track-item';
+                if (index === currentPlayingIndex) li.classList.add('playing');
+                li.innerHTML = `<div class="diamond-mark"></div><span>${String(index + 1).padStart(2, '0')} &nbsp;&nbsp;&nbsp; ${track.title}</span>`;
+                li.addEventListener('click', () => playTrack(index));
+                listContainer.appendChild(li);
+            });
+        }
+
+        function loadData(data) {
+            if(data.pairName) document.getElementById('pair-name-display').textContent = data.pairName;
+            if(data.subTitle) document.getElementById('sub-title-display').textContent = data.subTitle;
+            if(data.fontSize) { currentFontSize = data.fontSize; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; }
+            if(data.color1) { document.getElementById('config-color-1').value = data.color1; root.style.setProperty('--color-1', data.color1); }
+            if(data.color2) { document.getElementById('config-color-2').value = data.color2; root.style.setProperty('--color-2', data.color2); }
+            if(data.color3) { document.getElementById('config-color-3').value = data.color3; root.style.setProperty('--color-3', data.color3); }
+            if(data.color4) { document.getElementById('config-color-4').value = data.color4; root.style.setProperty('--color-4', data.color4); }
+            if(data.isBodoni) { isBodoni = true; root.style.setProperty('--font-pair', "'Bodoni Moda', serif"); }
+            if(data.imageData) { base64ImgData = data.imageData; document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`; }
+            if(data.playlist) { window.playlistData = data.playlist; renderPlaylist(); }
+        }
+
+        window.onload = () => {
+            const saved = localStorage.getItem('pair_music_box_v17');
+            if(saved) {
+                try { loadData(JSON.parse(saved)); } catch(e) {}
+            }
+        };
+
+        // 데이터 변경 시 Auto-Save 트리거
+        document.getElementById('config-color-1').addEventListener('input', e => { root.style.setProperty('--color-1', e.target.value); autoSave(); });
+        document.getElementById('config-color-2').addEventListener('input', e => { root.style.setProperty('--color-2', e.target.value); autoSave(); });
+        document.getElementById('config-color-3').addEventListener('input', e => { root.style.setProperty('--color-3', e.target.value); autoSave(); });
+        document.getElementById('config-color-4').addEventListener('input', e => { root.style.setProperty('--color-4', e.target.value); autoSave(); });
+        
+        document.getElementById('font-toggle-btn').addEventListener('click', () => {
+            isBodoni = !isBodoni;
+            root.style.setProperty('--font-pair', isBodoni ? "'Bodoni Moda', serif" : "'Pretendard', sans-serif");
+            autoSave();
+        });
+
+        const pairNameDisplay = document.getElementById('pair-name-display');
+        const subTitleDisplay = document.getElementById('sub-title-display');
+        
+        document.getElementById('font-size-up').addEventListener('click', () => {
+            if(currentFontSize < 120) currentFontSize += 4;
+            pairNameDisplay.style.fontSize = currentFontSize + 'px';
+            autoSave();
+        });
+        document.getElementById('font-size-down').addEventListener('click', () => {
+            if(currentFontSize > 24) currentFontSize -= 4;
+            pairNameDisplay.style.fontSize = currentFontSize + 'px';
+            autoSave();
+        });
+
+        pairNameDisplay.addEventListener('blur', () => { if(pairNameDisplay.textContent.trim() === '') pairNameDisplay.textContent = 'COSMIC_BOND'; autoSave(); });
+        subTitleDisplay.addEventListener('blur', () => { if(subTitleDisplay.textContent.trim() === '') subTitleDisplay.textContent = 'RECORD OF OUR GALAXY'; autoSave(); });
+
+        document.getElementById('config-file').addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = event => {
+                    base64ImgData = event.target.result;
+                    document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`;
+                    autoSave();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         function extractVideoID(url) {
             const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
@@ -506,56 +572,51 @@
             if (!videoId) return alert("유효한 유튜브 링크가 아닙니다.");
             window.playlistData.push({ videoId, title });
             document.getElementById('yt-url').value = ''; document.getElementById('yt-title').value = '';
-            
-            const li = document.createElement('li');
-            li.className = 'track-item';
-            li.innerHTML = `<div class="diamond-mark"></div><span>${String(window.playlistData.length).padStart(2, '0')} &nbsp;&nbsp;&nbsp; ${title}</span>`;
-            document.getElementById('playlist').appendChild(li);
+            renderPlaylist();
+            autoSave();
         });
 
-        const root = document.documentElement;
-        document.getElementById('config-color-1').addEventListener('input', e => root.style.setProperty('--color-1', e.target.value));
-        document.getElementById('config-color-2').addEventListener('input', e => root.style.setProperty('--color-2', e.target.value));
-        document.getElementById('config-color-3').addEventListener('input', e => root.style.setProperty('--color-3', e.target.value));
-        document.getElementById('config-color-4').addEventListener('input', e => root.style.setProperty('--color-4', e.target.value));
-        
-        let isBodoni = false;
-        document.getElementById('font-toggle-btn').addEventListener('click', () => {
-            isBodoni = !isBodoni;
-            root.style.setProperty('--font-pair', isBodoni ? "'Bodoni Moda', serif" : "'Pretendard', sans-serif");
+        // ==========================================
+        // [JSON EXPORT / IMPORT] 서사 파일 추출 및 복원
+        // ==========================================
+        document.getElementById('export-json-btn').addEventListener('click', () => {
+            autoSave();
+            const savedData = localStorage.getItem('pair_music_box_v17');
+            const blob = new Blob([savedData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${pairNameDisplay.textContent}_Data.json`;
+            a.click();
+            URL.revokeObjectURL(url);
         });
 
-        const pairNameDisplay = document.getElementById('pair-name-display');
-        const subTitleDisplay = document.getElementById('sub-title-display');
-        
-        document.getElementById('font-size-up').addEventListener('click', () => {
-            if(currentFontSize < 120) currentFontSize += 4;
-            pairNameDisplay.style.fontSize = currentFontSize + 'px';
-        });
-        document.getElementById('font-size-down').addEventListener('click', () => {
-            if(currentFontSize > 24) currentFontSize -= 4;
-            pairNameDisplay.style.fontSize = currentFontSize + 'px';
+        document.getElementById('import-json-btn').addEventListener('click', () => {
+            document.getElementById('import-json-file').click();
         });
 
-        pairNameDisplay.addEventListener('blur', () => { if(pairNameDisplay.textContent.trim() === '') pairNameDisplay.textContent = 'COSMIC_BOND'; });
-        subTitleDisplay.addEventListener('blur', () => { if(subTitleDisplay.textContent.trim() === '') subTitleDisplay.textContent = 'RECORD OF OUR GALAXY'; });
-
-        document.getElementById('config-file').addEventListener('change', e => {
+        document.getElementById('import-json-file').addEventListener('change', e => {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = event => {
-                    base64ImgData = event.target.result;
-                    document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`;
-                };
-                reader.readAsDataURL(file);
-            }
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = event => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    loadData(data);
+                    autoSave();
+                    alert("보스! 성공적으로 서사 데이터를 복원했습니다.");
+                } catch(err) {
+                    alert("손상된 파일입니다.");
+                }
+            };
+            reader.readAsText(file);
         });
 
-        // ----------------------------------------------------
-        // [HTML 완벽 내보내기] - 잘림 현상 방지 100vw, 100vh 오토 스케일링
-        // ----------------------------------------------------
+        // ==========================================
+        // [HTML 완벽 내보내기] 절대값(Important) 강제 주입
+        // ==========================================
         document.getElementById('export-html-btn').addEventListener('click', () => {
+            autoSave();
             const c1 = document.getElementById('config-color-1').value;
             const c2 = document.getElementById('config-color-2').value;
             const c3 = document.getElementById('config-color-3').value;
@@ -574,11 +635,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
     <style>
-        :root { --color-1: ${c1}; --color-2: ${c2}; --color-3: ${c3}; --color-4: ${c4}; --font-pair: ${fp}; }
-        ${document.getElementById('core-styles').innerHTML}
-        
-        /* 뷰어용 반응형 추가 스타일 */
+        /* 보스. 테마색이 절대 깨지지 않도록 하드코딩 인젝트 처리 완료 */
+        :root {
+            --color-1: ${c1} !important;
+            --color-2: ${c2} !important;
+            --color-3: ${c3} !important;
+            --color-4: ${c4} !important;
+            --font-pair: ${fp} !important;
+        }
+        html, body { background-color: var(--color-4) !important; width: 100%; height: 100%; margin: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         #viewer-wrapper { width: 1400px; height: 850px; transform-origin: center center; position: relative; }
+        ${document.getElementById('core-styles').innerHTML}
     </style>
 </head>
 <body>
@@ -592,24 +659,18 @@
         </defs>
     </svg>
 
-    <!-- 배경 애니메이션 포함 -->
     <div class="stardust-container">
-        <div class="stardust-wrapper" style="transform: rotate(0deg);"><div class="stardust-layer layer-1"></div></div>
-        <div class="stardust-wrapper" style="transform: rotate(15deg);"><div class="stardust-layer layer-2"></div></div>
-        <div class="stardust-wrapper" style="transform: rotate(-10deg);"><div class="stardust-layer layer-3"></div></div>
+        <div class="stardust-layer"></div><div class="stardust-layer"></div>
     </div>
 
-    <!-- 반응형 스케일 래퍼 -->
     <div id="viewer-wrapper">
         <div id="export-target" style="padding:0; width:100%; height:100%;">
             <div class="main-content">
                 <div class="lp-wrapper">
                     <div class="sacred-geometry"></div>
-                    
                     <div class="lp-soundwaves">
                         <div class="wave-ring"></div><div class="wave-ring"></div><div class="wave-ring"></div>
                     </div>
-
                     <div class="lp-spin-master" id="lp-master">
                         <div class="lp-halo-ring" id="halo-ring"></div>
                         <div class="lp-record">
@@ -665,7 +726,6 @@
     <script>
         window.playlistData = ${JSON.stringify(window.playlistData)};
         
-        // 브라우저 해상도에 맞춰 자동 스케일 조절 
         function resizeFit() {
             const wrapper = document.getElementById('viewer-wrapper');
             const scale = Math.min(window.innerWidth / 1400, window.innerHeight / 850);
@@ -686,7 +746,7 @@
             a.download = `${pairNameDisplay.textContent}_CosmicViewer.html`;
             a.click();
             URL.revokeObjectURL(url);
-            alert("✨ 완벽하게 압축된 HTML 파일이 완성되었습니다. 넷플리파이로 출항하십시오!");
+            alert("✨ 보스. 테마색 영구 박제 및 HTML 추출이 완벽하게 완료되었습니다.");
         });
     </script>
 </body>
