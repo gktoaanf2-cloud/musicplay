@@ -2,63 +2,73 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Pair Music Box v3.0 - High-End UI</title>
+    <title>Pair Music Box - Masterpiece</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- 절대 진리의 폰트: 프리텐다드 로드 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <style>
         /* =========================================
            1. CORE DESIGN SYSTEM & VARIABLES
            ========================================= */
         :root {
-            --theme-color: #00f0ff; /* 무기미도 느낌의 서늘하고 날카로운 사이안 */
-            --bg-color: #050508;    /* 심연에 가까운 블랙 */
-            --text-glow: 0 0 10px var(--theme-color), 0 0 20px var(--theme-color);
-            --line-glow: 0 0 5px var(--theme-color);
-            --holo-gradient: conic-gradient(
+            --color-1: #00f0ff; /* 캐릭터 1의 컬러 (예: 사이안) */
+            --color-2: #ff007f; /* 캐릭터 2의 컬러 (예: 딥 마젠타) */
+            --bg-color: #030305;
+            
+            /* 두 색이 교차하는 다이나믹 홀로그램 그라데이션 */
+            --dynamic-holo: conic-gradient(
                 from 0deg, 
-                rgba(0, 240, 255, 0.1), rgba(255, 0, 255, 0.2), rgba(0, 255, 128, 0.1), 
-                rgba(0, 240, 255, 0.3), rgba(255, 0, 255, 0.1), rgba(0, 240, 255, 0.1)
+                var(--color-1) 0%, transparent 20%, 
+                var(--color-2) 40%, transparent 60%, 
+                var(--color-1) 80%, var(--color-2) 100%
             );
         }
 
         body {
             background-color: var(--bg-color);
             color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* 세련된 산세리프 */
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
             overflow-x: hidden;
+            font-weight: 300;
         }
 
         /* =========================================
-           2. MAIN EXPORT WRAPPER (Floating Design)
+           2. EXPORT TARGET (완벽한 비율의 캔버스)
            ========================================= */
         #export-target {
-            width: 1000px;
-            padding: 40px;
-            background: radial-gradient(circle at center, #11111a 0%, var(--bg-color) 100%);
+            width: 1200px; /* 웅장한 가로폭 */
+            height: 680px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.8) 100%);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
             display: flex;
             flex-direction: column;
-            gap: 30px;
-            margin-top: 20px;
-            box-sizing: border-box;
             position: relative;
+            overflow: hidden;
+            margin-top: 20px;
         }
 
-        /* 최상단: LP(좌) + 플레이리스트(우) */
-        .top-section {
+        /* 메인 상단 구역 (LP + 플레이리스트) */
+        .main-content {
             display: flex;
-            justify-content: space-between;
-            align-items: stretch;
-            gap: 50px;
+            flex: 1;
+            padding: 40px 60px;
+            gap: 60px;
+            align-items: center;
         }
 
         /* =========================================
-           3. MASSIVE HOLOGRAM LP (Left)
+           3. MASSIVE LP RECORD (화면을 꽉 채우는 압도적 크기)
            ========================================= */
-        .lp-section {
+        .lp-wrapper {
+            flex: 0 0 500px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -66,288 +76,355 @@
         }
 
         .lp-record {
-            width: 400px;
-            height: 400px;
+            width: 500px;
+            height: 500px;
             border-radius: 50%;
             position: relative;
-            /* 리얼한 바이닐 결 + 영롱한 홀로그램 */
+            /* 베이스 바이닐 텍스처 + 다이나믹 홀로그램 */
             background: 
-                repeating-radial-gradient( #0a0a0a 0, #0a0a0a 4px, #1a1a1a 5px, #0a0a0a 6px ),
-                var(--holo-gradient);
+                repeating-radial-gradient(#050505 0, #050505 3px, #111 4px, #050505 5px),
+                var(--dynamic-holo);
             background-blend-mode: screen;
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.15), 
-                        inset 0 0 20px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 60px rgba(0,0,0,0.8),
+                        inset 0 0 30px rgba(255,255,255,0.1);
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: spin 7s linear infinite;
-            animation-play-state: paused;
-            border: 1px solid rgba(255,255,255,0.1);
+            animation: spin 8s linear infinite;
+            animation-play-state: paused; /* 초기 정지 */
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* 빛 반사 스파클링 효과 (가짜 빛 반사) */
+        /* 유리 질감 빛 반사 (글래스모피즘 엣지) */
         .lp-record::after {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            inset: 0;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.1) 100%);
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.05) 100%);
             pointer-events: none;
         }
 
         .lp-center-image {
-            width: 140px;
-            height: 140px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            background-image: url('https://via.placeholder.com/140?text=PAIR'); 
+            background-image: url('https://via.placeholder.com/180?text=PAIR'); 
             background-size: cover;
             background-position: center;
-            border: 3px solid var(--theme-color);
+            border: 2px solid transparent;
+            /* 듀얼 컬러 테두리 */
+            background-clip: padding-box, border-box;
+            background-origin: padding-box, border-box;
+            background-image: url('https://via.placeholder.com/180?text=PAIR'), linear-gradient(45deg, var(--color-1), var(--color-2));
             z-index: 10;
-            box-shadow: 0 0 20px var(--theme-color), inset 0 0 10px #000;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
         }
 
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* =========================================
-           4. SLEEK PLAYLIST (Right)
+           4. PLAYLIST & TYPOGRAPHY
            ========================================= */
-        .playlist-section {
+        .playlist-wrapper {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            height: 100%;
         }
 
         .pair-name {
-            font-size: 38px;
-            font-weight: 900;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            margin-bottom: 20px;
-            text-shadow: var(--text-glow);
-            position: relative;
-        }
-
-        /* 사이버펑크 엣지 라인 */
-        .pair-name::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 3px;
-            background: var(--theme-color);
-            margin-top: 10px;
-            box-shadow: var(--line-glow);
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--color-1), var(--color-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            margin-bottom: 30px;
+            display: inline-block;
         }
 
         .playlist-container {
             list-style: none;
             padding: 0;
             margin: 0;
-            max-height: 280px;
+            max-height: 320px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
 
-        .playlist-container::-webkit-scrollbar { width: 4px; }
-        .playlist-container::-webkit-scrollbar-thumb { background: var(--theme-color); }
+        /* 스크롤바 미학 */
+        .playlist-container::-webkit-scrollbar { width: 2px; }
+        .playlist-container::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--color-1), var(--color-2)); }
 
         .track-item {
             display: flex;
             align-items: center;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 2px solid transparent;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
-            letter-spacing: 1px;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            color: #aaa;
+            font-size: 15px;
+            font-weight: 400;
+            color: #888;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 1px solid transparent;
         }
 
         .track-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-left: 2px solid var(--theme-color);
+            background: rgba(255, 255, 255, 0.05);
             color: #fff;
-            transform: translateX(5px);
+            transform: translateX(8px);
         }
 
         .track-item.playing {
             color: #fff;
-            background: linear-gradient(90deg, rgba(0, 240, 255, 0.15) 0%, transparent 100%);
-            border-left: 4px solid var(--theme-color);
-            font-weight: bold;
-            box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.05);
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+            border-left: 3px solid var(--color-1);
+            font-weight: 600;
         }
 
         /* =========================================
-           5. SOUND PLAYER BAR (Bottom)
+           5. PLAYER BAR & DELICATE EQUALIZER
            ========================================= */
-        .soundbar-wrapper {
-            width: 100%;
-            height: 60px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+        .player-bar {
+            height: 80px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.05);
             display: flex;
             align-items: center;
+            padding: 0 40px;
             justify-content: space-between;
-            padding: 0 20px;
-            box-sizing: border-box;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(5px);
         }
 
-        .now-playing-info {
-            font-size: 13px;
-            color: var(--theme-color);
-            letter-spacing: 2px;
-            font-weight: bold;
-            text-shadow: 0 0 5px var(--theme-color);
+        /* 좌측: 컨트롤 아이콘 */
+        .controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 25px;
+        }
+        
+        .control-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .control-btn:hover { opacity: 1; transform: scale(1.1); }
+        .control-btn svg {
+            width: 20px; height: 20px;
+            fill: #fff;
+        }
+        .play-pause-btn svg { width: 30px; height: 30px; fill: url(#grad1); }
+
+        /* 중앙: 섬세한 이퀄라이저 & 곡 정보 */
+        .track-info-eq {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        /* 시각적 이퀄라이저 애니메이션 */
+        #current-track-name {
+            font-size: 13px;
+            letter-spacing: 1px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        /* 초극세사 1px 이퀄라이저 */
         .equalizer {
             display: flex;
-            gap: 3px;
-            height: 20px;
             align-items: flex-end;
+            gap: 3px;
+            height: 15px;
         }
         .eq-bar {
-            width: 4px;
-            background: var(--theme-color);
-            box-shadow: var(--line-glow);
-            animation: eq-bounce 0.8s infinite alternate ease-in-out;
-            animation-play-state: paused;
+            width: 2px;
+            background: linear-gradient(to top, var(--color-1), var(--color-2));
+            border-radius: 2px;
+            opacity: 0.8;
+            animation: delicate-eq 0.6s infinite alternate ease-in-out;
+            animation-play-state: paused; /* 초기 정지 */
         }
-        .eq-bar:nth-child(1) { height: 30%; animation-delay: 0.1s; }
-        .eq-bar:nth-child(2) { height: 80%; animation-delay: 0.3s; }
-        .eq-bar:nth-child(3) { height: 50%; animation-delay: 0.2s; }
-        .eq-bar:nth-child(4) { height: 100%; animation-delay: 0.5s; }
-        .eq-bar:nth-child(5) { height: 40%; animation-delay: 0.4s; }
+        /* 각 바마다 다른 딜레이와 높이 */
+        .eq-bar:nth-child(1) { height: 40%; animation-delay: 0.0s; }
+        .eq-bar:nth-child(2) { height: 70%; animation-delay: 0.2s; }
+        .eq-bar:nth-child(3) { height: 100%; animation-delay: 0.4s; }
+        .eq-bar:nth-child(4) { height: 50%; animation-delay: 0.1s; }
+        .eq-bar:nth-child(5) { height: 80%; animation-delay: 0.5s; }
+        .eq-bar:nth-child(6) { height: 30%; animation-delay: 0.3s; }
+        .eq-bar:nth-child(7) { height: 90%; animation-delay: 0.6s; }
+        .eq-bar:nth-child(8) { height: 60%; animation-delay: 0.2s; }
+        .eq-bar:nth-child(9) { height: 100%; animation-delay: 0.5s; }
+        .eq-bar:nth-child(10) { height: 40%; animation-delay: 0.1s; }
 
-        @keyframes eq-bounce {
-            0% { transform: scaleY(0.3); }
+        @keyframes delicate-eq {
+            0% { transform: scaleY(0.2); }
             100% { transform: scaleY(1); }
         }
 
-        /* 플레이리스트 추가 폼 (사운드바 우측에 매끄럽게 배치) */
-        .add-form {
-            display: flex;
-            gap: 10px;
-        }
+        /* 우측: 트랙 추가 폼 */
+        .add-form { display: flex; gap: 15px; align-items: center; }
         .add-form input {
-            background: transparent;
+            background: rgba(255,255,255,0.03);
             border: none;
-            border-bottom: 1px solid rgba(255,255,255,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
             color: #fff;
-            padding: 5px;
-            font-size: 12px;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-family: inherit;
             outline: none;
             transition: 0.3s;
+            width: 160px;
         }
-        .add-form input:focus { border-bottom: 1px solid var(--theme-color); }
-        .add-form button {
+        .add-form input:focus { border-bottom-color: var(--color-1); background: rgba(255,255,255,0.06); }
+        .add-btn {
             background: transparent;
-            border: 1px solid var(--theme-color);
-            color: var(--theme-color);
-            padding: 5px 15px;
+            border: 1px solid var(--color-1);
+            color: var(--color-1);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: bold;
             transition: 0.3s;
-            text-transform: uppercase;
         }
-        .add-form button:hover {
-            background: var(--theme-color);
-            color: #000;
-            box-shadow: var(--line-glow);
-        }
+        .add-btn:hover { background: var(--color-1); color: #000; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
 
         /* =========================================
-           6. CONFIG PANEL (Outside export target)
+           6. CONFIG PANEL (듀얼 컬러 픽커)
            ========================================= */
         .config-panel {
-            width: 1000px;
+            width: 1200px;
             margin-top: 20px;
-            padding: 20px;
+            padding: 20px 30px;
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
             display: flex;
-            gap: 20px;
+            gap: 30px;
             align-items: center;
             box-sizing: border-box;
-            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
         }
-
-        .config-group { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #888; }
-        .config-group input[type="text"] {
-            background: #000; border: 1px solid #333; color: #fff; padding: 6px 10px;
-        }
-        .config-group input[type="color"] { border: none; background: transparent; cursor: pointer; width: 30px; height: 30px; }
+        .config-group { display: flex; align-items: center; gap: 10px; color: #aaa; }
+        .config-group input[type="text"] { background: #0a0a0c; border: 1px solid #333; color: #fff; padding: 8px 12px; border-radius: 6px; font-family: inherit; }
+        .config-group input[type="color"] { border: none; background: transparent; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; padding: 0; }
+        .config-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        .config-group input[type="color"]::-webkit-color-swatch { border: 1px solid #444; border-radius: 50%; }
+        
         .btn-action {
-            background: #111; border: 1px solid #444; color: #fff; padding: 8px 15px; cursor: pointer; transition: 0.2s;
+            background: #111; border: 1px solid #444; color: #fff; padding: 10px 20px; border-radius: 6px; cursor: pointer; transition: 0.3s; font-family: inherit; font-weight: 600;
         }
-        .btn-action:hover { border-color: var(--theme-color); color: var(--theme-color); }
+        .btn-action:hover { border-color: #fff; }
     </style>
 </head>
 <body>
 
+    <!-- 디자인에 사용될 SVG 그라데이션 정의 -->
+    <svg width="0" height="0">
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:var(--color-1); stop-opacity:1" />
+                <stop offset="100%" style="stop-color:var(--color-2); stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- [캡처 타겟 영역] -->
     <div id="export-target">
-        
-        <div class="top-section">
-            <div class="lp-section">
+        <div class="main-content">
+            <!-- 압도적 크기의 LP -->
+            <div class="lp-wrapper">
                 <div class="lp-record" id="lp-disk">
                     <div class="lp-center-image" id="center-img"></div>
                 </div>
             </div>
 
-            <div class="playlist-section">
-                <div class="pair-name" id="pair-name-display">SYSTEM_OVERRIDE</div>
+            <!-- 절제된 플레이리스트 -->
+            <div class="playlist-wrapper">
+                <div class="pair-name" id="pair-name-display">PAIR_TITLE</div>
                 <ul class="playlist-container" id="playlist">
-                    </ul>
+                    <!-- Tracks -->
+                </ul>
             </div>
         </div>
 
-        <div class="soundbar-wrapper">
-            <div class="now-playing-info">
+        <!-- 하단 플레이어 바 -->
+        <div class="player-bar">
+            <!-- 재생 컨트롤 -->
+            <div class="controls">
+                <button class="control-btn" id="btn-prev">
+                    <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                </button>
+                <button class="control-btn play-pause-btn" id="btn-play-pause">
+                    <!-- 기본은 재생(Play) 아이콘 -->
+                    <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <!-- 일시정지(Pause) 아이콘은 기본 숨김 -->
+                    <svg id="icon-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                </button>
+                <button class="control-btn" id="btn-next">
+                    <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                </button>
+            </div>
+
+            <!-- 이퀄라이저 및 곡명 -->
+            <div class="track-info-eq">
                 <div class="equalizer" id="eq-visualizer">
-                    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
                 </div>
-                <span id="current-track-name">NO TRACK PLAYING</span>
+                <span id="current-track-name">NO TRACK SELECTED</span>
             </div>
-            
+
+            <!-- 리스트 추가 -->
             <div class="add-form">
-                <input type="text" id="yt-url" placeholder="YouTube Link" style="width: 200px;">
-                <input type="text" id="yt-title" placeholder="Track Title" style="width: 150px;">
-                <button id="add-track-btn">ADD</button>
+                <input type="text" id="yt-url" placeholder="YouTube Link">
+                <input type="text" id="yt-title" placeholder="Track Title">
+                <button class="add-btn" id="add-track-btn">ADD</button>
             </div>
         </div>
-
     </div>
 
+    <!-- [하단 설정 패널] -->
     <div class="config-panel">
         <div class="config-group">
             <label>NAME</label>
-            <input type="text" id="config-pair-name" placeholder="페어명 입력">
+            <input type="text" id="config-pair-name" placeholder="페어명">
+        </div>
+        <!-- 듀얼 테마 컬러 픽커 -->
+        <div class="config-group" style="margin-left: 20px;">
+            <label>THEME 1</label>
+            <input type="color" id="config-color-1" value="#00f0ff">
         </div>
         <div class="config-group">
-            <label>THEME</label>
-            <input type="color" id="config-theme-color" value="#00f0ff">
+            <label>THEME 2</label>
+            <input type="color" id="config-color-2" value="#ff007f">
         </div>
-        <div class="config-group">
+        
+        <div class="config-group" style="margin-left: 20px;">
             <button class="btn-action" onclick="document.getElementById('config-file').click()">IMAGE UPLOAD</button>
             <input type="file" id="config-file" accept="image/*" style="display: none;">
         </div>
-        <div style="margin-left: auto; display: flex; gap: 10px;">
+
+        <div style="margin-left: auto; display: flex; gap: 15px;">
             <button class="btn-action" id="save-local-btn">SAVE DATA</button>
-            <button class="btn-action" id="export-png-btn" style="border-color: var(--theme-color); color: var(--theme-color);">EXPORT PNG</button>
+            <button class="btn-action" id="export-png-btn" style="background: linear-gradient(90deg, var(--color-1), var(--color-2)); border:none; color:#000;">EXPORT PNG</button>
         </div>
     </div>
 
@@ -363,6 +440,7 @@
         let playlistData = [];
         let currentPlayingIndex = -1;
         let base64ImgData = ""; 
+        let isPlaying = false;
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', {
@@ -371,16 +449,25 @@
             });
         }
 
+        // 재생 상태에 따른 UI (이퀄라이저, LP회전, 재생/정지 아이콘) 토글
         function onPlayerStateChange(event) {
             const lpDisk = document.getElementById('lp-disk');
             const eqBars = document.querySelectorAll('.eq-bar');
+            const iconPlay = document.getElementById('icon-play');
+            const iconPause = document.getElementById('icon-pause');
             
             if (event.data === YT.PlayerState.PLAYING) {
+                isPlaying = true;
                 lpDisk.style.animationPlayState = 'running';
                 eqBars.forEach(bar => bar.style.animationPlayState = 'running');
+                iconPlay.style.display = 'none';
+                iconPause.style.display = 'block';
             } else {
+                isPlaying = false;
                 lpDisk.style.animationPlayState = 'paused';
                 eqBars.forEach(bar => bar.style.animationPlayState = 'paused');
+                iconPlay.style.display = 'block';
+                iconPause.style.display = 'none';
             }
             if (event.data === YT.PlayerState.ENDED) playNextTrack();
         }
@@ -410,7 +497,7 @@
                 const li = document.createElement('li');
                 li.className = 'track-item';
                 if (index === currentPlayingIndex) li.classList.add('playing');
-                li.innerHTML = `0${index + 1} // ${track.title}`;
+                li.innerHTML = `${String(index + 1).padStart(2, '0')} &nbsp;&nbsp;|&nbsp;&nbsp; ${track.title}`;
                 li.addEventListener('click', () => playTrack(index));
                 listContainer.appendChild(li);
             });
@@ -431,13 +518,39 @@
             playTrack(nextIndex);
         }
 
-        // 실시간 동기화 및 로컬 스토리지
+        function playPrevTrack() {
+            if (playlistData.length === 0) return;
+            let prevIndex = currentPlayingIndex - 1;
+            if (prevIndex < 0) prevIndex = playlistData.length - 1;
+            playTrack(prevIndex);
+        }
+
+        // 버튼 컨트롤러 리스너
+        document.getElementById('btn-play-pause').addEventListener('click', () => {
+            if(currentPlayingIndex === -1 && playlistData.length > 0) {
+                playTrack(0);
+            } else if (player && player.getPlayerState) {
+                if (isPlaying) player.pauseVideo();
+                else player.playVideo();
+            }
+        });
+        document.getElementById('btn-next').addEventListener('click', playNextTrack);
+        document.getElementById('btn-prev').addEventListener('click', playPrevTrack);
+
+        // 듀얼 컬러 변수 실시간 동기화
+        const root = document.documentElement;
+        document.getElementById('config-color-1').addEventListener('input', (e) => {
+            root.style.setProperty('--color-1', e.target.value);
+        });
+        document.getElementById('config-color-2').addEventListener('input', (e) => {
+            root.style.setProperty('--color-2', e.target.value);
+        });
+
         document.getElementById('config-pair-name').addEventListener('input', (e) => {
-            document.getElementById('pair-name-display').textContent = e.target.value.trim() || "SYSTEM_OVERRIDE";
+            document.getElementById('pair-name-display').textContent = e.target.value.trim() || "PAIR_TITLE";
         });
-        document.getElementById('config-theme-color').addEventListener('input', (e) => {
-            document.documentElement.style.setProperty('--theme-color', e.target.value);
-        });
+        
+        // 커스텀 이미지 업로드
         document.getElementById('config-file').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -450,27 +563,33 @@
             }
         });
 
+        // 로컬 스토리지
         document.getElementById('save-local-btn').addEventListener('click', () => {
-            localStorage.setItem('pair_music_box_v3', JSON.stringify({
+            localStorage.setItem('pair_music_box_v4', JSON.stringify({
                 pairName: document.getElementById('config-pair-name').value,
-                themeColor: document.getElementById('config-theme-color').value,
+                color1: document.getElementById('config-color-1').value,
+                color2: document.getElementById('config-color-2').value,
                 playlist: playlistData,
                 imageData: base64ImgData
             }));
-            alert("SYSTEM: Data saved to local storage.");
+            alert("✅ 서사 데이터 백업 완료.");
         });
 
         window.onload = () => {
-            const saved = localStorage.getItem('pair_music_box_v3');
+            const saved = localStorage.getItem('pair_music_box_v4');
             if(saved) {
                 const data = JSON.parse(saved);
                 if(data.pairName) {
                     document.getElementById('config-pair-name').value = data.pairName;
                     document.getElementById('pair-name-display').textContent = data.pairName;
                 }
-                if(data.themeColor) {
-                    document.getElementById('config-theme-color').value = data.themeColor;
-                    document.documentElement.style.setProperty('--theme-color', data.themeColor);
+                if(data.color1) {
+                    document.getElementById('config-color-1').value = data.color1;
+                    root.style.setProperty('--color-1', data.color1);
+                }
+                if(data.color2) {
+                    document.getElementById('config-color-2').value = data.color2;
+                    root.style.setProperty('--color-2', data.color2);
                 }
                 if(data.imageData) {
                     base64ImgData = data.imageData;
@@ -483,12 +602,13 @@
             }
         };
 
+        // PNG 캡처 기능
         document.getElementById('export-png-btn').addEventListener('click', () => {
             html2canvas(document.getElementById('export-target'), {
-                useCORS: true, backgroundColor: '#050508', scale: 2
+                useCORS: true, backgroundColor: '#030305', scale: 2
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `music_box.png`;
+                link.download = `pair_music_box.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
