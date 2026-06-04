@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pair Music Box - Galactic Orbit</title>
+    <title>Pair Music Box - The Singularity</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
@@ -13,14 +13,13 @@
     
     <style id="core-styles">
         /* =========================================
-           1. CORE DESIGN SYSTEM (Monochrome Cosmic)
+           1. CORE DESIGN SYSTEM 
            ========================================= */
         :root {
-            /* 흑백/무채색 우주 기반의 기본 세팅 */
-            --color-1: #ffffff; /* White */
-            --color-2: #cccccc; /* Silver */
-            --color-3: #888888; /* Gray */
-            --color-4: #030305; /* Deep Space Black */
+            --color-1: #ffffff;
+            --color-2: #cccccc;
+            --color-3: #888888;
+            --color-4: #030305;
             --font-pair: 'Pretendard', sans-serif; 
         }
 
@@ -37,10 +36,13 @@
             font-weight: 300;
         }
 
-        /* 미세한 별가루 떨어지는 애니메이션 */
-        .stardust-container {
-            position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+        /* 캡처 시 강제 정렬 초기화를 위한 클래스 */
+        body.capturing {
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
         }
+
+        .stardust-container { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
         .stardust-layer {
             position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
             background-image:
@@ -52,13 +54,8 @@
             background-repeat: repeat; background-size: 800px 400px;
             animation: stardust-fall 40s linear infinite; opacity: 0.6;
         }
-        .stardust-layer:nth-child(2) {
-            background-size: 500px 300px; animation-duration: 60s; opacity: 0.3; transform: rotate(15deg);
-        }
-        @keyframes stardust-fall {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(400px) rotate(0deg); }
-        }
+        .stardust-layer:nth-child(2) { background-size: 500px 300px; animation-duration: 60s; opacity: 0.3; transform: rotate(15deg); }
+        @keyframes stardust-fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(400px) rotate(0deg); } }
 
         /* =========================================
            2. EXPORT TARGET
@@ -72,35 +69,35 @@
         .main-content { display: flex; flex: 1; gap: 120px; align-items: center; position: relative; z-index: 10; }
 
         /* =========================================
-           3. TOOLS & UI (보더 완전 삭제, 텍스트 글로우만)
+           3. TOOLS & UI (마름모 픽커 적용)
            ========================================= */
-        .floating-tools {
-            position: absolute; top: 40px; right: 50px; display: flex; gap: 20px; align-items: center; z-index: 100;
-        }
+        .floating-tools { position: absolute; top: 40px; right: 50px; display: flex; gap: 20px; align-items: center; z-index: 100; }
         
         .text-btn {
             background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 11px;
             cursor: pointer; transition: 0.4s; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; padding: 0;
         }
         .text-btn:hover { color: #fff; text-shadow: 0 0 10px var(--color-1), 0 0 20px var(--color-2); }
+        .text-btn.active { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
 
+        /* 파트너 요청: 45도 회전된 마름모꼴 컬러 픽커 */
         .color-picker-wrapper {
-            position: relative; width: 14px; height: 14px; border-radius: 50%; overflow: hidden;
-            cursor: pointer; transition: 0.3s;
-            /* 보더 삭제 */ border: none; box-shadow: 0 0 5px rgba(255,255,255,0.1);
+            position: relative; width: 14px; height: 14px; border-radius: 2px; overflow: hidden;
+            cursor: pointer; transition: 0.3s; border: none; box-shadow: 0 0 5px rgba(255,255,255,0.1);
+            transform: rotate(45deg);
         }
-        .color-picker-wrapper:hover { transform: scale(1.3); box-shadow: 0 0 15px var(--color-1); }
+        .color-picker-wrapper:hover { transform: rotate(45deg) scale(1.3); box-shadow: 0 0 15px var(--color-1); z-index: 10; }
         .color-picker-wrapper input[type="color"] {
-            position: absolute; top: -10px; left: -10px; width: 40px; height: 40px; cursor: pointer; border: none;
+            position: absolute; top: -15px; left: -15px; width: 45px; height: 45px; cursor: pointer; border: none;
+            transform: rotate(-45deg); /* 내부 컬러 픽커는 원상 복구해서 꽉 채우기 */
         }
         .font-controls, .color-controls { display: flex; gap: 15px; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px; align-items: center;}
 
         /* =========================================
-           4. MONOCHROME LP & GEOMETRY
+           4. HOLOGRAPHIC LP & WAVE RIPPLES
            ========================================= */
         .lp-wrapper { flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative; }
 
-        /* 기하학적 문양 (천문학도 / 궤도) */
         .sacred-geometry {
             position: absolute; inset: -50px; 
             background-image: url("data:image/svg+xml,%3Csvg width='750' height='750' viewBox='0 0 750 750' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23ffffff' stroke-width='1' fill='none' stroke-opacity='0.04'%3E%3Ccircle cx='375' cy='375' r='350'/%3E%3Ccircle cx='375' cy='375' r='280'/%3E%3Ccircle cx='375' cy='375' r='180'/%3E%3Cpath d='M375 25v700M25 375h700M127 127l496 496M127 623l496-496'/%3E%3C/g%3E%3C/svg%3E");
@@ -108,15 +105,32 @@
             animation: master-spin 60s linear infinite reverse;
         }
 
+        /* 파트너 요청: 은은하게 퍼지는 파동(Ripple) 애니메이션 */
+        .lp-soundwaves {
+            position: absolute; width: 650px; height: 650px; border-radius: 50%; pointer-events: none; z-index: 0;
+        }
+        .wave-ring {
+            position: absolute; inset: 0; border-radius: 50%; border: 1px solid var(--color-1);
+            animation: pulse-wave 4s ease-out infinite; animation-play-state: paused; opacity: 0;
+        }
+        .wave-ring:nth-child(2) { animation-delay: 1.3s; border-color: var(--color-2); }
+        .wave-ring:nth-child(3) { animation-delay: 2.6s; border-color: var(--color-3); }
+        
+        @keyframes pulse-wave {
+            0% { transform: scale(1); opacity: 0.7; box-shadow: 0 0 10px currentColor; }
+            100% { transform: scale(1.5); opacity: 0; box-shadow: 0 0 30px currentColor; }
+        }
+
         .lp-spin-master {
             width: 660px; height: 660px; display: flex; justify-content: center; align-items: center; position: relative;
             animation: master-spin 12s linear infinite; animation-play-state: paused; z-index: 1;
         }
 
+        /* 기본은 은은하게, 재생 시 opacity 증가! */
         .lp-halo-ring {
             position: absolute; inset: 5px; border-radius: 50%;
             background: conic-gradient(from 0deg, var(--color-1), transparent 20%, var(--color-2) 40%, transparent 60%, var(--color-3) 80%, var(--color-1));
-            opacity: 0.6; filter: blur(10px); z-index: 0;
+            opacity: 0.3; filter: blur(10px); z-index: 0; transition: opacity 0.5s;
         }
 
         .lp-record {
@@ -149,15 +163,22 @@
         .lp-center-image:hover { box-shadow: 0 0 0 1px #fff, 0 0 60px var(--color-1); transform: scale(1.02); }
 
         /* =========================================
-           5. PLAYLIST
+           5. PLAYLIST & SUB-TITLE
            ========================================= */
         .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; }
+
+        /* 파트너 요청: 서브 텍스트 문구 공간 */
+        .sub-title {
+            font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 6px; text-transform: uppercase;
+            margin-bottom: 5px; outline: none; font-weight: 500; transition: 0.3s;
+        }
+        .sub-title:focus { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
 
         .pair-name {
             font-family: var(--font-pair); font-size: 68px; font-weight: 700;
             background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: 2px; margin-bottom: 50px; outline: none; display: inline-block;
+            letter-spacing: 2px; margin-bottom: 40px; outline: none; display: inline-block;
             transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
         }
 
@@ -183,13 +204,15 @@
         .track-item.playing .diamond-mark { opacity: 1; background: var(--color-2); box-shadow: 0 0 10px var(--color-2); }
 
         /* =========================================
-           6. ULTRA-SLIM SOUNDBAR & VOLUME
+           6. ULTRA-SLIM SOUNDBAR & REPEAT
            ========================================= */
         .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 10; gap: 20px;}
-        .controls { display: flex; align-items: center; gap: 30px; }
-        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.4s; }
+        .controls { display: flex; align-items: center; gap: 25px; }
+        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.4s; display: flex; align-items: center;}
         .control-btn:hover { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 10px var(--color-1)); }
-        .control-btn svg { width: 18px; height: 18px; fill: #fff; }
+        .control-btn.active { opacity: 1; filter: drop-shadow(0 0 10px var(--color-1)); }
+        .control-btn.active svg { fill: var(--color-1); }
+        .control-btn svg { width: 18px; height: 18px; fill: #fff; transition: fill 0.3s;}
         .play-pause-btn svg { width: 32px; height: 32px; fill: url(#grad-play); }
 
         .progress-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
@@ -200,16 +223,11 @@
         .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-1), var(--color-3)); box-shadow: 0 0 10px var(--color-1); position: relative; transition: width 0.1s linear; }
         .progress-fill::after { content: ''; position: absolute; right: -3px; top: -3px; width: 5px; height: 5px; background: #fff; transform: rotate(45deg); box-shadow: 0 0 10px #fff, 0 0 15px var(--color-1); }
 
-        /* 볼륨 컨트롤 추가 */
-        .volume-wrapper { display: flex; align-items: center; gap: 10px; margin-left: 15px; opacity: 0.6; transition: 0.3s; }
+        .volume-wrapper { display: flex; align-items: center; gap: 10px; margin-left: 15px; opacity: 0.5; transition: 0.3s; }
         .volume-wrapper:hover { opacity: 1; }
         .volume-wrapper svg { width: 14px; height: 14px; fill: #fff; }
-        .volume-slider { 
-            -webkit-appearance: none; width: 60px; height: 1px; background: rgba(255,255,255,0.2); outline: none; cursor: pointer;
-        }
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 6px; height: 6px; background: #fff; transform: rotate(45deg); box-shadow: 0 0 10px var(--color-1);
-        }
+        .volume-slider { -webkit-appearance: none; width: 60px; height: 1px; background: rgba(255,255,255,0.2); outline: none; cursor: pointer; }
+        .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 6px; height: 6px; background: #fff; transform: rotate(45deg); box-shadow: 0 0 10px var(--color-1); }
 
         .add-form { display: flex; gap: 15px; align-items: center; margin-left: auto;}
         .add-form input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 0; font-size: 12px; width: 110px; outline: none; transition: 0.4s; font-family: inherit; }
@@ -228,8 +246,7 @@
     </svg>
 
     <div class="stardust-container" id="bg-stardust">
-        <div class="stardust-layer"></div>
-        <div class="stardust-layer"></div>
+        <div class="stardust-layer"></div><div class="stardust-layer"></div>
     </div>
 
     <div id="export-target">
@@ -256,8 +273,15 @@
         <div class="main-content">
             <div class="lp-wrapper">
                 <div class="sacred-geometry"></div>
+                
+                <div class="lp-soundwaves" id="soundwaves">
+                    <div class="wave-ring"></div>
+                    <div class="wave-ring"></div>
+                    <div class="wave-ring"></div>
+                </div>
+
                 <div class="lp-spin-master" id="lp-master">
-                    <div class="lp-halo-ring"></div>
+                    <div class="lp-halo-ring" id="halo-ring"></div>
                     <div class="lp-record">
                         <div class="lp-grooves"></div>
                         <div class="lp-internal-glow"></div>
@@ -267,6 +291,7 @@
             </div>
 
             <div class="playlist-wrapper">
+                <div class="sub-title" id="sub-title-display" contenteditable="true" spellcheck="false">RECORD OF OUR GALAXY</div>
                 <div class="pair-name" id="pair-name-display" contenteditable="true" spellcheck="false">COSMIC_BOND</div>
                 <ul class="playlist-container" id="playlist"></ul>
             </div>
@@ -274,12 +299,16 @@
 
         <div class="player-bar">
             <div class="controls">
-                <button class="control-btn" id="btn-prev"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+                <button class="control-btn" id="btn-prev" title="이전 곡"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
                 <button class="control-btn play-pause-btn" id="btn-play-pause">
                     <svg id="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     <svg id="icon-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                 </button>
-                <button class="control-btn" id="btn-next"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+                <button class="control-btn" id="btn-next" title="다음 곡"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+                
+                <button class="control-btn" id="btn-loop" title="한 곡 반복">
+                    <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+                </button>
             </div>
 
             <div class="progress-wrapper">
@@ -318,6 +347,7 @@
         if (typeof playlistData === 'undefined') { window.playlistData = []; }
         let currentPlayingIndex = -1;
         let isPlaying = false;
+        let isLooping = false;
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', { 
@@ -327,9 +357,8 @@
         }
 
         function onPlayerReady(event) {
-            // 초기 볼륨 셋팅
-            const vol = document.getElementById('volume-slider').value;
-            player.setVolume(vol);
+            const volSlider = document.getElementById('volume-slider');
+            if(volSlider) player.setVolume(volSlider.value);
         }
 
         function formatTime(seconds) {
@@ -355,23 +384,39 @@
 
         function onPlayerStateChange(event) {
             const lpMaster = document.getElementById('lp-master');
+            const haloRing = document.getElementById('halo-ring');
+            const waveRings = document.querySelectorAll('.wave-ring');
             const iconPlay = document.getElementById('icon-play');
             const iconPause = document.getElementById('icon-pause');
             
             if (event.data === YT.PlayerState.PLAYING) {
                 isPlaying = true;
                 lpMaster.style.animationPlayState = 'running';
+                haloRing.style.opacity = '0.8'; // 재생 시 빛 강하게
+                waveRings.forEach(ring => ring.style.animationPlayState = 'running');
+                
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'block';
                 startProgressBar();
             } else {
                 isPlaying = false;
                 lpMaster.style.animationPlayState = 'paused';
+                haloRing.style.opacity = '0.3'; // 멈추면 빛 약하게
+                waveRings.forEach(ring => ring.style.animationPlayState = 'paused');
+
                 iconPlay.style.display = 'block';
                 iconPause.style.display = 'none';
                 clearInterval(progressInterval);
             }
-            if (event.data === YT.PlayerState.ENDED) playNextTrack();
+            
+            if (event.data === YT.PlayerState.ENDED) {
+                if(isLooping) {
+                    player.seekTo(0);
+                    player.playVideo();
+                } else {
+                    playNextTrack();
+                }
+            }
         }
 
         document.getElementById('progress-bar').addEventListener('click', (e) => {
@@ -383,9 +428,17 @@
             }
         });
 
-        // 볼륨 슬라이더 이벤트
-        document.getElementById('volume-slider').addEventListener('input', (e) => {
-            if(player && player.setVolume) player.setVolume(e.target.value);
+        const volSlider = document.getElementById('volume-slider');
+        if(volSlider) {
+            volSlider.addEventListener('input', (e) => {
+                if(player && player.setVolume) player.setVolume(e.target.value);
+            });
+        }
+
+        // 반복재생 토글
+        document.getElementById('btn-loop').addEventListener('click', (e) => {
+            isLooping = !isLooping;
+            e.currentTarget.classList.toggle('active', isLooping);
         });
 
         document.getElementById('playlist').addEventListener('click', (e) => {
@@ -455,6 +508,8 @@
         });
 
         const pairNameDisplay = document.getElementById('pair-name-display');
+        const subTitleDisplay = document.getElementById('sub-title-display');
+        
         document.getElementById('font-size-up').addEventListener('click', () => {
             if(currentFontSize < 120) currentFontSize += 4;
             pairNameDisplay.style.fontSize = currentFontSize + 'px';
@@ -463,6 +518,9 @@
             if(currentFontSize > 24) currentFontSize -= 4;
             pairNameDisplay.style.fontSize = currentFontSize + 'px';
         });
+
+        pairNameDisplay.addEventListener('blur', () => { if(pairNameDisplay.textContent.trim() === '') pairNameDisplay.textContent = 'COSMIC_BOND'; });
+        subTitleDisplay.addEventListener('blur', () => { if(subTitleDisplay.textContent.trim() === '') subTitleDisplay.textContent = 'RECORD OF OUR GALAXY'; });
 
         document.getElementById('config-file').addEventListener('change', e => {
             const file = e.target.files[0];
@@ -476,18 +534,21 @@
             }
         });
 
-        // 캡처 영역 스크롤 버그 해결 & 별가루 포함
+        // ----------------------------------------------------
+        // [비기] 캡처 잘림 방지: Flex 초기화 및 강제 스크롤 제어
+        // ----------------------------------------------------
         document.getElementById('export-png-btn').addEventListener('click', async () => {
+            document.body.classList.add('capturing'); // Flex 중앙 정렬 강제 해제
             window.scrollTo(0, 0); 
+            
             const target = document.getElementById('export-target');
             const stardust = document.getElementById('bg-stardust');
-            
             target.insertBefore(stardust.cloneNode(true), target.firstChild);
             
             try {
                 const canvas = await html2canvas(target, {
                     useCORS: true, 
-                    backgroundColor: getComputedStyle(root).getPropertyValue('--color-4').trim(), 
+                    backgroundColor: document.getElementById('config-color-4').value, 
                     scale: 2, scrollX: 0, scrollY: 0, width: 1400, height: 850
                 });
                 
@@ -497,15 +558,18 @@
                 link.click();
             } finally {
                 target.removeChild(target.firstChild);
+                document.body.classList.remove('capturing'); // 원상 복구
             }
         });
 
-        // 공유용 HTML 추출 로직
+        // ----------------------------------------------------
+        // HTML 내보내기 (테마색 완벽 복제)
+        // ----------------------------------------------------
         document.getElementById('export-html-btn').addEventListener('click', () => {
-            const c1 = root.style.getPropertyValue('--color-1') || '#ffffff';
-            const c2 = root.style.getPropertyValue('--color-2') || '#cccccc';
-            const c3 = root.style.getPropertyValue('--color-3') || '#888888';
-            const c4 = root.style.getPropertyValue('--color-4') || '#030305';
+            const c1 = document.getElementById('config-color-1').value;
+            const c2 = document.getElementById('config-color-2').value;
+            const c3 = document.getElementById('config-color-3').value;
+            const c4 = document.getElementById('config-color-4').value;
             const fp = root.style.getPropertyValue('--font-pair') || "'Pretendard', sans-serif";
 
             const htmlContent = `
@@ -523,9 +587,7 @@
         :root { --color-1: ${c1}; --color-2: ${c2}; --color-3: ${c3}; --color-4: ${c4}; --font-pair: ${fp}; }
         html, body { width: 100%; height: 100%; margin: 0; display: flex; justify-content: center; align-items: center; background: var(--color-4); overflow: hidden; }
         
-        #viewer-wrapper {
-            width: 1400px; height: 850px; transform-origin: center center; position: relative;
-        }
+        #viewer-wrapper { width: 1400px; height: 850px; transform-origin: center center; position: relative; }
         ${document.getElementById('core-styles').innerHTML}
     </style>
 </head>
@@ -549,8 +611,13 @@
             <div class="main-content">
                 <div class="lp-wrapper">
                     <div class="sacred-geometry"></div>
+                    
+                    <div class="lp-soundwaves">
+                        <div class="wave-ring"></div><div class="wave-ring"></div><div class="wave-ring"></div>
+                    </div>
+
                     <div class="lp-spin-master" id="lp-master">
-                        <div class="lp-halo-ring"></div>
+                        <div class="lp-halo-ring" id="halo-ring"></div>
                         <div class="lp-record">
                             <div class="lp-grooves"></div>
                             <div class="lp-internal-glow"></div>
@@ -560,6 +627,7 @@
                 </div>
 
                 <div class="playlist-wrapper">
+                    <div class="sub-title">${subTitleDisplay.textContent}</div>
                     <div class="pair-name" id="pair-name-display" style="font-size: ${currentFontSize}px;">${pairNameDisplay.textContent}</div>
                     <ul class="playlist-container" id="playlist">
                         ${document.getElementById('playlist').innerHTML}
@@ -575,6 +643,9 @@
                         <svg id="icon-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                     </button>
                     <button class="control-btn" id="btn-next"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+                    <button class="control-btn" id="btn-loop">
+                        <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+                    </button>
                 </div>
 
                 <div class="progress-wrapper">
@@ -620,7 +691,7 @@
             a.download = `${pairNameDisplay.textContent}_CosmicViewer.html`;
             a.click();
             URL.revokeObjectURL(url);
-            alert("✨ 파트너! 완성된 HTML입니다. 우주의 기운을 담아 공유해 봐!");
+            alert("✨ 파트너! 색상까지 완벽하게 박제된 뷰어용 HTML 완성!");
         });
     </script>
 </body>
