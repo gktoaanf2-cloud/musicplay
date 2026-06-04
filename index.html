@@ -2,10 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Pair Music Box - Ultimate Aura</title>
+    <title>Pair Music Box - Orbital Glow</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
-    <!-- 절대 진리의 프리텐다드 & 보스가 선택한 우아함의 극치 보도니 모다 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,15 +12,14 @@
     
     <style>
         /* =========================================
-           1. CORE DESIGN SYSTEM (Dynamic 3-Colors)
+           1. CORE DESIGN SYSTEM 
            ========================================= */
         :root {
-            /* 보스의 지시대로 3가지 테마 컬러 도입 */
             --color-1: #00f0ff;
             --color-2: #ff007f;
             --color-3: #7000ff;
-            --bg-dark: #050508;
-            --font-pair: 'Pretendard', sans-serif; /* 기본 폰트 */
+            --bg-dark: #020203;
+            --font-pair: 'Pretendard', sans-serif; 
         }
 
         body {
@@ -37,19 +35,12 @@
             font-weight: 300;
         }
 
-        /* 인스타 감성 영롱한 유리 오로라 백그라운드 */
+        /* 인스타 감성 오로라 백그라운드 */
         .ambient-background {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            z-index: -1;
-            background: var(--bg-dark);
+            position: absolute; inset: 0; overflow: hidden; z-index: -1; background: var(--bg-dark);
         }
         .ambient-blob {
-            position: absolute;
-            filter: blur(120px);
-            opacity: 0.4;
-            border-radius: 50%;
+            position: absolute; filter: blur(120px); opacity: 0.3; border-radius: 50%;
             animation: float 10s ease-in-out infinite alternate;
         }
         .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--color-1); animation-delay: 0s; }
@@ -59,206 +50,159 @@
         @keyframes float { 100% { transform: translate(5%, 5%) scale(1.1); } }
 
         /* =========================================
-           2. EXPORT TARGET
+           2. INVISIBLE EXPORT TARGET (사각형 완전 박살)
            ========================================= */
         #export-target {
             width: 1400px;
-            height: 850px; /* 사운드바 여백 확보를 위해 높이 확장 */
+            height: 850px;
             display: flex;
             flex-direction: column;
             position: relative;
             box-sizing: border-box;
             padding: 50px 60px;
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(30px); /* 글래스모피즘 극대화 */
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 30px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            /* 사각형 배경, 테두리, 블러 완전 삭제. 오직 여백뿐. */
+            background: transparent;
+            border: none;
+            box-shadow: none;
         }
 
         .main-content {
-            display: flex;
-            flex: 1;
-            gap: 120px;
-            align-items: center;
+            display: flex; flex: 1; gap: 120px; align-items: center;
         }
 
         /* =========================================
-           3. FLOATING COMPACT TOOLS (Top Right)
+           3. TEXT-ONLY BUTTONS & TOOLS
            ========================================= */
         .floating-tools {
-            position: absolute;
-            top: 40px;
-            right: 50px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            z-index: 100;
+            position: absolute; top: 40px; right: 50px; display: flex; gap: 20px; align-items: center; z-index: 100;
         }
 
-        .tool-btn {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #ddd;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 11px;
+        /* 버튼 외곽선 삭제 & 글로우 애니메이션 */
+        .text-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
             font-family: inherit;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            padding: 5px;
+            font-weight: 600;
         }
-        .tool-btn:hover { border-color: var(--color-1); color: #fff; box-shadow: 0 0 15px var(--color-1); }
+        .text-btn:hover {
+            color: #fff;
+            text-shadow: 0 0 15px var(--color-1), 0 0 30px var(--color-2);
+            transform: translateY(-2px);
+        }
 
+        /* 컬러 픽커 래퍼 (이것도 미니멀하게) */
         .color-picker-wrapper {
-            position: relative; width: 22px; height: 22px; border-radius: 50%; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s;
+            position: relative; width: 14px; height: 14px; border-radius: 50%; overflow: hidden;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s;
         }
-        .color-picker-wrapper:hover { transform: scale(1.1); border-color: #fff; }
+        .color-picker-wrapper:hover { transform: scale(1.5); box-shadow: 0 0 15px #fff; }
         .color-picker-wrapper input[type="color"] {
-            position: absolute; top: -10px; left: -10px; width: 44px; height: 44px; cursor: pointer; border: none;
+            position: absolute; top: -10px; left: -10px; width: 30px; height: 30px; cursor: pointer; border: none;
+        }
+
+        .font-controls {
+            display: flex; gap: 10px; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 20px;
         }
 
         /* =========================================
-           4. AESTHETIC HOLOGRAPHIC LP
+           4. ORBITAL GLOW LP 
            ========================================= */
         .lp-wrapper {
-            flex: 0 0 650px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative;
         }
+
+        /* LP 외부를 도는 궤도 빛 (Orbit Glow) */
+        .orbit-container {
+            position: absolute;
+            width: 720px; /* LP(650)보다 큰 궤도 */
+            height: 720px;
+            border-radius: 50%;
+            animation: orbit-spin 4s linear infinite;
+            animation-play-state: paused; /* 기본 정지 */
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        /* 빛의 핵 */
+        .orbit-light {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 8px; height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 10px var(--color-1), 0 0 50px 20px var(--color-2), 0 0 80px 30px var(--color-3);
+        }
+
+        @keyframes orbit-spin { 100% { transform: rotate(360deg); } }
 
         .lp-record {
-            width: 650px;
-            height: 650px;
-            border-radius: 50%;
-            background: rgba(10, 10, 15, 0.4);
-            backdrop-filter: blur(20px);
-            position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5), inset 0 0 40px rgba(255,255,255,0.05);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.15);
-            animation: lp-spin 12s linear infinite;
-            animation-play-state: paused;
+            width: 650px; height: 650px; border-radius: 50%;
+            background: rgba(5, 5, 8, 0.6); backdrop-filter: blur(10px); position: relative;
+            box-shadow: 0 0 60px rgba(0,0,0,0.8);
+            display: flex; justify-content: center; align-items: center; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            animation: lp-spin 12s linear infinite; animation-play-state: paused;
         }
 
-        /* 보스의 지시: 촘촘하고 세련된 바이닐 내부 선 */
         .lp-grooves {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background-image: repeating-radial-gradient(
-                transparent 0, transparent 8px,
-                rgba(255,255,255,0.05) 9px, transparent 10px
-            );
+            position: absolute; inset: 0; border-radius: 50%;
+            background-image: repeating-radial-gradient(transparent 0, transparent 8px, rgba(255,255,255,0.05) 9px, transparent 10px);
             pointer-events: none;
         }
 
-        /* 보스의 지시: 재생 시 선을 따라 도는 영롱한 글로우 효과 */
         .lp-glow-ring {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: conic-gradient(
-                from 0deg, 
-                transparent 0%, var(--color-1) 25%, 
-                transparent 50%, var(--color-2) 75%, 
-                transparent 100%
-            );
-            mix-blend-mode: color-dodge;
-            opacity: 0.6;
+            position: absolute; inset: 0; border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0%, var(--color-1) 25%, transparent 50%, var(--color-2) 75%, transparent 100%);
+            mix-blend-mode: color-dodge; opacity: 0.6;
             mask-image: repeating-radial-gradient(transparent 0, transparent 8px, black 9px, transparent 10px);
             -webkit-mask-image: repeating-radial-gradient(transparent 0, transparent 8px, black 9px, transparent 10px);
-            animation: holo-spin 3s linear infinite;
-            animation-play-state: paused;
-            pointer-events: none;
+            animation: holo-spin 3s linear infinite; animation-play-state: paused; pointer-events: none;
         }
 
         @keyframes lp-spin { 100% { transform: rotate(360deg); } }
-        @keyframes holo-spin { 100% { transform: rotate(-360deg); } } /* 반대로 돌려서 다이나믹함 극대화 */
+        @keyframes holo-spin { 100% { transform: rotate(-360deg); } }
 
-        /* 보스의 지시: 중앙 이미지 대폭 확장 (280px) */
         .lp-center-image {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background-color: #000;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 0 0 2px rgba(255,255,255,0.1),
-                        0 0 50px var(--color-3), 
-                        inset 0 0 30px rgba(0,0,0,0.8);
-            cursor: pointer;
-            transition: 0.4s;
-            /* 고정색 삭제, 3색 그라데이션 적용 */
-            background-image: url('https://via.placeholder.com/300?text=CLICK+TO+UPLOAD');
+            width: 280px; height: 280px; border-radius: 50%; background-color: #000;
+            background-size: cover; background-position: center; position: relative; z-index: 10;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.1), 0 0 50px var(--color-3), inset 0 0 30px rgba(0,0,0,0.9);
+            cursor: pointer; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            background-image: url('https://via.placeholder.com/300?text=UPLOAD');
         }
-
-        .lp-center-image:hover {
-            box-shadow: 0 0 0 2px #fff, 0 0 80px var(--color-1), inset 0 0 20px rgba(0,0,0,0.5);
-            transform: scale(1.02);
-        }
+        .lp-center-image:hover { box-shadow: 0 0 0 2px #fff, 0 0 80px var(--color-1), inset 0 0 20px rgba(0,0,0,0.5); transform: scale(1.05); }
 
         /* =========================================
-           5. PLAYLIST (True Glassmorphism)
+           5. PLAYLIST & EDITABLE FONT
            ========================================= */
-        .playlist-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-        }
+        .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; }
 
+        /* 보스 픽: 사이즈 조절 가능한 페어명 */
         .pair-name {
-            font-family: var(--font-pair); /* 폰트 변경 변수 */
-            font-size: 68px;
+            font-family: var(--font-pair);
+            font-size: 68px; /* JS로 제어됨 */
             font-weight: 700;
             background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
-            margin-bottom: 50px;
-            outline: none;
-            display: inline-block;
-            transition: 0.3s;
-            text-shadow: 0 0 30px rgba(255,255,255,0.1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: 2px; margin-bottom: 50px; outline: none; display: inline-block;
+            transition: font-size 0.3s;
+            text-shadow: 0 0 40px rgba(255,255,255,0.1);
         }
 
-        .playlist-container {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 400px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         .playlist-container::-webkit-scrollbar { display: none; }
 
         .track-item {
-            display: flex;
-            align-items: center;
-            padding: 16px 20px;
-            background: transparent;
-            cursor: pointer;
-            font-size: 16px;
-            color: rgba(255,255,255,0.5);
-            position: relative;
-            transition: color 0.4s;
-            font-weight: 400;
+            display: flex; align-items: center; padding: 16px 20px; background: transparent;
+            cursor: pointer; font-size: 16px; color: rgba(255,255,255,0.5); position: relative; transition: color 0.4s; font-weight: 400;
         }
-
-        /* 보스 픽: 은은한 글로우 하단 선 */
         .track-item::after {
             content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 1px;
             background: linear-gradient(90deg, var(--color-1), var(--color-3));
@@ -277,22 +221,15 @@
         .track-item.playing .diamond-mark { opacity: 1; background: var(--color-3); box-shadow: 0 0 20px var(--color-3); }
 
         /* =========================================
-           6. SOUNDBAR (Spaced out for visual coolness)
+           6. SOUNDBAR
            ========================================= */
         .player-bar {
-            width: 100%;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            background: transparent;
-            border: none;
-            /* 보스의 지시: 눈의 시원함을 위한 압도적 여백 */
-            margin-top: 70px;
+            width: 100%; height: 60px; display: flex; align-items: center; background: transparent; border: none; margin-top: 70px;
         }
 
         .controls { display: flex; align-items: center; gap: 40px; }
         .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.5; transition: 0.4s; }
-        .control-btn:hover { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 12px var(--color-2)); }
+        .control-btn:hover { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 15px var(--color-2)); }
         .control-btn svg { width: 22px; height: 22px; fill: #fff; }
         .play-pause-btn svg { width: 36px; height: 36px; fill: url(#grad-play); }
 
@@ -302,14 +239,11 @@
 
         .progress-bar-container { width: 100%; height: 2px; background: rgba(255,255,255,0.1); cursor: pointer; position: relative; }
         .progress-fill {
-            height: 100%; width: 0%;
-            background: linear-gradient(90deg, var(--color-1), var(--color-2), var(--color-3));
-            box-shadow: 0 0 15px var(--color-2);
-            position: relative; transition: width 0.1s linear;
+            height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-1), var(--color-2), var(--color-3));
+            box-shadow: 0 0 15px var(--color-2); position: relative; transition: width 0.1s linear;
         }
         .progress-fill::after {
-            content: ''; position: absolute; right: -4px; top: -5px; width: 12px; height: 12px;
-            background: #fff; border-radius: 50%; box-shadow: 0 0 15px #fff;
+            content: ''; position: absolute; right: -4px; top: -5px; width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: 0 0 15px #fff;
         }
 
         .add-form { display: flex; gap: 20px; align-items: center; }
@@ -318,16 +252,10 @@
             color: #fff; padding: 8px 0; font-size: 13px; width: 150px; outline: none; transition: 0.4s; font-family: inherit;
         }
         .add-form input:focus { border-bottom-color: var(--color-3); box-shadow: 0 10px 15px -10px var(--color-3); }
-        .add-btn {
-            background: transparent; color: rgba(255,255,255,0.6); font-size: 12px; border: none; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
-        }
-        .add-btn:hover { color: #fff; text-shadow: 0 0 12px var(--color-1); }
     </style>
 </head>
 <body>
 
-    <!-- 동적 3-Color SVG 그라데이션 -->
     <svg width="0" height="0">
         <defs>
             <linearGradient id="grad-play" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -338,36 +266,39 @@
         </defs>
     </svg>
 
-    <!-- 인스타 감성 오로라 백그라운드 -->
     <div class="ambient-background" data-html2canvas-ignore="true">
-        <div class="ambient-blob blob-1"></div>
-        <div class="ambient-blob blob-2"></div>
-        <div class="ambient-blob blob-3"></div>
+        <div class="ambient-blob blob-1"></div><div class="ambient-blob blob-2"></div><div class="ambient-blob blob-3"></div>
     </div>
 
-    <!-- 캡처 타겟 -->
     <div id="export-target">
         
         <div class="floating-tools" data-html2canvas-ignore="true">
-            <!-- 폰트 토글 버튼 -->
-            <button class="tool-btn" id="font-toggle-btn">FONT: PRETENDARD</button>
+            <!-- 폰트 사이즈 조절 컨트롤 -->
+            <div class="font-controls">
+                <button class="text-btn" id="font-size-down">A-</button>
+                <button class="text-btn" id="font-size-up">A+</button>
+            </div>
             
-            <!-- 3가지 테마 컬러 픽커 -->
+            <button class="text-btn" id="font-toggle-btn">FONT</button>
+            
             <div class="color-picker-wrapper" title="Theme 1"><input type="color" id="config-color-1" value="#00f0ff"></div>
             <div class="color-picker-wrapper" title="Theme 2"><input type="color" id="config-color-2" value="#ff007f"></div>
             <div class="color-picker-wrapper" title="Theme 3"><input type="color" id="config-color-3" value="#7000ff"></div>
             
-            <button class="tool-btn" id="save-local-btn">SAVE</button>
-            <button class="tool-btn" id="export-png-btn" style="border-color: #fff; color: #fff;">EXPORT PNG</button>
+            <button class="text-btn" id="save-local-btn">SAVE</button>
+            <button class="text-btn" id="export-png-btn">EXPORT PNG</button>
         </div>
 
         <div class="main-content">
-            <!-- 영롱한 글로우 라인 LP -->
             <div class="lp-wrapper">
+                <!-- 보스 요청: 재생 시 궤도를 도는 빛무리 -->
+                <div class="orbit-container" id="orbit-ring">
+                    <div class="orbit-light"></div>
+                </div>
+
                 <div class="lp-record" id="lp-disk">
                     <div class="lp-grooves"></div>
                     <div class="lp-glow-ring"></div>
-                    <!-- 커진 280px 중앙 이미지 -->
                     <div class="lp-center-image" id="center-img" onclick="document.getElementById('config-file').click()"></div>
                 </div>
             </div>
@@ -378,7 +309,6 @@
             </div>
         </div>
 
-        <!-- 숨통이 트인 플레이어 바 -->
         <div class="player-bar">
             <div class="controls">
                 <button class="control-btn" id="btn-prev"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
@@ -402,7 +332,8 @@
             <div class="add-form" data-html2canvas-ignore="true">
                 <input type="text" id="yt-url" placeholder="YouTube URL">
                 <input type="text" id="yt-title" placeholder="Track Title">
-                <button class="add-btn" id="add-track-btn">ADD</button>
+                <!-- 버튼 외곽선 삭제 완료 -->
+                <button class="text-btn" id="add-track-btn">ADD TRACK</button>
             </div>
         </div>
     </div>
@@ -420,8 +351,9 @@
         let playlistData = [];
         let currentPlayingIndex = -1;
         let isPlaying = false;
-        let base64ImgData = "https://via.placeholder.com/300?text=CLICK+TO+UPLOAD";
+        let base64ImgData = "https://via.placeholder.com/300?text=UPLOAD";
         let isBodoni = false;
+        let currentFontSize = 68; // 기본 폰트 사이즈
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', { height: '0', width: '0', events: { 'onStateChange': onPlayerStateChange } });
@@ -451,6 +383,7 @@
         function onPlayerStateChange(event) {
             const lpDisk = document.getElementById('lp-disk');
             const holoLight = document.querySelector('.lp-glow-ring');
+            const orbitRing = document.getElementById('orbit-ring'); // 보스 요청: 궤도 빛
             const iconPlay = document.getElementById('icon-play');
             const iconPause = document.getElementById('icon-pause');
             
@@ -458,6 +391,7 @@
                 isPlaying = true;
                 lpDisk.style.animationPlayState = 'running';
                 holoLight.style.animationPlayState = 'running';
+                orbitRing.style.animationPlayState = 'running';
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'block';
                 startProgressBar();
@@ -465,6 +399,7 @@
                 isPlaying = false;
                 lpDisk.style.animationPlayState = 'paused';
                 holoLight.style.animationPlayState = 'paused';
+                orbitRing.style.animationPlayState = 'paused';
                 iconPlay.style.display = 'block';
                 iconPause.style.display = 'none';
                 clearInterval(progressInterval);
@@ -526,25 +461,28 @@
         document.getElementById('btn-next').addEventListener('click', playNextTrack);
         document.getElementById('btn-prev').addEventListener('click', playPrevTrack);
 
-        // 3가지 컬러 픽커 연동
         const root = document.documentElement;
         document.getElementById('config-color-1').addEventListener('input', e => root.style.setProperty('--color-1', e.target.value));
         document.getElementById('config-color-2').addEventListener('input', e => root.style.setProperty('--color-2', e.target.value));
         document.getElementById('config-color-3').addEventListener('input', e => root.style.setProperty('--color-3', e.target.value));
         
-        // 폰트 스위칭 로직
-        document.getElementById('font-toggle-btn').addEventListener('click', (e) => {
+        // 폰트 스위칭
+        document.getElementById('font-toggle-btn').addEventListener('click', () => {
             isBodoni = !isBodoni;
-            if(isBodoni) {
-                root.style.setProperty('--font-pair', "'Bodoni Moda', serif");
-                e.target.textContent = "FONT: BODONI MODA";
-            } else {
-                root.style.setProperty('--font-pair', "'Pretendard', sans-serif");
-                e.target.textContent = "FONT: PRETENDARD";
-            }
+            root.style.setProperty('--font-pair', isBodoni ? "'Bodoni Moda', serif" : "'Pretendard', sans-serif");
         });
 
+        // 폰트 사이즈 조절 로직
         const pairNameDisplay = document.getElementById('pair-name-display');
+        document.getElementById('font-size-up').addEventListener('click', () => {
+            if(currentFontSize < 120) currentFontSize += 4;
+            pairNameDisplay.style.fontSize = currentFontSize + 'px';
+        });
+        document.getElementById('font-size-down').addEventListener('click', () => {
+            if(currentFontSize > 30) currentFontSize -= 4;
+            pairNameDisplay.style.fontSize = currentFontSize + 'px';
+        });
+
         pairNameDisplay.addEventListener('blur', () => {
             if(pairNameDisplay.textContent.trim() === '') pairNameDisplay.textContent = 'ETERNAL_BOND';
         });
@@ -562,8 +500,9 @@
         });
 
         document.getElementById('save-local-btn').addEventListener('click', () => {
-            localStorage.setItem('pair_music_box_v7', JSON.stringify({
+            localStorage.setItem('pair_music_box_v8', JSON.stringify({
                 pairName: pairNameDisplay.textContent,
+                fontSize: currentFontSize,
                 color1: document.getElementById('config-color-1').value,
                 color2: document.getElementById('config-color-2').value,
                 color3: document.getElementById('config-color-3').value,
@@ -571,18 +510,19 @@
                 playlist: playlistData,
                 imageData: base64ImgData
             }));
-            alert("SYSTEM: 보스, 완벽하게 백업되었습니다.");
+            alert("SYSTEM: 오타쿠 서사 보존 완료.");
         });
 
         window.onload = () => {
-            const saved = localStorage.getItem('pair_music_box_v7');
+            const saved = localStorage.getItem('pair_music_box_v8');
             if(saved) {
                 const data = JSON.parse(saved);
                 if(data.pairName) pairNameDisplay.textContent = data.pairName;
+                if(data.fontSize) { currentFontSize = data.fontSize; pairNameDisplay.style.fontSize = currentFontSize + 'px'; }
                 if(data.color1) { document.getElementById('config-color-1').value = data.color1; root.style.setProperty('--color-1', data.color1); }
                 if(data.color2) { document.getElementById('config-color-2').value = data.color2; root.style.setProperty('--color-2', data.color2); }
                 if(data.color3) { document.getElementById('config-color-3').value = data.color3; root.style.setProperty('--color-3', data.color3); }
-                if(data.isBodoni) document.getElementById('font-toggle-btn').click();
+                if(data.isBodoni) { isBodoni = true; root.style.setProperty('--font-pair', "'Bodoni Moda', serif"); }
                 if(data.imageData) {
                     base64ImgData = data.imageData;
                     document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`;
@@ -591,7 +531,6 @@
             }
         };
 
-        // PNG 내보내기 (투명도 유지)
         document.getElementById('export-png-btn').addEventListener('click', () => {
             html2canvas(document.getElementById('export-target'), {
                 useCORS: true, backgroundColor: null, scale: 2
