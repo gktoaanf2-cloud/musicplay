@@ -133,35 +133,61 @@
         .add-form input:focus { border-bottom-color: var(--color-1); box-shadow: 0 10px 10px -10px var(--color-1); }
 
         /* =========================================
-           7. GUIDE MODAL (보스의 화룡점정)
+           7. SYSTEM TERMINAL MODAL (보스 픽: 기하학 터미널 팝업)
            ========================================= */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
             display: flex; justify-content: center; align-items: center; z-index: 1000;
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        
         .modal-content {
-            background: rgba(5, 5, 10, 0.9); border: 1px solid rgba(255,255,255,0.15);
-            padding: 40px; border-radius: 20px; box-shadow: 0 0 60px rgba(0,0,0,0.9), 0 0 20px var(--color-1);
-            max-width: 500px; width: 100%; position: relative;
-            transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            background: linear-gradient(135deg, rgba(15, 15, 20, 0.85) 0%, rgba(5, 5, 10, 0.7) 100%);
+            backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px 40px; width: 500px; position: relative;
+            /* 핵심: 직각과 45도로 깎인 사이버펑크 모서리 (Chamfered Edge) */
+            clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px));
+            transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
         }
-        .modal-overlay.show .modal-content { transform: translateY(0); }
+        .modal-overlay.show .modal-content { transform: scale(1); }
+        
+        /* SF 기하학적 데코 라인 */
+        .modal-content::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--color-1), transparent);
+        }
+        .modal-content::after {
+            content: ''; position: absolute; bottom: 0; right: 0; width: 100%; height: 2px;
+            background: linear-gradient(-90deg, var(--color-3), transparent);
+        }
+        .modal-deco { position: absolute; right: 0; top: 0; width: 30px; height: 30px; background: rgba(255,255,255,0.1); clip-path: polygon(100% 0, 100% 100%, 0 0); }
+        .modal-deco-2 { position: absolute; left: 0; bottom: 0; width: 30px; height: 30px; background: rgba(255,255,255,0.1); clip-path: polygon(0 100%, 100% 100%, 0 0); }
+
         .modal-close {
-            position: absolute; top: 20px; right: 25px; background: transparent; border: none;
-            color: rgba(255,255,255,0.5); font-size: 26px; cursor: pointer; transition: 0.3s;
+            position: absolute; top: 25px; right: 25px; background: transparent; border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.6); font-size: 12px; cursor: pointer; transition: 0.3s;
+            padding: 5px 10px; font-family: 'Courier New', monospace; letter-spacing: 1px; z-index: 10;
         }
-        .modal-close:hover { color: var(--color-2); text-shadow: 0 0 15px var(--color-2); }
+        .modal-close:hover { background: var(--color-2); color: #000; border-color: var(--color-2); box-shadow: 0 0 15px var(--color-2); }
+        
         .modal-content h2 {
-            margin-top: 0; font-size: 20px; letter-spacing: 2px; color: #fff;
-            text-shadow: 0 0 10px var(--color-1); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;
+            margin: 0 0 25px 0; font-size: 18px; letter-spacing: 4px; color: #fff;
+            text-shadow: 0 0 15px var(--color-1); border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 15px;
+            display: flex; align-items: center; gap: 10px; font-weight: 600;
         }
-        .modal-content ol { list-style: none; padding: 0; margin: 25px 0 0 0; display: flex; flex-direction: column; gap: 18px; }
-        .modal-content li { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.6; display: flex; gap: 10px; }
-        .modal-content li span { color: var(--color-1); font-weight: bold; }
-        .modal-content a { color: var(--color-2); text-decoration: none; border-bottom: 1px dashed var(--color-2); transition: 0.3s; font-weight: 500;}
-        .modal-content a:hover { color: #fff; border-bottom-color: #fff; text-shadow: 0 0 10px var(--color-2); }
+        .modal-content h2::before { content: '■'; color: var(--color-1); font-size: 10px; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
+
+        .modal-content ol { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px; }
+        .modal-content li { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; display: flex; gap: 15px; align-items: flex-start; }
+        .modal-content li span { 
+            color: var(--color-4); background: var(--color-1); font-weight: bold; 
+            padding: 2px 8px; font-size: 11px; letter-spacing: 1px; box-shadow: 0 0 10px var(--color-1);
+        }
+        .modal-content a { color: var(--color-1); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); transition: 0.3s; font-weight: 500;}
+        .modal-content a:hover { color: #fff; border-bottom-color: #fff; text-shadow: 0 0 10px var(--color-1); }
     </style>
 </head>
 <body>
@@ -183,21 +209,24 @@
 
     <div id="guide-modal" class="modal-overlay" data-html2canvas-ignore="true">
         <div class="modal-content">
-            <button class="modal-close" id="modal-close-btn">&times;</button>
-            <h2>🚀 NETLIFY DEPLOY GUIDE</h2>
+            <div class="modal-deco"></div>
+            <div class="modal-deco-2"></div>
+            <button class="modal-close" id="modal-close-btn">[CLOSE]</button>
+            <h2>SYSTEM_GUIDE // DEPLOY</h2>
             <ol>
-                <li><span>1.</span> <div><b>서사 완성:</b> 페어명, 색상, 유튜브 링크, 이미지를 취향껏 세팅합니다. (수정 즉시 브라우저에 자동 저장됩니다.)</div></li>
-                <li><span>2.</span> <div><b>HTML 추출:</b> 우측 상단의 <span style="color:var(--color-3); font-weight:bold;">[HTML SHARE]</span> 버튼을 눌러 공유용 뷰어 HTML 파일을 다운로드합니다.</div></li>
-                <li><span>3.</span> <div><b>Netlify 접속:</b> <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop (app.netlify.com/drop)</a> 사이트에 접속합니다. (회원가입/로그인 불필요)</div></li>
-                <li><span>4.</span> <div><b>드래그 앤 드롭:</b> 방금 다운로드한 HTML 파일을 화면 중앙의 원 안에 드래그해서 떨어뜨립니다.</div></li>
-                <li><span>5.</span> <div><b>공유:</b> 잠시 후 생성되는 링크를 복사하여 앤오님께 헌정합니다! ✨</div></li>
+                <li><span>01</span> <div><b>서사 세팅:</b> 페어명, 색상, 유튜브 링크, 이미지를 설정합니다. (수정 즉시 로컬 캐시에 오토 세이브)</div></li>
+                <li><span>02</span> <div><b>HTML 추출:</b> 우측 상단의 <b style="color:var(--color-3);">[HTML SHARE]</b> 버튼을 눌러 공유용 뷰어 HTML 파일을 다운로드합니다.</div></li>
+                <li><span>03</span> <div><b>호스팅 연동:</b> <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop (app.netlify.com/drop)</a> 터미널에 접속합니다. (로그인 불필요)</div></li>
+                <li><span>04</span> <div><b>데이터 전송:</b> 다운로드한 HTML 파일을 화면 중앙 타겟 영역에 드래그 앤 드롭합니다.</div></li>
+                <li><span>05</span> <div><b>서사 공유:</b> 생성된 URL 링크를 복사하여 앤오님께 전송합니다.</div></li>
             </ol>
         </div>
     </div>
 
     <div id="export-target">
-        <div class="floating-tools" id="editor-tools" data-html2canvas-ignore="true">
-            <button class="text-btn" id="guide-btn" title="배포 가이드" style="color: #fff; text-shadow: 0 0 10px #fff; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 15px;">GUIDE</button>
+        
+        <div class="floating-tools" id="editor-tools">
+            <button class="text-btn" id="guide-btn" title="시스템 배포 가이드" style="color: #fff; text-shadow: 0 0 10px #fff; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 15px;">GUIDE</button>
             
             <div class="font-controls">
                 <button class="text-btn" id="font-size-down" title="폰트 축소">A-</button>
@@ -414,7 +443,7 @@
         let isBodoni = false;
         const root = document.documentElement;
 
-        // 모달 가이드 제어 로직
+        // 터미널 가이드 모달 제어 로직
         const guideModal = document.getElementById('guide-modal');
         document.getElementById('guide-btn').addEventListener('click', () => {
             guideModal.style.display = 'flex';
@@ -422,7 +451,7 @@
         });
         document.getElementById('modal-close-btn').addEventListener('click', () => {
             guideModal.classList.remove('show');
-            setTimeout(() => guideModal.style.display = 'none', 300);
+            setTimeout(() => guideModal.style.display = 'none', 400);
         });
 
         function getSiteData() {
@@ -441,7 +470,7 @@
         }
 
         function saveLocal() {
-            try { localStorage.setItem('pair_music_box_v21', JSON.stringify(getSiteData())); } catch(e) { console.warn(e); }
+            try { localStorage.setItem('pair_music_box_v22', JSON.stringify(getSiteData())); } catch(e) { console.warn(e); }
         }
 
         function applyDataToUI(data) {
@@ -484,7 +513,6 @@
             saveLocal();
         });
 
-        // Event Listeners for Auto Save
         ['1', '2', '3', '4'].forEach(num => {
             document.getElementById(`config-color-${num}`).addEventListener('input', e => { root.style.setProperty(`--color-${num}`, e.target.value); saveLocal(); });
         });
@@ -509,7 +537,6 @@
             e.target.value = '';
         });
 
-        // JSON DATA I/O
         document.getElementById('export-json-btn').addEventListener('click', () => {
             saveLocal(); const data = getSiteData();
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -530,9 +557,8 @@
             reader.readAsText(file);
         });
 
-        window.onload = () => { const saved = localStorage.getItem('pair_music_box_v21'); if(saved) { try { applyDataToUI(JSON.parse(saved)); } catch(e) {} } };
+        window.onload = () => { const saved = localStorage.getItem('pair_music_box_v22'); if(saved) { try { applyDataToUI(JSON.parse(saved)); } catch(e) {} } };
 
-        // HTML SHARE (뷰어 전용)
         document.getElementById('export-html-btn').addEventListener('click', () => {
             saveLocal();
             const data = getSiteData();
