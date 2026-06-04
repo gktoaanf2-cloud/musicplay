@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Pair Music Box</title>
+    <style>
+        /* 1. 테마 변수 세팅 (유저가 나중에 색상을 바꿀 수 있도록) */
+        :root {
+            --theme-color: #d4af37; /* 기본 테마: 무기미도 느낌의 바랜 골드 */
+            --bg-color: #0b0b0e;
+            --line-color: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace; /* 타자기 느낌의 폰트 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* 2. 니어 오토마타 스타일의 메인 컨테이너 (얇은 선과 깔끔한 여백) */
+        .container {
+            display: flex;
+            width: 900px;
+            height: 500px;
+            border: 1px solid var(--line-color);
+            position: relative;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+            /* 45도 깎인 모서리 포인트 */
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+        }
+
+        /* 좌측: LP판 영역 */
+        .lp-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid var(--line-color);
+            position: relative;
+        }
+
+        /* 3. 대망의 홀로그램 LP판 */
+        .lp-record {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            /* LP판 특유의 결 + 홀로그램 그라데이션 */
+            background: 
+                repeating-radial-gradient(
+                    #111 0, 
+                    #111 4px, 
+                    #222 5px, 
+                    #111 6px
+                ),
+                conic-gradient(
+                    from 0deg, 
+                    rgba(255,0,0,0.2), rgba(255,255,0,0.2), rgba(0,255,0,0.2), 
+                    rgba(0,255,255,0.2), rgba(0,0,255,0.2), rgba(255,0,255,0.2), rgba(255,0,0,0.2)
+                );
+            background-blend-mode: overlay;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 
+                        inset 0 0 20px var(--theme-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: spin 5s linear infinite; /* 빙글빙글 회전 */
+            animation-play-state: paused; /* 기본은 정지, 노래 틀면 running으로 변경 */
+        }
+
+        /* 중앙 페어 이미지 컷아웃 */
+        .lp-center-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-image: url('https://via.placeholder.com/100'); /* 나중에 유저 업로드 이미지로 교체 */
+            background-size: cover;
+            background-position: center;
+            border: 3px solid var(--theme-color);
+            z-index: 10;
+        }
+
+        /* 우측: 플레이리스트 및 페어명 영역 */
+        .playlist-section {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pair-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--theme-color);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border-bottom: 1px solid var(--line-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="export-target">
+        <div class="lp-section">
+            <div class="lp-record" id="lp-disk">
+                <div class="lp-center-image" id="center-img"></div>
+            </div>
+        </div>
+
+        <div class="playlist-section">
+            <div class="pair-name" id="pair-name-display">Pair_Name_Here</div>
+            <div style="flex-grow: 1; border: 1px dashed var(--line-color); display: flex; align-items: center; justify-content: center; color: gray;">
+                [ Music List & Soundbar Area ]
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
