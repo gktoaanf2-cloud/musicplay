@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pair Music Box - Galactic Orbit</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,6 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
     
     <style id="core-styles">
+        /* =========================================
+           1. CORE DESIGN SYSTEM 
+           ========================================= */
         :root {
             --color-1: #ffffff;
             --color-2: #cccccc;
@@ -20,47 +22,67 @@
             --font-pair: 'Pretendard', sans-serif; 
         }
 
-        body {
+        html, body {
             background-color: var(--color-4);
             color: #fff;
             font-family: 'Pretendard', sans-serif;
-            margin: 0;
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             overflow: hidden;
             font-weight: 300;
+            transition: background-color 0.5s ease;
         }
 
-        /* 캡처 시 강제 고정용 클래스 */
-        body.capturing {
-            justify-content: flex-start !important;
-            align-items: flex-start !important;
-        }
-        .capturing #export-target {
-            transform: none !important;
-            position: absolute !important;
-            top: 0 !important; left: 0 !important;
-            margin: 0 !important;
-            background-color: var(--color-4) !important;
-        }
-
+        /* =========================================
+           2. 3D STARDUST ANIMATION (보스 요청: 반짝이는 우주 먼지)
+           ========================================= */
         .stardust-container { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-        .stardust-layer {
-            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
-            background-image:
-                radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(1.5px 1.5px at 150px 150px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 300px 80px, rgba(255,255,255,0.4), transparent),
-                radial-gradient(2px 2px at 450px 250px, rgba(255,255,255,0.9), transparent),
-                radial-gradient(1px 1px at 600px 30px, rgba(255,255,255,0.5), transparent);
-            background-repeat: repeat; background-size: 800px 400px;
-            animation: stardust-fall 40s linear infinite; opacity: 0.6;
-        }
-        .stardust-layer:nth-child(2) { background-size: 500px 300px; animation-duration: 60s; opacity: 0.3; transform: rotate(15deg); }
-        @keyframes stardust-fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(400px) rotate(0deg); } }
+        .stardust-wrapper { position: absolute; inset: -50%; width: 200%; height: 200%; }
+        .stardust-layer { position: absolute; inset: 0; background-repeat: repeat; }
 
+        .layer-1 {
+            background-image:
+                radial-gradient(2px 2px at 40px 60px, #fff, transparent),
+                radial-gradient(1.5px 1.5px at 150px 200px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2.5px 2.5px at 300px 100px, #fff, transparent),
+                radial-gradient(1px 1px at 500px 300px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(3px 3px at 700px 150px, rgba(255,255,255,0.9), transparent);
+            background-size: 800px 500px;
+            animation: stardust-fall 40s linear infinite, stardust-twinkle 3s ease-in-out infinite alternate;
+        }
+        .layer-2 {
+            background-image:
+                radial-gradient(1.5px 1.5px at 80px 120px, #fff, transparent),
+                radial-gradient(2px 2px at 250px 350px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 400px 80px, #fff, transparent),
+                radial-gradient(2.5px 2.5px at 600px 400px, rgba(255,255,255,0.9), transparent);
+            background-size: 600px 450px;
+            animation: stardust-fall 50s linear infinite, stardust-twinkle 4s ease-in-out infinite alternate-reverse;
+        }
+        .layer-3 {
+            background-image:
+                radial-gradient(2px 2px at 100px 50px, #fff, transparent),
+                radial-gradient(1px 1px at 350px 250px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(3px 3px at 550px 120px, #fff, transparent);
+            background-size: 900px 600px;
+            animation: stardust-fall 60s linear infinite, stardust-twinkle 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes stardust-fall {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(600px); }
+        }
+        @keyframes stardust-twinkle {
+            0% { opacity: 0.1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.1)); }
+            100% { opacity: 1; filter: drop-shadow(0 0 10px #fff); }
+        }
+
+        /* =========================================
+           3. MAIN LAYOUT
+           ========================================= */
         #export-target {
             width: 1400px; height: 850px; display: flex; flex-direction: column;
             position: relative; box-sizing: border-box; padding: 50px 60px;
@@ -69,12 +91,17 @@
 
         .main-content { display: flex; flex: 1; gap: 120px; align-items: center; position: relative; z-index: 10; }
 
+        /* =========================================
+           4. TOOLS & UI 
+           ========================================= */
         .floating-tools { position: absolute; top: 40px; right: 50px; display: flex; gap: 20px; align-items: center; z-index: 100; }
+        
         .text-btn {
             background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 11px;
             cursor: pointer; transition: 0.4s; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; padding: 0;
         }
         .text-btn:hover { color: #fff; text-shadow: 0 0 10px var(--color-1), 0 0 20px var(--color-2); }
+        .text-btn.active { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
 
         .color-picker-wrapper {
             position: relative; width: 14px; height: 14px; border-radius: 2px; overflow: hidden;
@@ -88,6 +115,9 @@
         }
         .font-controls, .color-controls { display: flex; gap: 15px; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 20px; align-items: center;}
 
+        /* =========================================
+           5. HOLOGRAPHIC LP & WAVE RIPPLES
+           ========================================= */
         .lp-wrapper { flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative; }
 
         .sacred-geometry {
@@ -97,19 +127,17 @@
             animation: master-spin 60s linear infinite reverse;
         }
 
-        /* 파트너 요청 3: 파동 이펙트 극도로 은은하게 수정 */
         .lp-soundwaves { position: absolute; width: 650px; height: 650px; border-radius: 50%; pointer-events: none; z-index: 0; }
         .wave-ring {
-            position: absolute; inset: 0; border-radius: 50%; 
-            border: 1px solid var(--color-1);
-            animation: pulse-wave 5s linear infinite; animation-play-state: paused; opacity: 0;
+            position: absolute; inset: 0; border-radius: 50%; border: 1px solid var(--color-1);
+            animation: pulse-wave 4s ease-out infinite; animation-play-state: paused; opacity: 0;
         }
-        .wave-ring:nth-child(2) { animation-delay: 1.6s; border-color: var(--color-2); }
-        .wave-ring:nth-child(3) { animation-delay: 3.2s; border-color: var(--color-3); }
+        .wave-ring:nth-child(2) { animation-delay: 1.3s; border-color: var(--color-2); }
+        .wave-ring:nth-child(3) { animation-delay: 2.6s; border-color: var(--color-3); }
         
         @keyframes pulse-wave {
             0% { transform: scale(1); opacity: 0.15; }
-            100% { transform: scale(1.4); opacity: 0; }
+            100% { transform: scale(1.5); opacity: 0; }
         }
 
         .lp-spin-master {
@@ -120,12 +148,12 @@
         .lp-halo-ring {
             position: absolute; inset: 5px; border-radius: 50%;
             background: conic-gradient(from 0deg, var(--color-1), transparent 20%, var(--color-2) 40%, transparent 60%, var(--color-3) 80%, var(--color-1));
-            opacity: 0.2; filter: blur(10px); z-index: 0; transition: opacity 0.5s;
+            opacity: 0.3; filter: blur(10px); z-index: 0; transition: opacity 0.5s;
         }
 
         .lp-record {
             width: 650px; height: 650px; border-radius: 50%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); /* 캡처 렌더링 안정화를 위해 블러 최소화 */
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(15px);
             position: relative; box-shadow: inset 0 0 80px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05);
             display: flex; justify-content: center; align-items: center; overflow: hidden; z-index: 1;
         }
@@ -139,7 +167,7 @@
         .lp-internal-glow {
             position: absolute; inset: -20px; border-radius: 50%;
             background: conic-gradient(from 90deg, transparent 0%, rgba(255,255,255,0.1) 25%, transparent 50%, rgba(255,255,255,0.1) 75%, transparent 100%);
-            opacity: 0.4; pointer-events: none; z-index: 3; filter: blur(4px); mix-blend-mode: screen;
+            opacity: 0.5; pointer-events: none; z-index: 3; filter: blur(4px); mix-blend-mode: screen;
         }
 
         @keyframes master-spin { 100% { transform: rotate(360deg); } }
@@ -150,13 +178,19 @@
             box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.9);
             cursor: pointer; transition: 0.5s; background-image: url('https://via.placeholder.com/300?text=UPLOAD');
         }
+        .lp-center-image:hover { box-shadow: 0 0 0 1px #fff, 0 0 60px var(--color-1); transform: scale(1.02); }
 
+        /* =========================================
+           6. PLAYLIST & SUB-TITLE
+           ========================================= */
         .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; }
 
         .sub-title {
             font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 6px; text-transform: uppercase;
             margin-bottom: 5px; outline: none; font-weight: 500; transition: 0.3s;
         }
+        .sub-title:focus { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
+
         .pair-name {
             font-family: var(--font-pair); font-size: 68px; font-weight: 700;
             background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3));
@@ -174,18 +208,21 @@
         }
         .track-item::after {
             content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 1px;
-            background: linear-gradient(90deg, var(--color-1), var(--color-3)); transition: width 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            background: linear-gradient(90deg, var(--color-1), var(--color-3));
+            box-shadow: 0 0 10px var(--color-1); transition: width 0.7s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .track-item:hover { color: #fff; }
         .track-item:hover::after { width: 100%; }
         .track-item.playing { color: #fff; font-weight: 500; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
         .track-item.playing::after { width: 100%; opacity: 0.5; }
 
-        /* 파트너 요청 1: 마름모 아이콘 더 작게 4px */
         .diamond-mark { width: 4px; height: 4px; background: #fff; transform: rotate(45deg); margin-right: 20px; opacity: 0.15; transition: 0.5s; }
         .track-item:hover .diamond-mark { opacity: 1; background: var(--color-1); box-shadow: 0 0 8px var(--color-1); }
         .track-item.playing .diamond-mark { opacity: 1; background: var(--color-2); box-shadow: 0 0 8px var(--color-2); }
 
+        /* =========================================
+           7. ULTRA-SLIM SOUNDBAR & REPEAT
+           ========================================= */
         .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 10; gap: 20px;}
         .controls { display: flex; align-items: center; gap: 25px; }
         .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.4s; display: flex; align-items: center; justify-content: center;}
@@ -193,10 +230,7 @@
         .control-btn.active { opacity: 1; filter: drop-shadow(0 0 10px var(--color-1)); }
         .control-btn.active svg { fill: var(--color-1); }
         .control-btn svg { width: 18px; height: 18px; fill: #fff; transition: fill 0.3s;}
-        
-        /* 파트너 요청 2: 반복재생 아이콘 크기 더 작고 컴팩트하게 */
         #btn-loop svg { width: 14px; height: 14px; }
-        
         .play-pause-btn svg { width: 32px; height: 32px; fill: url(#grad-play); }
 
         .progress-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
@@ -209,7 +243,7 @@
 
         .volume-wrapper { display: flex; align-items: center; gap: 10px; margin-left: 15px; opacity: 0.5; transition: 0.3s; }
         .volume-wrapper:hover { opacity: 1; }
-        .volume-wrapper svg { width: 12px; height: 12px; fill: #fff; }
+        .volume-wrapper svg { width: 14px; height: 14px; fill: #fff; }
         .volume-slider { -webkit-appearance: none; width: 60px; height: 1px; background: rgba(255,255,255,0.2); outline: none; cursor: pointer; }
         .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 6px; height: 6px; background: #fff; transform: rotate(45deg); box-shadow: 0 0 10px var(--color-1); }
 
@@ -230,12 +264,14 @@
     </svg>
 
     <div class="stardust-container" id="bg-stardust">
-        <div class="stardust-layer"></div><div class="stardust-layer"></div>
+        <div class="stardust-wrapper" style="transform: rotate(0deg);"><div class="stardust-layer layer-1"></div></div>
+        <div class="stardust-wrapper" style="transform: rotate(15deg);"><div class="stardust-layer layer-2"></div></div>
+        <div class="stardust-wrapper" style="transform: rotate(-10deg);"><div class="stardust-layer layer-3"></div></div>
     </div>
 
     <div id="export-target">
         
-        <div class="floating-tools" data-html2canvas-ignore="true" id="editor-tools">
+        <div class="floating-tools" id="editor-tools">
             <div class="font-controls">
                 <button class="text-btn" id="font-size-down">A-</button>
                 <button class="text-btn" id="font-size-up">A+</button>
@@ -250,7 +286,6 @@
             </div>
             
             <button class="text-btn" id="save-local-btn">SAVE</button>
-            <button class="text-btn" id="export-png-btn">IMG</button>
             <button class="text-btn" id="export-html-btn" style="color: var(--color-2);">HTML SHARE</button>
         </div>
 
@@ -309,7 +344,7 @@
                 <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="100">
             </div>
 
-            <div class="add-form" data-html2canvas-ignore="true" id="add-track-form">
+            <div class="add-form" id="add-track-form">
                 <input type="text" id="yt-url" placeholder="YouTube URL">
                 <input type="text" id="yt-title" placeholder="Track Title">
                 <button class="text-btn" id="add-track-btn">ADD</button>
@@ -384,7 +419,7 @@
             } else {
                 isPlaying = false;
                 lpMaster.style.animationPlayState = 'paused';
-                haloRing.style.opacity = '0.2'; 
+                haloRing.style.opacity = '0.3'; 
                 waveRings.forEach(ring => ring.style.animationPlayState = 'paused');
 
                 iconPlay.style.display = 'block';
@@ -455,6 +490,7 @@
         document.getElementById('btn-prev').addEventListener('click', playPrevTrack);
     </script>
 
+    <!-- EDITOR LOGIC -->
     <script id="editor-logic">
         let base64ImgData = "https://via.placeholder.com/300?text=UPLOAD";
         let currentFontSize = 68;
@@ -516,33 +552,9 @@
             }
         });
 
-        // 캡처 영역 좌표 초기화로 짤림 100% 방지
-        document.getElementById('export-png-btn').addEventListener('click', async () => {
-            document.body.classList.add('capturing'); 
-            window.scrollTo(0, 0); 
-            
-            const target = document.getElementById('export-target');
-            const stardust = document.getElementById('bg-stardust');
-            target.insertBefore(stardust.cloneNode(true), target.firstChild);
-            
-            try {
-                const canvas = await html2canvas(target, {
-                    useCORS: true, 
-                    backgroundColor: document.getElementById('config-color-4').value, 
-                    scale: 2, scrollX: 0, scrollY: 0, width: 1400, height: 850
-                });
-                
-                const link = document.createElement('a');
-                link.download = `${pairNameDisplay.textContent}_box.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            } finally {
-                target.removeChild(target.firstChild);
-                document.body.classList.remove('capturing');
-            }
-        });
-
-        // [HTML 내보내기 테마색 완벽 복구] - 직접 input에서 컬러값 추출!
+        // ----------------------------------------------------
+        // [HTML 완벽 내보내기] - 잘림 현상 방지 100vw, 100vh 오토 스케일링
+        // ----------------------------------------------------
         document.getElementById('export-html-btn').addEventListener('click', () => {
             const c1 = document.getElementById('config-color-1').value;
             const c2 = document.getElementById('config-color-2').value;
@@ -563,10 +575,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
     <style>
         :root { --color-1: ${c1}; --color-2: ${c2}; --color-3: ${c3}; --color-4: ${c4}; --font-pair: ${fp}; }
-        html, body { width: 100%; height: 100%; margin: 0; display: flex; justify-content: center; align-items: center; background: var(--color-4); overflow: hidden; }
-        
-        #viewer-wrapper { width: 1400px; height: 850px; transform-origin: center center; position: relative; }
         ${document.getElementById('core-styles').innerHTML}
+        
+        /* 뷰어용 반응형 추가 스타일 */
+        #viewer-wrapper { width: 1400px; height: 850px; transform-origin: center center; position: relative; }
     </style>
 </head>
 <body>
@@ -580,18 +592,24 @@
         </defs>
     </svg>
 
+    <!-- 배경 애니메이션 포함 -->
     <div class="stardust-container">
-        <div class="stardust-layer"></div><div class="stardust-layer"></div>
+        <div class="stardust-wrapper" style="transform: rotate(0deg);"><div class="stardust-layer layer-1"></div></div>
+        <div class="stardust-wrapper" style="transform: rotate(15deg);"><div class="stardust-layer layer-2"></div></div>
+        <div class="stardust-wrapper" style="transform: rotate(-10deg);"><div class="stardust-layer layer-3"></div></div>
     </div>
 
+    <!-- 반응형 스케일 래퍼 -->
     <div id="viewer-wrapper">
         <div id="export-target" style="padding:0; width:100%; height:100%;">
             <div class="main-content">
                 <div class="lp-wrapper">
                     <div class="sacred-geometry"></div>
+                    
                     <div class="lp-soundwaves">
                         <div class="wave-ring"></div><div class="wave-ring"></div><div class="wave-ring"></div>
                     </div>
+
                     <div class="lp-spin-master" id="lp-master">
                         <div class="lp-halo-ring" id="halo-ring"></div>
                         <div class="lp-record">
@@ -647,6 +665,7 @@
     <script>
         window.playlistData = ${JSON.stringify(window.playlistData)};
         
+        // 브라우저 해상도에 맞춰 자동 스케일 조절 
         function resizeFit() {
             const wrapper = document.getElementById('viewer-wrapper');
             const scale = Math.min(window.innerWidth / 1400, window.innerHeight / 850);
@@ -664,10 +683,10 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${pairNameDisplay.textContent}_Viewer.html`;
+            a.download = `${pairNameDisplay.textContent}_CosmicViewer.html`;
             a.click();
             URL.revokeObjectURL(url);
-            alert("✨ 파트너! 컬러까지 완벽 복제된 뷰어용 HTML입니다. 이제 안 짤리고 색도 완벽합니다!");
+            alert("✨ 완벽하게 압축된 HTML 파일이 완성되었습니다. 넷플리파이로 출항하십시오!");
         });
     </script>
 </body>
