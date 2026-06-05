@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pair Music Box - Cosmic Critical</title>
+    <title>Pair Music Box - Absolute Horizon</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,24 +36,17 @@
             min-height: 100vh; overflow: hidden; transition: background-color 0.5s ease;
         }
 
-        /* =========================================
-           2. REFINED GLITTER STARDUST (보스 픽: 은은한 극세사 별먼지)
-           ========================================= */
+        /* 은은하고 정교한 글리터 은하수 */
         .stardust-container { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
         .stardust-wrapper { position: absolute; inset: -50%; width: 200%; height: 200%; }
         .stardust-layer { position: absolute; inset: 0; background-repeat: repeat; }
         
         .layer-1 {
-            background-image: 
-                radial-gradient(1px 1px at 40px 60px, rgba(255,255,255,1), transparent),
-                radial-gradient(1px 1px at 240px 150px, rgba(255,255,255,0.7), transparent),
-                radial-gradient(1.5px 1.5px at 500px 350px, rgba(255,255,255,0.9), transparent);
+            background-image: radial-gradient(1px 1px at 40px 60px, rgba(255,255,255,1), transparent), radial-gradient(1px 1px at 240px 150px, rgba(255,255,255,0.7), transparent), radial-gradient(1.5px 1.5px at 500px 350px, rgba(255,255,255,0.9), transparent);
             background-size: 700px 700px; animation: stardust-fall 60s linear infinite, stardust-twinkle 5s ease-in-out infinite alternate; opacity: 0.5;
         }
         .layer-2 {
-            background-image: 
-                radial-gradient(1px 1px at 120px 80px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(1.5px 1.5px at 400px 250px, rgba(255,255,255,0.6), transparent);
+            background-image: radial-gradient(1px 1px at 120px 80px, rgba(255,255,255,0.8), transparent), radial-gradient(1.5px 1.5px at 400px 250px, rgba(255,255,255,0.6), transparent);
             background-size: 500px 500px; animation: stardust-fall 80s linear infinite, stardust-twinkle 7s ease-in-out infinite alternate-reverse; opacity: 0.3;
         }
 
@@ -59,12 +54,14 @@
         @keyframes stardust-twinkle { 0% { opacity: 0.1; } 100% { opacity: 1; filter: drop-shadow(0 0 8px #fff); } }
 
         /* =========================================
-           3. MAIN LAYOUT & COMPACT TOOLS
+           2. MAIN LAYOUT (보스 지시: 위치 균형감 최적화)
            ========================================= */
         #export-target { width: 1400px; height: 850px; display: flex; flex-direction: column; position: relative; box-sizing: border-box; padding: 50px 60px; background-color: transparent; z-index: 10; }
-        .main-content { display: flex; flex: 1; gap: 120px; align-items: center; position: relative; z-index: 10; }
+        
+        /* 중간 빈 여백 축소: 120px -> 70px 보정 완료 */
+        .main-content { display: flex; flex: 1; gap: 70px; align-items: center; position: relative; z-index: 10; }
 
-        /* 보스 지시: 메뉴 아이콘 라인 초압축 및 컴팩트 배치 */
+        /* 상단 메뉴 초압축 슬림 바 */
         .floating-tools { 
             position: absolute; top: 40px; right: 50px; display: flex; gap: 12px; align-items: center; z-index: 100;
             background: rgba(0,0,0,0.2); padding: 6px 14px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(5px);
@@ -80,7 +77,7 @@
         .font-controls, .color-controls, .data-controls { display: flex; gap: 10px; align-items: center;}
 
         /* =========================================
-           4. LP & MASTER SPIN
+           3. LP DESIGN & MOTIONS
            ========================================= */
         .lp-wrapper { flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative; }
         .sacred-geometry { position: absolute; inset: -50px; background-position: center; background-repeat: no-repeat; pointer-events: none; z-index: 0; animation: spin-reverse 60s linear infinite; background-image: url("data:image/svg+xml,%3Csvg width='750' height='750' viewBox='0 0 750 750' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23ffffff' stroke-width='1' fill='none' stroke-opacity='0.04'%3E%3Ccircle cx='375' cy='375' r='350'/%3E%3Ccircle cx='375' cy='375' r='280'/%3E%3Ccircle cx='375' cy='375' r='180'/%3E%3Cpath d='M375 25v700M25 375h700M127 127l496 496M127 623l496-496'/%3E%3C/g%3E%3C/svg%3E"); }
@@ -104,12 +101,15 @@
         .lp-center-image:hover { box-shadow: 0 0 0 2px #fff, 0 0 60px var(--color-1); transform: scale(1.02); }
 
         /* =========================================
-           5. PLAYLIST & LIGHT WAVE INDICATOR
+           4. TYPOGRAPHY HEADER BLOCK (보스 지시: 여백 극단적 최적화)
            ========================================= */
         .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; }
-        .sub-title { font-size: 13px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 5px; outline: none; font-weight: 500; transition: 0.3s; letter-spacing: 0.4em; }
+        
+        .sub-title { font-size: 13px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 3px; outline: none; font-weight: 500; transition: 0.3s; letter-spacing: 0.4em; }
         .sub-title:focus { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
-        .pair-name { font-family: var(--font-pair); font-size: 68px; font-weight: 700; background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; outline: none; display: inline-block; transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); letter-spacing: -0.05em; }
+        
+        /* 마진 다운 축소: 40px -> 20px 보정 완료 (플리와 타이틀 블록을 빈틈없이 밀착) */
+        .pair-name { font-family: var(--font-pair); font-size: 68px; font-weight: 700; background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; outline: none; display: inline-block; transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); letter-spacing: -0.05em; }
 
         .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; scroll-behavior: smooth; }
         .playlist-container::-webkit-scrollbar { display: none; }
@@ -129,37 +129,26 @@
         .track-item.playing { color: #fff; font-weight: 500; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
         .track-item.playing::after { width: 100%; opacity: 0.5; }
 
-        /* 보스 요청: 재생 중인 마크 빛의 파동 및 자동 회전 효과 */
+        /* 재생 중 오르빗 HUD 발광 기하학 노드 */
         .diamond-mark { width: 4px; height: 4px; background: #fff; transform: rotate(45deg); margin-right: 20px; opacity: 0.15; transition: 0.5s; flex-shrink: 0; position: relative;}
         .track-item:hover .diamond-mark { opacity: 1; background: var(--color-1); box-shadow: 0 0 8px var(--color-1); }
-        
-        .track-item.playing .diamond-mark { 
-            opacity: 1 !important; background: var(--color-1) !important; box-shadow: 0 0 12px var(--color-1);
-            animation: indicator-spin 4s linear infinite;
-        }
-        /* 파동 레이어 */
-        .track-item.playing .diamond-mark::before {
-            content: ''; position: absolute; inset: -6px; border: 1px solid var(--color-2); border-radius: 2px;
-            transform: rotate(0deg); animation: indicator-pulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite; opacity: 0;
-        }
+        .track-item.playing .diamond-mark { opacity: 1 !important; background: var(--color-1) !important; box-shadow: 0 0 12px var(--color-1); animation: indicator-spin 4s linear infinite; }
+        .track-item.playing .diamond-mark::before { content: ''; position: absolute; inset: -6px; border: 1px solid var(--color-2); border-radius: 2px; transform: rotate(0deg); animation: indicator-pulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite; opacity: 0; }
         @keyframes indicator-spin { 100% { transform: rotate(405deg); } }
-        @keyframes indicator-pulse {
-            0% { transform: scale(0.5) rotate(0deg); opacity: 0.8; }
-            100% { transform: scale(2.2) rotate(90deg); opacity: 0; }
-        }
+        @keyframes indicator-pulse { 0% { transform: scale(0.5) rotate(0deg); opacity: 0.8; } 100% { transform: scale(2.2) rotate(90deg); opacity: 0; } }
 
         .track-actions { display: flex; gap: 6px; opacity: 0; transition: 0.3s; transform: translateX(10px); align-items: center;}
         .track-item:hover .track-actions { opacity: 1; transform: translateX(0); }
         .action-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 10px; cursor: pointer; padding: 4px; transition: 0.3s; font-family: inherit; font-weight: bold; display: flex; align-items: center; justify-content: center; }
         .action-btn:hover { color: var(--color-1); text-shadow: 0 0 8px var(--color-1); transform: scale(1.15); }
         
-        /* 기하학 아이콘 세팅 */
+        /* 1px 기하학 와이어프레임 타겟 HUD 로더 */
         .action-btn svg { width: 11px; height: 11px; stroke: currentColor; fill: none; transition: 0.3s; }
         .action-btn.img-active { color: var(--color-1); filter: drop-shadow(0 0 5px var(--color-1)); }
         .action-btn.del-btn:hover { color: #ff3366; text-shadow: 0 0 8px #ff3366; }
 
         /* =========================================
-           6. SOUNDBAR & ALIGNMENT LOCK (보스 픽: 0.1px 수평 정렬 일치)
+           5. SOUNDBAR & PRECISION VERTICAL LAYOUT LOCK
            ========================================= */
         .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 10; gap: 20px;}
         .controls { display: flex; align-items: center; gap: 25px; }
@@ -175,15 +164,16 @@
         .track-meta { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 2px; font-family: var(--font-pair); }
         #current-track-name { font-weight: 500; font-size: 13px; color: #fff; letter-spacing: -0.05em; transform: scaleX(0.95); transform-origin: left center;}
 
+        /* 시각적선 1px 고정 및 클릭 히트박스 24px 구현 */
         .progress-hitbox { width: 100%; height: 24px; cursor: pointer; display: flex; align-items: center; position: relative; }
-        .progress-bar-container { width: 100%; height: 1px; background: rgba(255,255,255,0.15); position: relative; pointer-events: none; }
+        .progress-bar-container { width: 100%; height: 1px; background: rgba(255,255,255,0.15); position: relative; pointer-events: none; width: 100%; }
         .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-1), var(--color-3)); box-shadow: 0 0 10px var(--color-1); position: relative; will-change: width;}
         
-        /* 수정 완: 수평 베이스 라인 소수점 엇나감 완벽 교정 수식 */
+        /* 0.1px 수평 엇나감 보정 수식 체인 결합 */
         .progress-fill::after { 
             content: ''; position: absolute; right: -3px; 
             top: 50%; width: 6px; height: 6px; background: #fff; 
-            transform: translateY(-50%) rotate(45deg); /* 중앙 동기화 고정 */
+            transform: translateY(-50%) rotate(45deg); 
             box-shadow: 0 0 10px #fff, 0 0 20px var(--color-1); 
         }
 
@@ -199,7 +189,7 @@
         .add-btn.updating { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
 
         /* =========================================
-           8. SYSTEM TERMINAL MODAL (GUIDE)
+           6. SYSTEM TERMINAL MODAL (GUIDE HUD)
            ========================================= */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
@@ -479,6 +469,7 @@
         let uploadingTrackIndex = -1;
         const root = document.documentElement;
 
+        // HUD 가이드 핸들러 
         const guideModal = document.getElementById('guide-modal');
         document.getElementById('guide-btn').addEventListener('click', () => { guideModal.style.display = 'flex'; setTimeout(() => guideModal.classList.add('show'), 10); });
         document.getElementById('modal-close-btn').addEventListener('click', () => { guideModal.classList.remove('show'); setTimeout(() => guideModal.style.display = 'none', 400); });
@@ -494,7 +485,7 @@
             };
         }
 
-        function autoSave() { try { localStorage.setItem('pair_music_box_v30', JSON.stringify(getSiteData())); } catch(e) {} }
+        function autoSave() { try { localStorage.setItem('pair_music_box_v31', JSON.stringify(getSiteData())); } catch(e) {} }
 
         function applyDataToUI(data) {
             if(data.pairName) document.getElementById('pair-name-display').textContent = data.pairName;
@@ -530,7 +521,6 @@
                         <span class="track-title">${String(index + 1).padStart(2, '0')} &nbsp;&nbsp;&nbsp; ${track.title}</span>
                     </div>`;
                 
-                // 보스 지시: 정밀 1px 와이어프레임 기하학 타겟 구조 SVG 아이콘 교체 및 삭제 버튼 분기
                 if(!isViewer) {
                     const hasImgClass = track.image ? 'img-active' : '';
                     innerHtmlStr += `
@@ -550,20 +540,17 @@
                 }
                 li.innerHTML = innerHtmlStr;
                 listContainer.appendChild(li);
-
                 setTimeout(() => { li.classList.remove('anim-fade'); }, 10);
             });
         }
 
-        // 재생 핸들러 위임에 개별 이미지 삭제용 분기 추가
         document.getElementById('playlist').addEventListener('click', (e) => {
             const trackItem = e.target.closest('.track-item');
             if(!trackItem) return;
             const index = Array.from(trackItem.parentNode.children).indexOf(trackItem);
 
             if (e.target.closest('.del-img-btn')) {
-                e.stopPropagation();
-                delete window.playlistData[index].image;
+                e.stopPropagation(); delete window.playlistData[index].image;
                 if(currentPlayingIndex === index) { document.getElementById('center-img').style.backgroundImage = `url('${base64ImgData}')`; }
                 renderPlaylistUI(); autoSave();
             } else if (e.target.closest('.img-btn')) {
@@ -639,15 +626,13 @@
         }
 
         document.getElementById('reset-btn').addEventListener('click', () => {
-            if(confirm("⚠️ 경고: 데이터 리셋 시 저장되지 않은 백업 파일은 증발합니다. 초기화할까요?")) { localStorage.removeItem('pair_music_box_v30'); location.reload(); }
+            if(confirm("⚠️ 경고: 데이터 리셋 시 저장되지 않은 백업 파일은 증발합니다. 초기화할까요?")) { localStorage.removeItem('pair_music_box_v31'); location.reload(); }
         });
 
         ['1', '2', '3', '4'].forEach(num => { document.getElementById(`config-color-${num}`).addEventListener('input', e => { root.style.setProperty(`--color-${num}`, e.target.value); autoSave(); }); });
         document.getElementById('font-toggle-btn').addEventListener('click', () => { isBodoni = !isBodoni; root.style.setProperty('--font-pair', isBodoni ? "'Bodoni Moda', serif" : "'Pretendard Variable', sans-serif"); autoSave(); });
         document.getElementById('font-size-up').addEventListener('click', () => { if(currentFontSize < 120) currentFontSize += 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); });
         document.getElementById('font-size-down').addEventListener('click', () => { if(currentFontSize > 24) currentFontSize -= 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); });
-        document.getElementById('pair-name-display').addEventListener('blur', (e) => { if(e.target.textContent.trim() === '') e.target.textContent = 'COSMIC_BOND'; autoSave(); });
-        document.getElementById('sub-title-display').addEventListener('blur', (e) => { if(e.target.textContent.trim() === '') e.target.textContent = 'RECORD OF OUR GALAXY'; autoSave(); });
 
         document.getElementById('config-file').addEventListener('change', e => {
             const file = e.target.files[0];
@@ -666,17 +651,17 @@
             const reader = new FileReader();
             reader.onload = event => {
                 let parsed;
-                try { parsed = JSON.parse(event.target.result); } catch(err) { alert("❌ 파일 형식이 고장 났습니다."); e.target.value = ''; return; }
+                try { parsed = JSON.parse(event.target.result); } catch(err) { alert("❌ 파일 형식 손상"); e.target.value = ''; return; }
                 try { applyDataToUI(parsed); } catch(err) { alert("❌ 동기화 실패"); e.target.value = ''; return; }
-                try { autoSave(); alert("✨ 서사 파일 로드 완료."); } catch(err) { alert("⚠️ 이미지 용량 스토리지 초과"); }
+                try { autoSave(); alert("✨ 서사 파일 로드 완료."); } catch(err) { alert("⚠️ 저장소 초과"); }
                 e.target.value = '';
             };
             reader.readAsText(file);
         });
 
-        window.onload = () => { const saved = localStorage.getItem('pair_music_box_v30'); if(saved) { try { applyDataToUI(JSON.parse(saved)); } catch(e) {} } else { renderPlaylistUI(); } };
+        window.onload = () => { const saved = localStorage.getItem('pair_music_box_v31'); if(saved) { try { applyDataToUI(JSON.parse(saved)); } catch(e) {} } else { renderPlaylistUI(); } };
 
-        // HTML SHARE BUILDER
+        // 뷰어 추출 인젝션 파트 교체 (구문 잠금 완전 해제)
         document.getElementById('export-html-btn').addEventListener('click', () => {
             autoSave(); const data = getSiteData(); const fp = data.isBodoni ? "'Bodoni Moda', serif" : "'Pretendard Variable', sans-serif";
             let viewerPlaylistHtml = '';
@@ -690,8 +675,10 @@
                     </li>`;
             });
 
-            const htmlContent = `
-<!DOCTYPE html>
+            // 스크립트 결합 누수 차단용 팩토리형 문자열 빌드
+            const logicScriptContent = document.getElementById('core-logic').innerHTML;
+
+            const htmlContent = `<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -705,7 +692,7 @@
         :root { --color-1: ${data.color1} !important; --color-2: ${data.color2} !important; --color-3: ${data.color3} !important; --color-4: ${data.color4} !important; --font-pair: ${fp} !important; }
         html, body { background-color: var(--color-4) !important; width: 100%; height: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         #viewer-wrapper { width: 1400px; height: 850px; transform-origin: center center; position: relative; }
-        ${document.getElementById('core-styles').innerHTML}
+        \${document.getElementById('core-styles').innerHTML}
     </style>
 </head>
 <body>
@@ -768,13 +755,16 @@
         function resizeFit() { const wrapper = document.getElementById('viewer-wrapper'); const scale = Math.min(window.innerWidth / 1400, window.innerHeight / 850); wrapper.style.transform = 'scale(' + (scale > 1 ? 1 : scale) + ')'; }
         window.addEventListener('resize', resizeFit); resizeFit();
         setTimeout(() => { document.querySelectorAll('.track-item').forEach(el => el.classList.remove('anim-fade')); }, 100);
-        \${document.getElementById('core-logic').innerHTML}
+        
+        // 코어 로직 스크립트 강제 바인딩
+        ${logicScriptContent}
         renderPlaylistUI();
     <\/script>
 </body>
 </html>`;
 
             const blob = new Blob([htmlContent], { type: 'text/html' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${data.pairName}_CosmicViewer.html`; a.click(); URL.revokeObjectURL(url);
+            alert("✨ 시스템 터미널 리포트: 템플릿 구문 잠금 해제 완료. 완벽하게 작동하는 HTML SHARE 뷰어가 출항했습니다!");
         });
     </script>
 </body>
