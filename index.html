@@ -6,7 +6,6 @@
     <title>Pair Music Box - The Final Masterpiece</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,6 +32,7 @@
             --base-weight: 300;
         }
 
+        /* FONT 스위치 ON 시 적용되는 영문 보도니 + 한글 북엔드 바탕 콤비네이션 */
         body.font-bodoni {
             --font-pair: "Bodoni Moda", 'BookendBatang', serif;
             --base-weight: 400;
@@ -286,6 +286,7 @@
         <div class="stardust-wrapper" style="transform: rotate(-10deg);"><div class="stardust-layer layer-3"></div></div>
     </div>
 
+    <!-- 친절하고 명확한 가이드라인 -->
     <div id="guide-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1000; justify-content:center; align-items:center; opacity:0; transition:0.3s; pointer-events:none;" data-html2canvas-ignore="true">
         <div style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.95) 0%, rgba(5, 5, 10, 0.85) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 50px 40px; width: 550px; position: relative; clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px)); text-align: left;">
             <button onclick="window.closeGuide()" class="geometric-close-btn">
@@ -303,6 +304,7 @@
 
     <div id="export-target">
         
+        <!-- 에러 완전 차단: 직접 실행(onclick) 방식 유지 -->
         <div class="floating-tools" id="editor-tools" data-html2canvas-ignore="true">
             <button class="text-btn" onclick="window.openGuide()">GUIDE</button>
             <span class="tool-sep">|</span>
@@ -382,15 +384,19 @@
         </div>
     </div>
 
+    <!-- 숨겨진 I/O 파일 포트 -->
     <input type="file" id="config-file" accept="image/*" style="display: none;" onchange="window.handleLpUpload(event)">
     <input type="file" id="track-img-file" accept="image/*" style="display: none;" onchange="window.handleTrackUpload(event)">
     <input type="file" id="import-json-file" accept=".json" style="display: none;" onchange="window.importJson(event)">
     <div id="youtube-player" style="display:none; position:absolute;"></div>
 
+    <!-- =========================================================================
+         [ABSOLUTE GLOBAL SCRIPT]: 에러 발생 확률 0%의 단일 전역 함수 팩토리
+         ========================================================================= -->
     <script id="master-script">
         // 모든 변수를 window 객체에 직접 박아넣어 에디터의 메모리 충돌(Syntax Error) 에러를 원천 파괴했습니다.
         window.base64ImgData = window.base64ImgData || ""; 
-        window.playlistData = Array.isArray(window.playlistData) ? window.playlistData : [];
+        window.playlistData = (window.playlistData && window.playlistData.length !== undefined) ? window.playlistData : [];
         window.currentPlayingIndex = window.currentPlayingIndex !== undefined ? window.currentPlayingIndex : -1;
         
         window.player = window.player || null; 
@@ -402,8 +408,9 @@
         window.isBodoni = window.isBodoni || false; 
         window.editingTrackUid = window.editingTrackUid || null;
 
-        window.generateUid = function() { return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); };
+        window.generateUid = function() { return 'id_' + new Date().getTime() + '_' + Math.random().toString(36).substr(2, 9); };
         window.formatTime = function(s) { if(!s) return "0:00"; var m = Math.floor(s/60); var ss = Math.floor(s%60); return m + ":" + (ss<10?"0":"")+ss; };
+        window.findTrackIndex = function(uid) { for(var i=0; i<window.playlistData.length; i++) { if(window.playlistData[i].uid === uid) return i; } return -1; };
 
         // [YouTube API 로드]
         if(!document.getElementById('yt-api-script')) {
@@ -437,17 +444,20 @@
 
         window.onPlayerStateChange = function(event) {
             try {
-                var lp = document.getElementById('lp-master'), halo = document.getElementById('halo-ring'), waves = document.querySelectorAll('.wave-ring');
-                var iPlay = document.getElementById('icon-play'), iPause = document.getElementById('icon-pause');
+                var lp = document.getElementById('lp-master'); var halo = document.getElementById('halo-ring'); 
+                var waves = document.querySelectorAll('.wave-ring');
+                var iPlay = document.getElementById('icon-play'); var iPause = document.getElementById('icon-pause');
                 
                 if (event.data === YT.PlayerState.PLAYING) {
                     window.isPlaying = true; 
-                    if(lp) lp.style.animationPlayState = 'running'; if(halo) halo.style.opacity = '0.7'; waves.forEach(function(w) { w.style.animationPlayState = 'running'; });
+                    if(lp) lp.style.animationPlayState = 'running'; if(halo) halo.style.opacity = '0.7'; 
+                    for(var j=0; j<waves.length; j++) waves[j].style.animationPlayState = 'running';
                     if(iPlay) iPlay.style.display = 'none'; if(iPause) iPause.style.display = 'block';
                     window.startProgressBar();
                 } else {
                     window.isPlaying = false; 
-                    if(lp) lp.style.animationPlayState = 'paused'; if(halo) halo.style.opacity = '0.3'; waves.forEach(function(w) { w.style.animationPlayState = 'paused'; });
+                    if(lp) lp.style.animationPlayState = 'paused'; if(halo) halo.style.opacity = '0.3'; 
+                    for(var k=0; k<waves.length; k++) waves[k].style.animationPlayState = 'paused';
                     if(iPlay) iPlay.style.display = 'block'; if(iPause) iPause.style.display = 'none';
                     cancelAnimationFrame(window.animationFrameId);
                 }
@@ -474,18 +484,23 @@
                 if(window.player && window.player.loadVideoById) window.player.loadVideoById(track.videoId);
                 var tName = document.getElementById('current-track-name'); if(tName) tName.textContent = track.title;
                 var img = track.image ? track.image : (window.base64ImgData || ""); window.changeLPImage(img);
-                document.querySelectorAll('.track-item').forEach(function(item) {
-                    if(item.getAttribute('data-uid') === track.uid) { item.classList.add('playing'); setTimeout(function() { item.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50); }
-                    else { item.classList.remove('playing'); }
-                });
+                
+                var items = document.querySelectorAll('.track-item');
+                for(var i=0; i<items.length; i++) {
+                    var item = items[i];
+                    if(item.getAttribute('data-uid') === track.uid) { 
+                        item.classList.add('playing'); 
+                        (function(el) { setTimeout(function() { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50); })(item);
+                    } else { item.classList.remove('playing'); }
+                }
             } catch(e) {}
         };
 
-        window.playTrackByUid = function(uid) { var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx !== -1) window.playTrack(idx); };
+        window.playTrackByUid = function(uid) { var idx = window.findTrackIndex(uid); if(idx !== -1) window.playTrack(idx); };
         window.playNext = function() { if(window.playlistData.length) window.playTrack((window.currentPlayingIndex + 1) % window.playlistData.length); };
         window.playPrev = function() { if(window.playlistData.length) window.playTrack((window.currentPlayingIndex - 1 + window.playlistData.length) % window.playlistData.length); };
         window.togglePlay = function() { if(window.currentPlayingIndex === -1 && window.playlistData.length > 0) window.playTrack(0); else if (window.player && window.player.getPlayerState) window.isPlaying ? window.player.pauseVideo() : window.player.playVideo(); };
-        window.toggleLoop = function(btn) { window.isLooping = !window.isLooping; if(btn) btn.classList.toggle('active', window.isLooping); };
+        window.toggleLoop = function(btn) { window.isLooping = !window.isLooping; if(btn) { if(window.isLooping) btn.classList.add('active'); else btn.classList.remove('active'); } };
         window.changeVolume = function(val) { if(window.player && window.player.setVolume) window.player.setVolume(val); };
 
         window.startDragProgress = function(e) { window.isDraggingProgress = true; window.moveProgress(e); };
@@ -508,7 +523,7 @@
         window.handleLpUpload = function(e) { var f = e.target.files[0]; if(f) { var r = new FileReader(); r.onload = function(ev) { window.base64ImgData = ev.target.result; if(window.currentPlayingIndex === -1 || !window.playlistData[window.currentPlayingIndex] || !window.playlistData[window.currentPlayingIndex].image) window.changeLPImage(ev.target.result); window.autoSave(); }; r.readAsDataURL(f); } e.target.value = ''; };
 
         window.triggerTrackUpload = function(uid) { window.editingTrackUid = uid; var f = document.getElementById('track-img-file'); if(f) f.click(); };
-        window.handleTrackUpload = function(e) { var f = e.target.files[0]; if(f && window.editingTrackUid) { var r = new FileReader(); r.onload = function(ev) { var idx = window.playlistData.findIndex(function(t) { return t.uid === window.editingTrackUid; }); if(idx !== -1) { window.playlistData[idx].image = ev.target.result; if(window.currentPlayingIndex === idx) window.changeLPImage(ev.target.result); window.renderPlaylistUI(); window.autoSave(); window.editingTrackUid = null; } }; r.readAsDataURL(f); } e.target.value = ''; };
+        window.handleTrackUpload = function(e) { var f = e.target.files[0]; if(f && window.editingTrackUid) { var r = new FileReader(); r.onload = function(ev) { var idx = window.findTrackIndex(window.editingTrackUid); if(idx !== -1) { window.playlistData[idx].image = ev.target.result; if(window.currentPlayingIndex === idx) window.changeLPImage(ev.target.result); window.renderPlaylistUI(); window.autoSave(); window.editingTrackUid = null; } }; r.readAsDataURL(f); } e.target.value = ''; };
 
         window.addTrack = function() {
             var ytU = document.getElementById('yt-url'); var ytT = document.getElementById('yt-title'); if(!ytU || !ytT) return;
@@ -518,7 +533,7 @@
             
             var btnA = document.getElementById('add-track-btn');
             if(window.editingTrackUid) { 
-                var idx = window.playlistData.findIndex(function(t) { return t.uid === window.editingTrackUid; });
+                var idx = window.findTrackIndex(window.editingTrackUid);
                 if(idx !== -1) { window.playlistData[idx].videoId = id; window.playlistData[idx].title = title; }
                 window.editingTrackUid = null; if(btnA) { btnA.textContent = "ADD"; btnA.classList.remove('updating'); }
             } else { window.playlistData.push({ uid: window.generateUid(), videoId: id, title: title }); }
@@ -526,7 +541,7 @@
         };
 
         window.deleteTrack = function(uid) {
-            var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx === -1) return;
+            var idx = window.findTrackIndex(uid); if(idx === -1) return;
             window.playlistData.splice(idx, 1); 
             if(window.currentPlayingIndex === idx) { 
                 if(window.player && window.player.stopVideo) window.player.stopVideo(); window.currentPlayingIndex = -1; 
@@ -539,13 +554,13 @@
         };
 
         window.deleteTrackImg = function(uid) {
-            var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx === -1) return;
+            var idx = window.findTrackIndex(uid); if(idx === -1) return;
             delete window.playlistData[idx].image; if(window.currentPlayingIndex === idx) window.changeLPImage(window.base64ImgData); 
             window.renderPlaylistUI(); window.autoSave();
         };
 
         window.editTrackText = function(uid) {
-            var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx === -1) return;
+            var idx = window.findTrackIndex(uid); if(idx === -1) return;
             window.editingTrackUid = uid; 
             var ytT = document.getElementById('yt-title'); var ytU = document.getElementById('yt-url'); var btnA = document.getElementById('add-track-btn');
             if(ytT) ytT.value = window.playlistData[idx].title;
@@ -554,7 +569,7 @@
         };
 
         window.moveTrack = function(uid, dir) {
-            var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx === -1) return;
+            var idx = window.findTrackIndex(uid); if(idx === -1) return;
             var target = idx + dir; 
             if(target >= 0 && target < window.playlistData.length) { var t = window.playlistData[idx]; window.playlistData[idx] = window.playlistData[target]; window.playlistData[target] = t; window.renderPlaylistUI(); window.autoSave(); }
         };
@@ -587,7 +602,11 @@
                     if(d.isBodoni) { window.isBodoni = true; document.body.classList.add('font-bodoni'); } else { window.isBodoni = false; document.body.classList.remove('font-bodoni'); }
                     
                     var parsedList = d.playlist || [];
-                    window.playlistData = parsedList.map(function(t) { var newT = Object.assign({}, t); newT.uid = newT.uid ? newT.uid : window.generateUid(); return newT; });
+                    window.playlistData = [];
+                    for(var i=0; i<parsedList.length; i++) {
+                        var t = parsedList[i];
+                        window.playlistData.push({ uid: t.uid ? t.uid : window.generateUid(), videoId: t.videoId, title: t.title, image: t.image });
+                    }
                     window.base64ImgData = d.imageData || ""; 
                     window.renderPlaylistUI(); window.changeLPImage(window.base64ImgData); window.autoSave();
                 } catch(err) { alert("파일 파싱에 실패했습니다."); }
@@ -599,26 +618,29 @@
                 var list = document.getElementById('playlist'); if(!list) return;
                 list.innerHTML = ''; var isViewer = !document.getElementById('editor-tools');
                 
-                window.playlistData.forEach(function(track, i) {
-                    var li = document.createElement('li'); li.className = 'track-item anim-fade'; li.setAttribute('data-uid', track.uid);
-                    if (i === window.currentPlayingIndex) li.classList.add('playing');
-                    
-                    var html = '<div class="track-info" onclick="window.playTrackByUid(\'' + track.uid + '\')"><div class="diamond-mark"></div><span class="track-title">' + String(i + 1).padStart(2, '0') + ' &nbsp;&nbsp;&nbsp; ' + track.title + '</span></div>';
-                    if(!isViewer) {
-                        html += '<div class="track-actions">' +
-                            '<button class="action-btn img-btn ' + (track.image?'img-active':'') + '" onclick="event.stopPropagation(); window.triggerTrackUpload(\'' + track.uid + '\')" title="커버 등록"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke-width="1.5"/></svg></button>' +
-                            (track.image ? '<button class="action-btn del-img-btn" onclick="event.stopPropagation(); window.deleteTrackImg(\'' + track.uid + '\')" title="커버 삭제"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" stroke-width="1.5"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="1.5"/></svg></button>' : '') +
-                            '<button class="action-btn edit-btn" onclick="event.stopPropagation(); window.editTrackText(\'' + track.uid + '\')" title="수정">✎</button>' +
-                            '<button class="action-btn move-up" onclick="event.stopPropagation(); window.moveTrack(\'' + track.uid + '\', -1)" title="위로">▲</button><button class="action-btn move-dn" onclick="event.stopPropagation(); window.moveTrack(\'' + track.uid + '\', 1)" title="아래로">▼</button><button class="action-btn del-btn" onclick="event.stopPropagation(); window.deleteTrack(\'' + track.uid + '\')" title="삭제">✕</button></div>';
-                    }
-                    li.innerHTML = html; list.appendChild(li);
-                    setTimeout(function() { li.classList.remove('anim-fade'); }, 10);
-                });
+                for(var i=0; i<window.playlistData.length; i++) {
+                    (function(track, idx) {
+                        var li = document.createElement('li'); li.className = 'track-item anim-fade'; li.setAttribute('data-uid', track.uid);
+                        if (idx === window.currentPlayingIndex) li.classList.add('playing');
+                        
+                        var idxStr = (idx + 1) < 10 ? '0' + (idx + 1) : String(idx + 1);
+                        var html = '<div class="track-info" onclick="window.playTrackByUid(\'' + track.uid + '\')"><div class="diamond-mark"></div><span class="track-title">' + idxStr + ' &nbsp;&nbsp;&nbsp; ' + track.title + '</span></div>';
+                        if(!isViewer) {
+                            html += '<div class="track-actions">' +
+                                '<button class="action-btn img-btn ' + (track.image?'img-active':'') + '" onclick="event.stopPropagation(); window.triggerTrackUpload(\'' + track.uid + '\')" title="커버 등록"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke-width="1.5"/></svg></button>' +
+                                (track.image ? '<button class="action-btn del-img-btn" onclick="event.stopPropagation(); window.deleteTrackImg(\'' + track.uid + '\')" title="커버 삭제"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" stroke-width="1.5"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="1.5"/></svg></button>' : '') +
+                                '<button class="action-btn edit-btn" onclick="event.stopPropagation(); window.editTrackText(\'' + track.uid + '\')" title="수정">✎</button>' +
+                                '<button class="action-btn move-up" onclick="event.stopPropagation(); window.moveTrack(\'' + track.uid + '\', -1)" title="위로">▲</button><button class="action-btn move-dn" onclick="event.stopPropagation(); window.moveTrack(\'' + track.uid + '\', 1)" title="아래로">▼</button><button class="action-btn del-btn" onclick="event.stopPropagation(); window.deleteTrack(\'' + track.uid + '\')" title="삭제">✕</button></div>';
+                        }
+                        li.innerHTML = html; list.appendChild(li);
+                        setTimeout(function() { li.classList.remove('anim-fade'); }, 10);
+                    })(window.playlistData[i], i);
+                }
             } catch(e) {}
         };
 
-        // 초기화 함수
-        window.addEventListener('DOMContentLoaded', function() {
+        // 초기화
+        window.initApp = function() {
             var isViewerGlobal = !document.getElementById('editor-tools');
             if(!isViewerGlobal) {
                 try {
@@ -631,8 +653,11 @@
                         if(d.isBodoni) { window.isBodoni = true; document.body.classList.add('font-bodoni'); } else { window.isBodoni = false; document.body.classList.remove('font-bodoni'); }
                         
                         var parsedList = d.playlist || [];
-                        window.playlistData = parsedList.map(function(t) { var newT = Object.assign({}, t); newT.uid = newT.uid ? newT.uid : window.generateUid(); return newT; });
-                        
+                        window.playlistData = [];
+                        for(var i=0; i<parsedList.length; i++) {
+                            var t = parsedList[i];
+                            window.playlistData.push({ uid: t.uid ? t.uid : window.generateUid(), videoId: t.videoId, title: t.title, image: t.image });
+                        }
                         window.base64ImgData = d.imageData || ""; 
                         window.renderPlaylistUI(); window.changeLPImage(window.base64ImgData);
                     } else { window.renderPlaylistUI(); window.changeLPImage(""); }
@@ -640,20 +665,21 @@
             } else {
                 window.renderPlaylistUI(); window.changeLPImage(window.base64ImgData);
             }
-        });
+            window.resizeFit();
+        };
 
-        // HTML SHARE EXPORTER (에러 방어형 텍스트 생성)
+        // HTML SHARE EXPORTER
         window.exportHtml = function() {
             window.autoSave(); var d = window.getSiteData();
             var plHtml = '';
-            d.playlist.forEach(function(t, i) { 
-                plHtml += '<li class="track-item" data-uid="' + t.uid + '"><div class="track-info" onclick="window.playTrackByUid(\'' + t.uid + '\')"><div class="diamond-mark"></div><span class="track-title">' + String(i + 1).padStart(2, '0') + ' &nbsp;&nbsp;&nbsp; ' + t.title + '</span></div></li>'; 
-            });
+            for(var i=0; i<d.playlist.length; i++) {
+                var t = d.playlist[i];
+                var idxStr = (i + 1) < 10 ? '0' + (i + 1) : String(i + 1);
+                plHtml += '<li class="track-item" data-uid="' + t.uid + '"><div class="track-info" onclick="window.playTrackByUid(\'' + t.uid + '\')"><div class="diamond-mark"></div><span class="track-title">' + idxStr + ' &nbsp;&nbsp;&nbsp; ' + t.title + '</span></div></li>'; 
+            }
 
-            var cs = document.getElementById('core-styles');
-            var stylesText = cs ? cs.innerHTML : '';
-            var ms = document.getElementById('master-script');
-            var logicScriptText = ms ? ms.innerHTML : '';
+            var cs = document.getElementById('core-styles'); var stylesText = cs ? cs.innerHTML : '';
+            var ms = document.getElementById('master-script'); var logicScriptText = ms ? ms.innerHTML : '';
             var bClass = d.isBodoni ? 'font-bodoni' : '';
             var sOpen = '<sc' + 'ript>'; var sClose = '</sc' + 'ript>';
             
@@ -682,8 +708,11 @@
             var blob = new Blob([htmlBlocks.join('\n')], {type:'text/html'}); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = d.pairName + "_Cosmic_Viewer.html"; a.click(); URL.revokeObjectURL(url);
         };
         
-        function resizeFit() { var w = document.getElementById("viewer-wrapper") || document.getElementById("export-target"); if(!w) return; var s = Math.min(window.innerWidth/1400, window.innerHeight/850); if(w.id === "viewer-wrapper") w.style.transform = "scale(" + (s>1?1:s) + ")"; }
-        window.addEventListener('resize', resizeFit); resizeFit();
+        window.resizeFit = function() { var w = document.getElementById("viewer-wrapper") || document.getElementById("export-target"); if(!w) return; var s = Math.min(window.innerWidth/1400, window.innerHeight/850); if(w.id === "viewer-wrapper") w.style.transform = "scale(" + (s>1?1:s) + ")"; };
+        window.addEventListener('resize', window.resizeFit); 
+        
+        // 어떤 환경이든 안전하게 DOM 부팅
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', window.initApp); } else { window.initApp(); }
 
     </script>
 </body>
