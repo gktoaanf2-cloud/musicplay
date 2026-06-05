@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pair Music Box - Absolute Typography</title>
+    <title>Pair Music Box - Genesis Light</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <!-- 보스 픽: 한글 렌더링 1티어 스태틱 프리텐다드 & 오류를 멸균한 보도니 모다 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
     
     <style id="core-styles">
         /* =========================================
@@ -42,36 +40,55 @@
         .capturing #export-target { transform: none !important; position: absolute !important; top: 0 !important; left: 0 !important; margin: 0 !important; background-color: var(--color-4) !important; }
 
         /* =========================================
-           2. VISIBLE NEBULA & BRILLIANT STARDUST
+           2. INDEPENDENT NEBULA & STARDUST (우주먼지 밀도 증폭!)
            ========================================= */
         .nebula-container { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
         .nebula-light {
-            position: absolute; border-radius: 50%; filter: blur(90px); mix-blend-mode: screen;
-            animation: cosmic-drift 20s ease-in-out infinite alternate;
+            position: absolute; border-radius: 50%; filter: blur(100px); mix-blend-mode: screen;
+            animation: cosmic-pulse 12s ease-in-out infinite alternate; will-change: transform, opacity;
         }
-        .light-1 { top: 15%; left: 15%; width: 450px; height: 450px; background: var(--color-1); opacity: 0.15; animation-duration: 22s; }
-        .light-2 { bottom: 10%; right: 10%; width: 550px; height: 550px; background: var(--color-2); opacity: 0.18; animation-duration: 28s; animation-delay: -5s; }
-        .light-3 { top: 50%; left: 45%; width: 350px; height: 350px; background: var(--color-3); opacity: 0.20; animation-duration: 18s; animation-delay: -10s; }
-
-        @keyframes cosmic-drift {
-            0% { transform: translate(0, 0) scale(0.9); }
-            100% { transform: translate(60px, -40px) scale(1.1); }
+        .blob-1 { top: 10%; left: 15%; width: 260px; height: 260px; background: var(--color-1); opacity: 0.04; animation-duration: 15s; }
+        .blob-2 { bottom: 20%; right: 12%; width: 320px; height: 320px; background: var(--color-2); opacity: 0.03; animation-duration: 22s; animation-delay: -3s; }
+        .blob-3 { top: 55%; left: 45%; width: 220px; height: 220px; background: var(--color-3); opacity: 0.04; animation-duration: 18s; animation-delay: -6s; }
+        .blob-4 { top: 5%; right: 25%; width: 150px; height: 150px; background: var(--color-1); opacity: 0.02; animation-duration: 25s; animation-delay: -2s; }
+        
+        @keyframes cosmic-pulse {
+            0% { transform: translate(0, 0) scale(0.85); opacity: 0.01; }
+            100% { transform: translate(35px, 20px) scale(1.15); opacity: 0.06; filter: blur(130px); }
         }
 
+        /* 보스 픽: 우주먼지 레이어를 3개로 늘리고 입자수를 빽빽하게 채웠습니다 */
         .stardust-container { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
         .stardust-wrapper { position: absolute; inset: -50%; width: 200%; height: 200%; }
         .stardust-layer { position: absolute; inset: 0; background-repeat: repeat; }
         
         .layer-1 {
-            background-image: radial-gradient(1.5px 1.5px at 40px 60px, rgba(255,255,255,1), transparent), radial-gradient(1px 1px at 240px 150px, rgba(255,255,255,0.6), transparent), radial-gradient(2px 2px at 500px 350px, rgba(255,255,255,0.9), transparent);
-            background-size: 800px 800px; animation: stardust-fall 80s linear infinite, stardust-twinkle 5s ease-in-out infinite alternate; opacity: 0.6;
+            background-image: 
+                radial-gradient(1.5px 1.5px at 40px 60px, rgba(255,255,255,1), transparent), 
+                radial-gradient(1px 1px at 240px 150px, rgba(255,255,255,0.8), transparent), 
+                radial-gradient(2px 2px at 500px 350px, rgba(255,255,255,1), transparent),
+                radial-gradient(1px 1px at 150px 400px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1.5px 1.5px at 650px 120px, rgba(255,255,255,0.9), transparent);
+            background-size: 800px 800px; animation: stardust-fall 80s linear infinite, stardust-twinkle 4s ease-in-out infinite alternate; opacity: 0.8;
         }
         .layer-2 {
-            background-image: radial-gradient(1px 1px at 120px 80px, rgba(255,255,255,0.7), transparent), radial-gradient(1.5px 1.5px at 400px 250px, rgba(255,255,255,0.5), transparent);
-            background-size: 600px 600px; animation: stardust-fall 100s linear infinite, stardust-twinkle 7s ease-in-out infinite alternate-reverse; opacity: 0.5;
+            background-image: 
+                radial-gradient(1px 1px at 120px 80px, rgba(255,255,255,0.7), transparent), 
+                radial-gradient(1.5px 1.5px at 400px 250px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 50px 500px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 300px 50px, rgba(255,255,255,0.5), transparent);
+            background-size: 600px 600px; animation: stardust-fall 100s linear infinite, stardust-twinkle 6s ease-in-out infinite alternate-reverse; opacity: 0.7;
         }
+        .layer-3 {
+            background-image: 
+                radial-gradient(1.5px 1.5px at 200px 300px, rgba(255,255,255,0.9), transparent), 
+                radial-gradient(1px 1px at 550px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 700px 450px, rgba(255,255,255,0.8), transparent);
+            background-size: 900px 900px; animation: stardust-fall 130s linear infinite, stardust-twinkle 5s ease-in-out infinite alternate; opacity: 0.6;
+        }
+
         @keyframes stardust-fall { 0% { transform: translateY(0); } 100% { transform: translateY(400px); } }
-        @keyframes stardust-twinkle { 0% { opacity: 0.2; } 100% { opacity: 1; filter: drop-shadow(0 0 12px #fff); } }
+        @keyframes stardust-twinkle { 0% { opacity: 0.1; filter: drop-shadow(0 0 1px rgba(255,255,255,0.1)); } 100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,255,255,1)); } }
 
         /* =========================================
            3. MAIN LAYOUT & ULTRA-COMPACT TOOLBAR
@@ -94,7 +111,7 @@
         .font-controls, .color-controls, .data-controls { display: flex; gap: 10px; align-items: center;}
 
         /* =========================================
-           4. LP & DUAL IMAGE LAYERS (크로스페이드)
+           4. LP & DUAL IMAGE LAYERS
            ========================================= */
         .lp-wrapper { flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative; }
         .sacred-geometry { position: absolute; inset: -50px; background-position: center; background-repeat: no-repeat; pointer-events: none; z-index: 0; animation: spin-reverse 60s linear infinite; background-image: url("data:image/svg+xml,%3Csvg width='750' height='750' viewBox='0 0 750 750' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23ffffff' stroke-width='1' fill='none' stroke-opacity='0.04'%3E%3Ccircle cx='375' cy='375' r='350'/%3E%3Ccircle cx='375' cy='375' r='280'/%3E%3Ccircle cx='375' cy='375' r='180'/%3E%3Cpath d='M375 25v700M25 375h700M127 127l496 496M127 623l496-496'/%3E%3C/g%3E%3C/svg%3E"); }
@@ -117,15 +134,8 @@
         .lp-center-image-container {
             width: 290px; height: 290px; border-radius: 50%; position: relative; z-index: 10;
             box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.9);
-            cursor: pointer; overflow: hidden; transition: transform 0.4s;
+            cursor: pointer; overflow: hidden;
         }
-        .lp-center-image-container::after {
-            content: ''; position: absolute; inset: 0; border-radius: 50%;
-            box-shadow: inset 0 0 40px var(--color-1); opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
-        }
-        .lp-center-image-container:hover { transform: scale(1.02); box-shadow: 0 0 0 2px #fff, 0 0 60px var(--color-1); }
-        .lp-center-image-container:hover::after { opacity: 0.8; }
-
         .lp-center-bg {
             position: absolute; inset: 0; border-radius: 50%; background-size: cover; background-position: center;
             transition: opacity 0.8s cubic-bezier(0.25, 1, 0.25, 1); will-change: opacity;
@@ -134,7 +144,7 @@
         #center-img-overlay { opacity: 0; }
 
         /* =========================================
-           5. PLAYLIST & SHOOTING STAR TRAIL
+           5. PLAYLIST (슈팅 스타 스캔 효과 극강의 세련미 튜닝)
            ========================================= */
         .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; position: relative; }
         
@@ -147,7 +157,7 @@
         
         .track-item { display: flex; align-items: center; padding: 14px 20px; background: transparent; cursor: pointer; font-size: 14px; color: var(--color-1); opacity: 0.45; position: relative; font-weight: 300; justify-content: space-between; letter-spacing: -0.05em; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: center; }
         .track-item.anim-fade { opacity: 0; transform: translateY(-10px); }
-        .track-info { display: flex; align-items: center; flex: 1; }
+        .track-info { display: flex; align-items: center; flex: 1; min-width: 0; }
         .track-title { display: inline-block; transform: scaleX(0.95); transform-origin: left center; white-space: nowrap; transition: 0.3s; }
 
         .track-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 1px; background: var(--color-1); opacity: 0.15; transition: width 0.7s cubic-bezier(0.19, 1, 0.22, 1); }
@@ -156,18 +166,20 @@
 
         .track-item.playing { opacity: 1; color: var(--color-1); font-weight: 500; text-shadow: 0 0 15px var(--color-1); }
         
+        /* 보스 지시 100% 반영: 얇고, 빠르고, 은은한 스크러빙 슈팅스타 빛 꼬리 */
         .track-item.playing::after { 
             content: ''; position: absolute; bottom: 0; left: 0; width: 100% !important; height: 1px;
-            background: linear-gradient(90deg, var(--color-1) 0%, transparent 100%);
-            transform: scaleY(0.3); transform-origin: left bottom;
-            -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 15%, black 45%, transparent 100%);
+            background: linear-gradient(90deg, transparent 0%, var(--color-1) 10%, var(--color-1) 90%, transparent 100%);
+            transform: scaleY(0.15); /* 0.15px의 극한의 얇기 */
+            transform-origin: left bottom;
+            -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 20%, transparent 100%);
             -webkit-mask-size: 200% 100%; -webkit-mask-repeat: no-repeat;
-            opacity: 0.7; animation: shooting-star 6s ease-in-out infinite; 
+            opacity: 0.8; animation: shooting-star 2.5s ease-out infinite; /* 2.5초의 스피드감 넘치는 궤적 */
         }
         @keyframes shooting-star { 
             0% { -webkit-mask-position: -200% 0; opacity: 0; } 
-            25% { opacity: 1; }
-            75% { opacity: 0.5; }
+            15% { opacity: 1; }
+            50% { opacity: 0.3; }
             100% { -webkit-mask-position: 200% 0; opacity: 0; } 
         }
 
@@ -198,10 +210,11 @@
         .control-btn.active { opacity: 1; filter: drop-shadow(0 0 10px var(--color-1)); }
         .control-btn.active svg { fill: var(--color-1); }
         .control-btn svg { width: 18px; height: 18px; fill: var(--color-1); transition: fill 0.3s;}
+        #btn-loop svg { width: 14px; height: 14px; }
         .play-pause-btn svg { width: 32px; height: 32px; fill: url(#grad-play); }
 
         .progress-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
-        .track-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-1); opacity: 0.5; letter-spacing: 2px; }
+        .track-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-1); opacity: 0.5; letter-spacing: 2px; font-family: var(--font-pair); }
         #current-track-name { font-weight: 500; font-size: 13px; color: var(--color-1); letter-spacing: -0.05em; transform: scaleX(0.95); transform-origin: left center;}
 
         .progress-hitbox { width: 100%; height: 24px; cursor: pointer; display: flex; align-items: center; position: relative; }
@@ -231,22 +244,23 @@
         </defs>
     </svg>
 
-    <div class="nebula-container">
-        <div class="nebula-light light-1"></div>
-        <div class="nebula-light light-2"></div>
-        <div class="nebula-light light-3"></div>
+    <div class="ambient-container">
+        <div class="ambient-blob blob-1"></div>
+        <div class="ambient-blob blob-2"></div>
+        <div class="ambient-blob blob-3"></div>
+        <div class="ambient-blob blob-4"></div>
     </div>
     
     <div class="stardust-container" id="bg-stardust">
         <div class="stardust-wrapper" style="transform: rotate(0deg);"><div class="stardust-layer layer-1"></div></div>
         <div class="stardust-wrapper" style="transform: rotate(15deg);"><div class="stardust-layer layer-2"></div></div>
+        <div class="stardust-wrapper" style="transform: rotate(-10deg);"><div class="stardust-layer layer-3"></div></div>
     </div>
 
-    <!-- 가이드 HUD -->
     <div id="guide-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1000; justify-content:center; align-items:center; opacity:0; transition:0.3s; pointer-events:none;" data-html2canvas-ignore="true">
         <div style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.85) 0%, rgba(5, 5, 10, 0.7) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 50px 40px; width: 500px; position: relative; clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px)); text-align: left;">
-            <button onclick="document.getElementById('guide-modal').style.opacity='0'; setTimeout(()=>document.getElementById('guide-modal').style.display='none',300);" style="position: absolute; top: 25px; right: 25px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); font-size: 12px; cursor: pointer; padding: 5px 10px; font-family: 'Courier New', monospace; letter-spacing: 1px;">[CLOSE]</button>
-            <h2 style="font-size: 18px; letter-spacing: 4px; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 15px; margin:0 0 25px 0; text-shadow: 0 0 10px var(--color-1);">SYSTEM_GUIDE // ABYSS</h2>
+            <button id="modal-close-btn" style="position: absolute; top: 25px; right: 25px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); font-size: 12px; cursor: pointer; padding: 5px 10px; font-family: 'Courier New', monospace; letter-spacing: 1px; z-index: 10;">[CLOSE]</button>
+            <h2 style="font-size: 18px; letter-spacing: 4px; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 15px; margin:0 0 25px 0; text-shadow: 0 0 15px var(--color-1);">SYSTEM_GUIDE // ABYSS</h2>
             <ol style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px; font-size: 13px; opacity: 0.85; line-height: 1.6;">
                 <li>01. 곡마다 개별 이미지를 매칭하여 서사의 질감을 전환하세요.</li>
                 <li>02. 전체 텍스트 레이아웃이 지정하신 테마색 1번에 유기적으로 연동됩니다.</li>
@@ -259,7 +273,7 @@
     <div id="export-target">
         
         <div class="floating-tools" id="editor-tools" data-html2canvas-ignore="true">
-            <button class="text-btn" onclick="document.getElementById('guide-modal').style.display='flex'; setTimeout(()=>document.getElementById('guide-modal').style.opacity='1',10);">GUIDE</button>
+            <button class="text-btn" id="guide-btn">GUIDE</button>
             <span class="tool-sep">|</span>
             <div class="font-controls">
                 <button class="text-btn" id="font-size-down">A-</button>
@@ -292,9 +306,8 @@
                 <div class="lp-spin-master" id="lp-master">
                     <div class="lp-halo-ring" id="halo-ring"></div>
                     <div class="lp-record">
-                        <div class="lp-grooves"></div>
-                        <div class="lp-internal-glow"></div>
-                        <div class="lp-center-image-container" id="center-img-container" onclick="document.getElementById('config-file').click()">
+                        <div class="lp-grooves"></div><div class="lp-internal-glow"></div>
+                        <div class="lp-center-image-container" id="center-img-container">
                             <div class="lp-center-bg" id="center-img-base"></div>
                             <div class="lp-center-bg" id="center-img-overlay"></div>
                         </div>
@@ -338,7 +351,6 @@
     <input type="file" id="import-json-file" accept=".json" style="display: none;">
     <div id="youtube-player" style="display:none; position:absolute;"></div>
 
-    <!-- CORE LOGIC: 플레이어 동기화 엔진 -->
     <script id="core-logic-script">
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
@@ -426,11 +438,19 @@
         }
     </script>
 
-    <!-- EDITOR UI & DATA MANAGEMENT -->
     <script id="editor-ui-script">
         window.base64ImgData = ""; 
         let currentFontSize = 68, isBodoni = false, editingTrackIndex = -1, uploadingTrackIndex = -1;
         const root = document.documentElement;
+
+        const btnGuide = document.getElementById('guide-btn');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const guideModal = document.getElementById('guide-modal');
+        if(btnGuide && guideModal) btnGuide.onclick = () => { guideModal.style.display = 'flex'; setTimeout(() => { guideModal.style.opacity = '1'; guideModal.style.pointerEvents = 'auto'; }, 10); };
+        if(modalCloseBtn && guideModal) modalCloseBtn.onclick = () => { guideModal.style.opacity = '0'; guideModal.style.pointerEvents = 'none'; setTimeout(() => guideModal.style.display = 'none', 300); };
+        
+        const lpContainer = document.getElementById('center-img-container');
+        if(lpContainer) lpContainer.onclick = () => { const fileInput = document.getElementById('config-file'); if(fileInput) fileInput.click(); };
 
         function getSiteData() {
             return {
@@ -442,7 +462,7 @@
                 playlist: window.playlistData, imageData: window.base64ImgData
             };
         }
-        function autoSave() { try { localStorage.setItem('pair_music_box_v43', JSON.stringify(getSiteData())); } catch(e) {} }
+        function autoSave() { try { localStorage.setItem('pair_music_box_v44', JSON.stringify(getSiteData())); } catch(e) {} }
 
         function renderPlaylistUI() {
             const list = document.getElementById('playlist'); list.innerHTML = '';
@@ -488,51 +508,66 @@
             renderPlaylistUI(); autoSave();
         }
 
-        document.getElementById('add-track-btn').onclick = () => {
+        const btnAdd = document.getElementById('add-track-btn');
+        if(btnAdd) btnAdd.onclick = () => {
             const url = document.getElementById('yt-url').value, title = document.getElementById('yt-title').value.trim() || "UNKNOWN";
             const match = url.match(/(?:youtu\.be\/|v=)([^"&?\/\s]{11})/); const id = match ? match[1] : (url.length===11?url:null);
             if(!id) return alert("유효하지 않은 링크");
-            if(editingTrackIndex > -1) { window.playlistData[editingTrackIndex].videoId = id; window.playlistData[editingTrackIndex].title = title; editingTrackIndex = -1; const btn = document.getElementById('add-track-btn'); btn.textContent = "ADD"; btn.classList.remove('updating'); }
+            if(editingTrackIndex > -1) { window.playlistData[editingTrackIndex].videoId = id; window.playlistData[editingTrackIndex].title = title; editingTrackIndex = -1; btnAdd.textContent = "ADD"; btnAdd.classList.remove('updating'); }
             else { window.playlistData.push({ videoId: id, title: title }); }
             document.getElementById('yt-url').value = ''; document.getElementById('yt-title').value = ''; renderPlaylistUI(); autoSave();
         };
 
         ['1', '2', '3', '4'].forEach(n => {
-            document.getElementById('config-color-'+n).oninput = (e) => { root.style.setProperty('--color-'+n, e.target.value); autoSave(); };
+            const el = document.getElementById('config-color-'+n);
+            if(el) el.oninput = (e) => { root.style.setProperty('--color-'+n, e.target.value); autoSave(); };
         });
 
-        document.getElementById('config-file').onchange = (e) => {
-            const f = e.target.files[0]; if(f) { const r = new FileReader(); r.onload = (ev) => { window.base64ImgData = ev.target.result; if(currentPlayingIndex === -1 || !window.playlistData[currentPlayingIndex]?.image) changeLPImage(ev.target.result); autoSave(); }; r.readAsDataURL(f); }
-        };
-        document.getElementById('track-img-file').onchange = (e) => {
-            const f = e.target.files[0]; if(f && uploadingTrackIndex > -1) { const r = new FileReader(); r.onload = (ev) => { window.playlistData[uploadingTrackIndex].image = ev.target.result; if(currentPlayingIndex === uploadingTrackIndex) changeLPImage(ev.target.result); renderPlaylistUI(); autoSave(); }; r.readAsDataURL(f); }
+        const fileConfig = document.getElementById('config-file');
+        if(fileConfig) fileConfig.onchange = (e) => {
+            const f = e.target.files[0]; if(f) { const r = new FileReader(); r.onload = (ev) => { window.base64ImgData = ev.target.result; if(currentPlayingIndex === -1 || !window.playlistData[currentPlayingIndex]?.image) changeLPImage(ev.target.result); autoSave(); }; r.readAsDataURL(f); } e.target.value = '';
         };
 
-        document.getElementById('reset-btn').onclick = () => { if(confirm("세계선을 리셋하시겠습니까?")) { localStorage.removeItem('pair_music_box_v43'); location.reload(); } };
-        document.getElementById('export-json-btn').onclick = () => { const data = JSON.stringify(getSiteData()); const blob = new Blob([data], {type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = "Archive_Data.json"; a.click(); };
-        document.getElementById('import-json-btn').onclick = () => document.getElementById('import-json-file').click();
-        document.getElementById('import-json-file').onchange = (e) => {
+        const fileTrack = document.getElementById('track-img-file');
+        if(fileTrack) fileTrack.onchange = (e) => {
+            const f = e.target.files[0]; if(f && uploadingTrackIndex > -1) { const r = new FileReader(); r.onload = (ev) => { window.playlistData[uploadingTrackIndex].image = ev.target.result; if(currentPlayingIndex === uploadingTrackIndex) changeLPImage(ev.target.result); renderPlaylistUI(); autoSave(); }; r.readAsDataURL(f); } e.target.value = '';
+        };
+
+        const btnReset = document.getElementById('reset-btn');
+        if(btnReset) btnReset.onclick = () => { if(confirm("세계선을 리셋하시겠습니까?")) { localStorage.removeItem('pair_music_box_v44'); location.reload(); } };
+
+        const btnOut = document.getElementById('export-json-btn');
+        if(btnOut) btnOut.onclick = () => { const data = JSON.stringify(getSiteData()); const blob = new Blob([data], {type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = "Archive_Data.json"; a.click(); };
+
+        const btnIn = document.getElementById('import-json-btn');
+        if(btnIn) btnIn.onclick = () => document.getElementById('import-json-file').click();
+        
+        const fileImport = document.getElementById('import-json-file');
+        if(fileImport) fileImport.onchange = (e) => {
             const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = (ev) => { const d = JSON.parse(ev.target.result); 
                 document.getElementById('pair-name-display').textContent = d.pairName; document.getElementById('sub-title-display').textContent = d.subTitle;
                 ['1','2','3','4'].forEach(n => { document.getElementById('config-color-'+n).value = d['color'+n]; root.style.setProperty('--color-'+n, d['color'+n]); });
                 window.playlistData = d.playlist; window.base64ImgData = d.imageData || "";
                 if(d.isBodoni) { isBodoni = true; root.style.setProperty('--font-pair', "'Bodoni Moda', 'Pretendard', sans-serif"); }
                 renderPlaylistUI(); changeLPImage(window.base64ImgData); autoSave();
-            }; r.readAsText(f);
+            }; r.readAsText(f); e.target.value = '';
         };
 
-        // 보스 지시: 이중 폰트 스택 적용! (영문 Bodoni, 한글 Pretendard 궁극의 조화)
-        document.getElementById('font-toggle-btn').onclick = () => { 
+        const btnFontTgl = document.getElementById('font-toggle-btn');
+        if(btnFontTgl) btnFontTgl.onclick = () => { 
             isBodoni = !isBodoni; 
             root.style.setProperty('--font-pair', isBodoni ? "'Bodoni Moda', 'Pretendard', sans-serif" : "'Pretendard', sans-serif"); 
             autoSave(); 
         };
         
-        document.getElementById('font-size-up').onclick = () => { if(currentFontSize < 120) currentFontSize += 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); };
-        document.getElementById('font-size-down').onclick = () => { if(currentFontSize > 24) currentFontSize -= 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); };
+        const btnFontUp = document.getElementById('font-size-up');
+        if(btnFontUp) btnFontUp.onclick = () => { if(currentFontSize < 120) currentFontSize += 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); };
+        
+        const btnFontDn = document.getElementById('font-size-down');
+        if(btnFontDn) btnFontDn.onclick = () => { if(currentFontSize > 24) currentFontSize -= 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); };
 
         window.onload = () => {
-            const s = localStorage.getItem('pair_music_box_v43');
+            const s = localStorage.getItem('pair_music_box_v44');
             if(s) {
                 const d = JSON.parse(s);
                 document.getElementById('pair-name-display').textContent = d.pairName; document.getElementById('sub-title-display').textContent = d.subTitle;
@@ -544,8 +579,9 @@
             }
         };
 
-        // 보스 지시: 정적 문자열 완벽 결합, 오류 0% 배포 빌더
-        document.getElementById('export-html-btn').onclick = () => {
+        // 완벽 정적 문자열 빌드 팩토리 (버그 원천 차단형)
+        const btnExport = document.getElementById('export-html-btn');
+        if(btnExport) btnExport.onclick = () => {
             autoSave(); const d = getSiteData();
             let plHtml = '';
             d.playlist.forEach((t, i) => { plHtml += '<li class="track-item"><div class="track-info"><div class="diamond-mark"></div><span class="track-title">' + String(i + 1).padStart(2, '0') + ' &nbsp;&nbsp;&nbsp; ' + t.title + '</span></div></li>'; });
@@ -553,9 +589,7 @@
             const stylesText = document.getElementById('core-styles').innerHTML;
             const logicScriptText = document.getElementById('core-logic-script').innerHTML;
             const fp = d.isBodoni ? "'Bodoni Moda', 'Pretendard', sans-serif" : "'Pretendard', sans-serif";
-            
-            const sOpen = '<scr' + 'ipt>';
-            const sClose = '</scr' + 'ipt>';
+            const sOpen = '<scr' + 'ipt>'; const sClose = '</scr' + 'ipt>';
 
             const fullHtml = '<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n<title>' + d.pairName + ' - Cosmic Viewer</title>\n' +
                 '<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />\n' +
@@ -564,8 +598,8 @@
                 stylesText + '\nhtml, body { background-color: var(--color-4) !important; }\n#viewer-wrapper { width:1400px; height:850px; transform-origin: center center; position:relative; }\n' +
                 '</style>\n</head>\n<body style="display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; overflow:hidden;">\n' +
                 '<svg width="0" height="0"><defs><linearGradient id="grad-play" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:var(--color-1)" /><stop offset="50%" style="stop-color:var(--color-2)" /><stop offset="100%" style="stop-color:var(--color-3)" /></linearGradient></defs></svg>\n' +
-                '<div class="nebula-container"><div class="nebula-light light-1"></div><div class="nebula-light light-2"></div><div class="nebula-light light-3"></div></div>\n' +
-                '<div class="stardust-container"><div class="stardust-wrapper"><div class="stardust-layer layer-1"></div><div class="stardust-layer layer-2"></div></div></div>\n' +
+                '<div class="ambient-container"><div class="ambient-blob blob-1"></div><div class="ambient-blob blob-2"></div><div class="ambient-blob blob-3"></div><div class="ambient-blob blob-4"></div></div>\n' +
+                '<div class="stardust-container"><div class="stardust-wrapper"><div class="stardust-layer layer-1"></div><div class="stardust-layer layer-2"></div><div class="stardust-layer layer-3"></div></div></div>\n' +
                 '<div id="viewer-wrapper">\n<div id="export-target" style="padding:0; width:100%; height:100%;">\n' +
                 '<div class="main-content"><div class="lp-wrapper"><div class="sacred-geometry"></div><div class="lp-soundwaves"><div class="wave-ring"></div><div class="wave-ring"></div><div class="wave-ring"></div></div>' +
                 '<div class="lp-spin-master" id="lp-master"><div class="lp-halo-ring"></div><div class="lp-record"><div class="lp-grooves"></div><div class="lp-internal-glow"></div>' +
@@ -577,6 +611,7 @@
                 'function resize() { const w = document.getElementById("viewer-wrapper"); const s = Math.min(window.innerWidth/1400, window.innerHeight/850); w.style.transform = "scale(" + (s>1?1:s) + ")"; }\nwindow.onresize = resize; resize();\n' +
                 logicScriptText + '\n' +
                 'const list = document.getElementById("playlist"); list.innerHTML = ""; window.playlistData.forEach((track, i) => { const li = document.createElement("li"); li.className = "track-item"; if (i === currentPlayingIndex) li.classList.add("playing"); li.innerHTML = "<div class=\\"track-info\\"><div class=\\"diamond-mark\\"></div><span class=\\"track-title\\">" + String(i + 1).padStart(2, "0") + " &nbsp;&nbsp;&nbsp; " + track.title + "</span></div>"; li.onclick = () => playTrack(i); list.appendChild(li); });\n' +
+                'if(window.base64ImgData) document.getElementById("center-img-base").style.backgroundImage = "url(\'" + window.base64ImgData + "\')"; else document.getElementById("center-img-base").style.backgroundImage = "none";\n' +
                 sClose + '\n</body>\n</html>';
 
             const blob = new Blob([fullHtml], {type:'text/html'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = d.pairName + "_Viewer.html"; a.click();
