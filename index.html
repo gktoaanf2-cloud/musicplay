@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style id="core-styles">
-        /* 북엔드 바탕 (폰트 스위치 on 시 한글 전용) */
         @font-face {
             font-family: 'BookendBatang';
             src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-2@1.0/TTBookendBatangR.woff2') format('woff2');
@@ -20,9 +19,6 @@
             font-display: swap;
         }
 
-        /* =========================================
-           1. CORE DESIGN SYSTEM 
-           ========================================= */
         :root {
             --color-1: #ffffff;
             --color-2: #cccccc;
@@ -60,9 +56,6 @@
         body.capturing { justify-content: flex-start !important; align-items: flex-start !important; }
         .capturing #export-target { transform: none !important; position: absolute !important; top: 0 !important; left: 0 !important; margin: 0 !important; background-color: var(--color-4) !important; }
 
-        /* =========================================
-           2. AMBIENT GLOW & STARDUST
-           ========================================= */
         .ambient-container { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
         .ambient-blob { position: absolute; border-radius: 50%; filter: blur(120px); mix-blend-mode: screen; animation: cosmic-pulse 15s ease-in-out infinite alternate; will-change: transform, opacity; }
         .blob-1 { top: 15%; left: 20%; width: 300px; height: 300px; background: var(--color-1); opacity: 0.05; animation-duration: 20s; }
@@ -105,27 +98,40 @@
         @keyframes stardust-fall { 0% { transform: translateY(0); } 100% { transform: translateY(400px); } }
         @keyframes stardust-twinkle { 0% { opacity: 0.1; filter: drop-shadow(0 0 1px rgba(255,255,255,0.1)); } 100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,255,255,0.9)); } }
 
-        /* =========================================
-           3. MAIN LAYOUT & TOOLBAR
-           ========================================= */
         #export-target { width: 1400px; height: 850px; display: flex; flex-direction: column; position: relative; box-sizing: border-box; padding: 50px 60px; background-color: transparent; z-index: 10; }
         
         .main-content { display: flex; flex: 1; gap: 70px; align-items: center; position: relative; z-index: 10; margin-top: 25px; }
 
-        .floating-tools { position: absolute; top: 40px; right: 50px; display: flex; gap: 12px; align-items: center; z-index: 100; background: transparent; padding: 0; border: none; box-shadow: none; backdrop-filter: none; }
+        /* 🔥 이 부분이 핵심이야! 툴바가 씹히지 않도록 최상단 우선순위 & 클릭 강제 활성화 부여! */
+        .floating-tools { 
+            position: absolute; 
+            top: 40px; 
+            right: 50px; 
+            display: flex; 
+            gap: 12px; 
+            align-items: center; 
+            z-index: 999999 !important; 
+            pointer-events: auto !important; 
+            background: transparent; padding: 0; border: none; box-shadow: none; backdrop-filter: none; 
+        }
+        
+        /* 🔥 툴바 내부의 텍스트 버튼들도 무조건 클릭되도록 방어막 설정 */
+        .floating-tools button, .floating-tools input, .floating-tools .color-picker-wrapper {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            z-index: 999999 !important;
+        }
+
         .tool-sep { color: rgba(255,255,255,0.12); font-size: 9px; font-weight: 300; pointer-events: none; }
         .text-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 11px; cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; padding: 2px 4px; }
         .text-btn:hover { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
         .text-btn.reset-btn:hover { color: #ff3366; text-shadow: 0 0 10px #ff3366; }
 
         .color-picker-wrapper { position: relative; width: 12px; height: 12px; border-radius: 2px; overflow: hidden; cursor: pointer; transition: 0.3s; border: none; transform: rotate(45deg); }
-        .color-picker-wrapper:hover { transform: rotate(45deg) scale(1.3); box-shadow: 0 0 10px var(--color-1); z-index: 10; }
+        .color-picker-wrapper:hover { transform: rotate(45deg) scale(1.3); box-shadow: 0 0 10px var(--color-1); }
         .color-picker-wrapper input[type="color"] { position: absolute; top: -15px; left: -15px; width: 45px; height: 45px; cursor: pointer; border: none; transform: rotate(-45deg); }
         .font-controls, .color-controls, .data-controls { display: flex; gap: 10px; align-items: center;}
 
-        /* =========================================
-           4. LP & IMAGE LAYERS
-           ========================================= */
         .lp-wrapper { flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative; }
         .sacred-geometry { position: absolute; inset: -50px; background-position: center; background-repeat: no-repeat; pointer-events: none; z-index: 0; animation: spin-reverse 60s linear infinite; background-image: url("data:image/svg+xml,%3Csvg width='750' height='750' viewBox='0 0 750 750' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23ffffff' stroke-width='1' fill='none' stroke-opacity='0.04'%3E%3Ccircle cx='375' cy='375' r='350'/%3E%3Ccircle cx='375' cy='375' r='280'/%3E%3Ccircle cx='375' cy='375' r='180'/%3E%3Cpath d='M375 25v700M25 375h700M127 127l496 496M127 623l496-496'/%3E%3C/g%3E%3C/svg%3E"); }
 
@@ -166,9 +172,6 @@
 
         #center-img-overlay { opacity: 0; }
 
-        /* =========================================
-           5. PLAYLIST 
-           ========================================= */
         .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; position: relative; }
         
         .pair-name { font-family: var(--font-pair); font-size: 68px; font-weight: 700; background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; outline: none; display: inline-block; transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); letter-spacing: -0.05em; }
@@ -178,7 +181,7 @@
         
         .track-item { display: flex; align-items: center; padding: 14px 20px; background: transparent; cursor: pointer; font-size: 14px; color: var(--color-1); opacity: 0.45; position: relative; font-weight: 300; justify-content: space-between; letter-spacing: -0.05em; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: center; }
         .track-item.anim-fade { opacity: 0; transform: translateY(-10px); }
-        /* 🚨 문제의 원흉이었던 부분! 유령화(pointer-events: none)를 완벽하게 제거했습니다. */
+        
         .track-info { display: flex; align-items: center; flex: 1; min-width: 0; }
         .track-title { display: inline-block; transition: 0.3s; pointer-events: none; }
 
@@ -220,9 +223,6 @@
         .action-btn.img-active { color: var(--color-1); filter: drop-shadow(0 0 5px var(--color-1)); }
         .action-btn.del-btn:hover { color: #ff3366; }
 
-        /* =========================================
-           6. SOUNDBAR
-           ========================================= */
         .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 10; gap: 20px;}
         .controls { display: flex; align-items: center; gap: 25px; }
         .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.4s; display: flex; align-items: center; justify-content: center;}
@@ -603,7 +603,6 @@
                 
                 for(var i=0; i<window.playlistData.length; i++) {
                     (function(track, idx) {
-                        /* 🚨 장인의 수정 포인트: 클릭 이벤트를 가장 바깥 li 요소로 이동시켜 UX를 극대화했습니다! */
                         var li = document.createElement('li'); li.className = 'track-item anim-fade'; li.setAttribute('data-uid', track.uid);
                         li.setAttribute('onclick', "window.playTrackByUid('" + track.uid + "')");
                         
@@ -660,7 +659,6 @@
             for(var i=0; i<d.playlist.length; i++) {
                 var t = d.playlist[i];
                 var idxStr = (i + 1) < 10 ? '0' + (i + 1) : String(i + 1);
-                /* 🚨 장인의 수정 포인트: 추출된 HTML에서도 클릭 이벤트가 정상 작동하도록 li 자체에 탑재 완료! */
                 plHtml += '<li class="track-item" data-uid="' + t.uid + '" onclick="window.playTrackByUid(\'' + t.uid + '\')"><div class="track-info"><div class="diamond-mark"></div><span class="track-title">' + idxStr + ' &nbsp;&nbsp;&nbsp; ' + t.title + '</span></div></li>'; 
             }
 
