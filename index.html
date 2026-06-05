@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pair Music Box - Absolute Horizon</title>
+    <title>Pair Music Box - Cosmic Heartbeat</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,36 +35,59 @@
             min-height: 100vh; overflow: hidden; transition: background-color 0.5s ease;
         }
 
-        /* 은은하고 정교한 글리터 은하수 */
+        /* 캡처 강제 고정용 */
+        body.capturing { justify-content: flex-start !important; align-items: flex-start !important; }
+        .capturing #export-target { transform: none !important; position: absolute !important; top: 0 !important; left: 0 !important; margin: 0 !important; background-color: var(--color-4) !important; }
+
+        /* =========================================
+           2. 3D GLOWING STARDUST (별먼지 빛 증폭)
+           ========================================= */
         .stardust-container { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
         .stardust-wrapper { position: absolute; inset: -50%; width: 200%; height: 200%; }
         .stardust-layer { position: absolute; inset: 0; background-repeat: repeat; }
         
         .layer-1 {
-            background-image: radial-gradient(1px 1px at 40px 60px, rgba(255,255,255,1), transparent), radial-gradient(1px 1px at 240px 150px, rgba(255,255,255,0.7), transparent), radial-gradient(1.5px 1.5px at 500px 350px, rgba(255,255,255,0.9), transparent);
-            background-size: 700px 700px; animation: stardust-fall 60s linear infinite, stardust-twinkle 5s ease-in-out infinite alternate; opacity: 0.5;
+            background-image: radial-gradient(1px 1px at 40px 60px, rgba(255,255,255,1), transparent), radial-gradient(1px 1px at 240px 150px, rgba(255,255,255,0.8), transparent), radial-gradient(1.5px 1.5px at 500px 350px, rgba(255,255,255,1), transparent);
+            background-size: 700px 700px; animation: stardust-fall 60s linear infinite, stardust-twinkle 4s ease-in-out infinite alternate; opacity: 0.7;
         }
         .layer-2 {
-            background-image: radial-gradient(1px 1px at 120px 80px, rgba(255,255,255,0.8), transparent), radial-gradient(1.5px 1.5px at 400px 250px, rgba(255,255,255,0.6), transparent);
-            background-size: 500px 500px; animation: stardust-fall 80s linear infinite, stardust-twinkle 7s ease-in-out infinite alternate-reverse; opacity: 0.3;
+            background-image: radial-gradient(1px 1px at 120px 80px, rgba(255,255,255,0.9), transparent), radial-gradient(1.5px 1.5px at 400px 250px, rgba(255,255,255,0.7), transparent);
+            background-size: 500px 500px; animation: stardust-fall 80s linear infinite, stardust-twinkle 6s ease-in-out infinite alternate-reverse; opacity: 0.5;
         }
 
         @keyframes stardust-fall { 0% { transform: translateY(0); } 100% { transform: translateY(500px); } }
-        @keyframes stardust-twinkle { 0% { opacity: 0.1; } 100% { opacity: 1; filter: drop-shadow(0 0 8px #fff); } }
+        /* 반짝임(Twinkle) 강도 대폭 상향 */
+        @keyframes stardust-twinkle { 0% { opacity: 0.2; filter: drop-shadow(0 0 2px rgba(255,255,255,0.3)); } 100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,255,255,1)); } }
 
         /* =========================================
-           2. MAIN LAYOUT (보스 지시: 위치 균형감 최적화)
+           3. ECG HOLOGRAM LINE (보스 픽: 심전도 파동 라인)
+           ========================================= */
+        .ecg-visualizer {
+            position: absolute; top: 50%; left: 0; right: 0; height: 120px; transform: translateY(-50%);
+            background-image: url("data:image/svg+xml,%3Csvg width='500' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 60 L200 60 L210 30 L225 90 L240 20 L260 100 L275 40 L290 60 L500 60' stroke='%23ffffff' stroke-width='1.5' fill='none' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: repeat-x; background-size: 500px 120px;
+            opacity: 0; transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: none; z-index: 5;
+            -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+            /* 테마색 1번에 맞춰 영롱하게 발광 */
+            filter: drop-shadow(0 0 8px var(--color-1));
+        }
+        .ecg-visualizer.playing {
+            opacity: 0.2; /* 은은하게 스르륵 나타남 */
+            animation: ecg-flow 3.5s linear infinite;
+        }
+        /* 왼쪽에서 오른쪽으로 파동이 흐르는 모션 */
+        @keyframes ecg-flow {
+            0% { background-position: 0 0; }
+            100% { background-position: 500px 0; }
+        }
+
+        /* =========================================
+           4. MAIN LAYOUT & TOOLS
            ========================================= */
         #export-target { width: 1400px; height: 850px; display: flex; flex-direction: column; position: relative; box-sizing: border-box; padding: 50px 60px; background-color: transparent; z-index: 10; }
-        
-        /* 중간 빈 여백 축소: 120px -> 70px 보정 완료 */
         .main-content { display: flex; flex: 1; gap: 70px; align-items: center; position: relative; z-index: 10; }
 
-        /* 상단 메뉴 초압축 슬림 바 */
-        .floating-tools { 
-            position: absolute; top: 40px; right: 50px; display: flex; gap: 12px; align-items: center; z-index: 100;
-            background: rgba(0,0,0,0.2); padding: 6px 14px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(5px);
-        }
+        .floating-tools { position: absolute; top: 40px; right: 50px; display: flex; gap: 12px; align-items: center; z-index: 100; background: rgba(0,0,0,0.2); padding: 6px 14px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(5px); }
         .tool-sep { color: rgba(255,255,255,0.15); font-size: 9px; font-weight: 300; pointer-events: none; }
         .text-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 11px; cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; padding: 2px 4px; }
         .text-btn:hover { color: #fff; text-shadow: 0 0 10px var(--color-1); }
@@ -77,16 +99,27 @@
         .font-controls, .color-controls, .data-controls { display: flex; gap: 10px; align-items: center;}
 
         /* =========================================
-           3. LP DESIGN & MOTIONS
+           5. LP & WAVE RIPPLES (보스 픽: 잘림 없는 파동)
            ========================================= */
         .lp-wrapper { flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative; }
         .sacred-geometry { position: absolute; inset: -50px; background-position: center; background-repeat: no-repeat; pointer-events: none; z-index: 0; animation: spin-reverse 60s linear infinite; background-image: url("data:image/svg+xml,%3Csvg width='750' height='750' viewBox='0 0 750 750' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23ffffff' stroke-width='1' fill='none' stroke-opacity='0.04'%3E%3Ccircle cx='375' cy='375' r='350'/%3E%3Ccircle cx='375' cy='375' r='280'/%3E%3Ccircle cx='375' cy='375' r='180'/%3E%3Cpath d='M375 25v700M25 375h700M127 127l496 496M127 623l496-496'/%3E%3C/g%3E%3C/svg%3E"); }
 
-        .lp-soundwaves { position: absolute; width: 650px; height: 650px; border-radius: 50%; pointer-events: none; z-index: 0; }
-        .wave-ring { position: absolute; inset: 0; border-radius: 50%; border: 1px solid var(--color-1); animation: pulse-wave 4s ease-out infinite; animation-play-state: paused; opacity: 0; }
-        .wave-ring:nth-child(2) { animation-delay: 1.3s; border-color: var(--color-2); }
-        .wave-ring:nth-child(3) { animation-delay: 2.6s; border-color: var(--color-3); }
-        @keyframes pulse-wave { 0% { transform: scale(1); opacity: 0.12; } 100% { transform: scale(1.4); opacity: 0; } }
+        /* 파동 컨테이너 자체를 중앙 정렬로 변경하여 clipping 완벽 회피 */
+        .lp-soundwaves { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0; height: 0; pointer-events: none; z-index: 0; }
+        .wave-ring { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            border-radius: 50%; border: 1px solid var(--color-1); 
+            animation: pulse-wave 6s cubic-bezier(0.25, 0.8, 0.25, 1) infinite; animation-play-state: paused; opacity: 0; 
+        }
+        .wave-ring:nth-child(2) { animation-delay: 2s; border-color: var(--color-2); }
+        .wave-ring:nth-child(3) { animation-delay: 4s; border-color: var(--color-3); }
+        
+        /* 굵어지지 않고 너비만 커지는 수학적 파동 애니메이션 */
+        @keyframes pulse-wave { 
+            0% { width: 650px; height: 650px; opacity: 0; } 
+            20% { opacity: 0.15; } /* 은은한 퍼짐 */
+            100% { width: 1100px; height: 1100px; opacity: 0; } 
+        }
 
         .lp-spin-master { width: 660px; height: 660px; display: flex; justify-content: center; align-items: center; position: relative; animation: master-spin 10s linear infinite; animation-play-state: paused; z-index: 1; }
         @keyframes master-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -101,24 +134,18 @@
         .lp-center-image:hover { box-shadow: 0 0 0 2px #fff, 0 0 60px var(--color-1); transform: scale(1.02); }
 
         /* =========================================
-           4. TYPOGRAPHY HEADER BLOCK (보스 지시: 여백 극단적 최적화)
+           6. PLAYLIST (TYPOGRAPHY)
            ========================================= */
         .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; }
         
         .sub-title { font-size: 13px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 3px; outline: none; font-weight: 500; transition: 0.3s; letter-spacing: 0.4em; }
         .sub-title:focus { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
-        
-        /* 마진 다운 축소: 40px -> 20px 보정 완료 (플리와 타이틀 블록을 빈틈없이 밀착) */
         .pair-name { font-family: var(--font-pair); font-size: 68px; font-weight: 700; background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; outline: none; display: inline-block; transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); letter-spacing: -0.05em; }
 
         .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; scroll-behavior: smooth; }
         .playlist-container::-webkit-scrollbar { display: none; }
         
-        .track-item { 
-            display: flex; align-items: center; padding: 14px 20px; background: transparent; cursor: pointer; 
-            font-size: 14px; color: rgba(255,255,255,0.4); position: relative; font-weight: 300; justify-content: space-between; letter-spacing: -0.05em; 
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: center;
-        }
+        .track-item { display: flex; align-items: center; padding: 14px 20px; background: transparent; cursor: pointer; font-size: 14px; color: rgba(255,255,255,0.4); position: relative; font-weight: 300; justify-content: space-between; letter-spacing: -0.05em; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: center; }
         .track-item.anim-fade { opacity: 0; transform: translateY(-10px); }
         .track-info { display: flex; align-items: center; flex: 1; overflow: hidden; }
         .track-title { display: inline-block; transform: scaleX(0.95); transform-origin: left center; white-space: nowrap; transition: 0.3s; }
@@ -129,7 +156,7 @@
         .track-item.playing { color: #fff; font-weight: 500; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
         .track-item.playing::after { width: 100%; opacity: 0.5; }
 
-        /* 재생 중 오르빗 HUD 발광 기하학 노드 */
+        /* 트랙 재생 오르빗 라이트 */
         .diamond-mark { width: 4px; height: 4px; background: #fff; transform: rotate(45deg); margin-right: 20px; opacity: 0.15; transition: 0.5s; flex-shrink: 0; position: relative;}
         .track-item:hover .diamond-mark { opacity: 1; background: var(--color-1); box-shadow: 0 0 8px var(--color-1); }
         .track-item.playing .diamond-mark { opacity: 1 !important; background: var(--color-1) !important; box-shadow: 0 0 12px var(--color-1); animation: indicator-spin 4s linear infinite; }
@@ -141,14 +168,12 @@
         .track-item:hover .track-actions { opacity: 1; transform: translateX(0); }
         .action-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 10px; cursor: pointer; padding: 4px; transition: 0.3s; font-family: inherit; font-weight: bold; display: flex; align-items: center; justify-content: center; }
         .action-btn:hover { color: var(--color-1); text-shadow: 0 0 8px var(--color-1); transform: scale(1.15); }
-        
-        /* 1px 기하학 와이어프레임 타겟 HUD 로더 */
         .action-btn svg { width: 11px; height: 11px; stroke: currentColor; fill: none; transition: 0.3s; }
         .action-btn.img-active { color: var(--color-1); filter: drop-shadow(0 0 5px var(--color-1)); }
         .action-btn.del-btn:hover { color: #ff3366; text-shadow: 0 0 8px #ff3366; }
 
         /* =========================================
-           5. SOUNDBAR & PRECISION VERTICAL LAYOUT LOCK
+           7. SOUNDBAR
            ========================================= */
         .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 10; gap: 20px;}
         .controls { display: flex; align-items: center; gap: 25px; }
@@ -164,12 +189,12 @@
         .track-meta { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 2px; font-family: var(--font-pair); }
         #current-track-name { font-weight: 500; font-size: 13px; color: #fff; letter-spacing: -0.05em; transform: scaleX(0.95); transform-origin: left center;}
 
-        /* 시각적선 1px 고정 및 클릭 히트박스 24px 구현 */
+        /* 넓어진 투명 히트박스 */
         .progress-hitbox { width: 100%; height: 24px; cursor: pointer; display: flex; align-items: center; position: relative; }
         .progress-bar-container { width: 100%; height: 1px; background: rgba(255,255,255,0.15); position: relative; pointer-events: none; width: 100%; }
         .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-1), var(--color-3)); box-shadow: 0 0 10px var(--color-1); position: relative; will-change: width;}
         
-        /* 0.1px 수평 엇나감 보정 수식 체인 결합 */
+        /* 다이아몬드 위치 오차 제로 보정 수식 */
         .progress-fill::after { 
             content: ''; position: absolute; right: -3px; 
             top: 50%; width: 6px; height: 6px; background: #fff; 
@@ -189,7 +214,7 @@
         .add-btn.updating { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
 
         /* =========================================
-           6. SYSTEM TERMINAL MODAL (GUIDE HUD)
+           8. SYSTEM TERMINAL MODAL (GUIDE)
            ========================================= */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
@@ -225,14 +250,16 @@
         <div class="stardust-wrapper" style="transform: rotate(15deg);"><div class="stardust-layer layer-2"></div></div>
     </div>
 
-    <div id="guide-modal" class="modal-overlay">
+    <div class="ecg-visualizer" id="ecg-line"></div>
+
+    <div id="guide-modal" class="modal-overlay" data-html2canvas-ignore="true">
         <div class="modal-content">
             <div class="modal-deco"></div><div class="modal-deco-2"></div>
             <button class="modal-close" id="modal-close-btn">[CLOSE]</button>
             <h2>SYSTEM_GUIDE // DEPLOY</h2>
             <ol>
                 <li><span>01</span> <div><b>기본 세팅:</b> 페어명과 색상을 지정하고, 중앙 LP판을 눌러 글로벌 이미지를 등록합니다.</div></li>
-                <li><span>02</span> <div><b>트랙 제어:</b> 곡에 마우스를 올려 수정 도구가 나타납니다.<br><b style="color:#fff;">[ 미니멀 HUD 아이콘 / 수정 / 이동 / 삭제 ]</b><br>※ 기하학 HUD 버튼으로 곡마다 개별 이미지 조율 및 삭제가 가능합니다.</div></li>
+                <li><span>02</span> <div><b>트랙 제어:</b> 곡에 마우스를 올려 수정 도구를 확인합니다.<br><b style="color:#fff;">[ 기하학 HUD / 수정 / 이동 / 삭제 ]</b><br>※ HUD 버튼으로 곡마다 개별 이미지 조율이 가능합니다.</div></li>
                 <li><span>03</span> <div><b>데이터 관리:</b> 우측 상단의 초압축 바에서 <b style="color:#fff;">[OUT/IN]</b> 및 <b style="color:#ff3366;">[RESET]</b>을 제어합니다.</div></li>
                 <li><span>04</span> <div><b>HTML 추출:</b> <b style="color:var(--color-3);">[SHARE]</b> 버튼을 눌러 공유용 독립형 웹을 빌드합니다.</div></li>
             </ol>
@@ -241,7 +268,7 @@
 
     <div id="export-target">
         
-        <div class="floating-tools" id="editor-tools">
+        <div class="floating-tools" id="editor-tools" data-html2canvas-ignore="true">
             <button class="text-btn" id="guide-btn">GUIDE</button>
             <span class="tool-sep">|</span>
             <div class="font-controls">
@@ -319,7 +346,7 @@
                 <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="100">
             </div>
 
-            <div class="add-form" id="add-track-form">
+            <div class="add-form" id="add-track-form" data-html2canvas-ignore="true">
                 <input type="text" id="yt-url" placeholder="YouTube URL">
                 <input type="text" id="yt-title" placeholder="Track Title">
                 <button class="text-btn add-btn" id="add-track-btn">ADD</button>
@@ -361,6 +388,7 @@
             return `${m}:${s < 10 ? '0' : ''}${s}`;
         }
 
+        // 60FPS 렌더링 루프
         function startProgressBar() {
             cancelAnimationFrame(animationFrameId);
             function update() {
@@ -383,12 +411,15 @@
             const waveRings = document.querySelectorAll('.wave-ring');
             const iconPlay = document.getElementById('icon-play');
             const iconPause = document.getElementById('icon-pause');
+            const ecgLine = document.getElementById('ecg-line');
             
             if (event.data === YT.PlayerState.PLAYING) {
                 isPlaying = true;
                 lpMaster.style.animationPlayState = 'running';
                 haloRing.style.opacity = '0.7'; 
                 waveRings.forEach(ring => ring.style.animationPlayState = 'running');
+                ecgLine.classList.add('playing'); // 심전도 라인 등장!
+                
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'block';
                 startProgressBar();
@@ -397,6 +428,8 @@
                 lpMaster.style.animationPlayState = 'paused';
                 haloRing.style.opacity = '0.3'; 
                 waveRings.forEach(ring => ring.style.animationPlayState = 'paused');
+                ecgLine.classList.remove('playing'); // 심전도 라인 아웃
+                
                 iconPlay.style.display = 'block';
                 iconPause.style.display = 'none';
                 cancelAnimationFrame(animationFrameId);
@@ -459,20 +492,27 @@
         });
         document.getElementById('btn-next').addEventListener('click', playNextTrack);
         document.getElementById('btn-prev').addEventListener('click', playPrevTrack);
+
+        const volSlider = document.getElementById('volume-slider');
+        if(volSlider) { volSlider.addEventListener('input', (e) => { if(player && player.setVolume) player.setVolume(e.target.value); }); }
+
+        document.getElementById('btn-loop').addEventListener('click', (e) => {
+            isLooping = !isLooping;
+            e.currentTarget.classList.toggle('active', isLooping);
+        });
     </script>
 
     <script id="editor-logic">
+        const guideModal = document.getElementById('guide-modal');
+        document.getElementById('guide-btn').addEventListener('click', () => { guideModal.style.display = 'flex'; setTimeout(() => guideModal.classList.add('show'), 10); });
+        document.getElementById('modal-close-btn').addEventListener('click', () => { guideModal.classList.remove('show'); setTimeout(() => guideModal.style.display = 'none', 400); });
+
         let base64ImgData = "https://via.placeholder.com/300?text=UPLOAD";
         let currentFontSize = 68;
         let isBodoni = false;
         let editingTrackIndex = -1;
         let uploadingTrackIndex = -1;
         const root = document.documentElement;
-
-        // HUD 가이드 핸들러 
-        const guideModal = document.getElementById('guide-modal');
-        document.getElementById('guide-btn').addEventListener('click', () => { guideModal.style.display = 'flex'; setTimeout(() => guideModal.classList.add('show'), 10); });
-        document.getElementById('modal-close-btn').addEventListener('click', () => { guideModal.classList.remove('show'); setTimeout(() => guideModal.style.display = 'none', 400); });
 
         function getSiteData() {
             return {
@@ -485,7 +525,7 @@
             };
         }
 
-        function autoSave() { try { localStorage.setItem('pair_music_box_v31', JSON.stringify(getSiteData())); } catch(e) {} }
+        function autoSave() { try { localStorage.setItem('pair_music_box_v32', JSON.stringify(getSiteData())); } catch(e) {} }
 
         function applyDataToUI(data) {
             if(data.pairName) document.getElementById('pair-name-display').textContent = data.pairName;
@@ -503,6 +543,11 @@
                 }
             }
             if(data.playlist) { window.playlistData = data.playlist; renderPlaylistUI(); }
+        }
+
+        function extractVideoID(url) {
+            const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+            return (match && match[1].length === 11) ? match[1] : null;
         }
 
         function renderPlaylistUI() {
@@ -523,13 +568,14 @@
                 
                 if(!isViewer) {
                     const hasImgClass = track.image ? 'img-active' : '';
+                    // 이미지 삭제 버튼과 기하학 HUD 아이콘 
                     innerHtmlStr += `
                     <div class="track-actions">
-                        <button class="action-btn img-btn ${hasImgClass}" title="이 곡의 기하학 이미지 HUD 등록">
+                        <button class="action-btn img-btn ${hasImgClass}" title="이 곡만의 커버 변경">
                             <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke-width="1.5"/></svg>
                         </button>
                         ${track.image ? `
-                        <button class="action-btn del-img-btn" title="이 곡의 이미지 삭제" style="color:#ff3366;">
+                        <button class="action-btn del-img-btn" title="커버 삭제" style="color:#ff3366;">
                             <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" stroke-width="1.5"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="1.5"/></svg>
                         </button>` : ''}
                         <button class="action-btn edit-btn" title="수정">✎</button>
@@ -540,6 +586,7 @@
                 }
                 li.innerHTML = innerHtmlStr;
                 listContainer.appendChild(li);
+
                 setTimeout(() => { li.classList.remove('anim-fade'); }, 10);
             });
         }
@@ -570,7 +617,6 @@
                     window.playlistData[uploadingTrackIndex].image = event.target.result;
                     if(currentPlayingIndex === uploadingTrackIndex) { document.getElementById('center-img').style.backgroundImage = `url('${event.target.result}')`; }
                     renderPlaylistUI(); autoSave(); 
-                    alert("✨ 성공적으로 해당 트랙의 HUD 커버가 락온되었습니다.");
                 };
                 reader.readAsDataURL(file);
             }
@@ -586,7 +632,7 @@
             if (editingTrackIndex > -1) {
                 const existingImage = window.playlistData[editingTrackIndex].image;
                 window.playlistData[editingTrackIndex] = { videoId: finalId, title, image: existingImage };
-                if (currentPlayingIndex === editingTrackIndex) {
+                if (currentPlayingIndex === editingTrackIndex && player && player.loadVideoById) {
                     player.loadVideoById(finalId); document.getElementById('current-track-name').textContent = title;
                 }
                 editingTrackIndex = -1;
@@ -626,13 +672,15 @@
         }
 
         document.getElementById('reset-btn').addEventListener('click', () => {
-            if(confirm("⚠️ 경고: 데이터 리셋 시 저장되지 않은 백업 파일은 증발합니다. 초기화할까요?")) { localStorage.removeItem('pair_music_box_v31'); location.reload(); }
+            if(confirm("⚠️ 경고: 데이터 리셋 시 저장되지 않은 백업 파일은 증발합니다. 초기화할까요?")) { localStorage.removeItem('pair_music_box_v32'); location.reload(); }
         });
 
         ['1', '2', '3', '4'].forEach(num => { document.getElementById(`config-color-${num}`).addEventListener('input', e => { root.style.setProperty(`--color-${num}`, e.target.value); autoSave(); }); });
         document.getElementById('font-toggle-btn').addEventListener('click', () => { isBodoni = !isBodoni; root.style.setProperty('--font-pair', isBodoni ? "'Bodoni Moda', serif" : "'Pretendard Variable', sans-serif"); autoSave(); });
         document.getElementById('font-size-up').addEventListener('click', () => { if(currentFontSize < 120) currentFontSize += 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); });
         document.getElementById('font-size-down').addEventListener('click', () => { if(currentFontSize > 24) currentFontSize -= 4; document.getElementById('pair-name-display').style.fontSize = currentFontSize + 'px'; autoSave(); });
+        document.getElementById('pair-name-display').addEventListener('blur', (e) => { if(e.target.textContent.trim() === '') e.target.textContent = 'COSMIC_BOND'; autoSave(); });
+        document.getElementById('sub-title-display').addEventListener('blur', (e) => { if(e.target.textContent.trim() === '') e.target.textContent = 'RECORD OF OUR GALAXY'; autoSave(); });
 
         document.getElementById('config-file').addEventListener('change', e => {
             const file = e.target.files[0];
@@ -659,9 +707,9 @@
             reader.readAsText(file);
         });
 
-        window.onload = () => { const saved = localStorage.getItem('pair_music_box_v31'); if(saved) { try { applyDataToUI(JSON.parse(saved)); } catch(e) {} } else { renderPlaylistUI(); } };
+        window.onload = () => { const saved = localStorage.getItem('pair_music_box_v32'); if(saved) { try { applyDataToUI(JSON.parse(saved)); } catch(e) {} } else { renderPlaylistUI(); } };
 
-        // 뷰어 추출 인젝션 파트 교체 (구문 잠금 완전 해제)
+        // HTML SHARE
         document.getElementById('export-html-btn').addEventListener('click', () => {
             autoSave(); const data = getSiteData(); const fp = data.isBodoni ? "'Bodoni Moda', serif" : "'Pretendard Variable', sans-serif";
             let viewerPlaylistHtml = '';
@@ -675,7 +723,6 @@
                     </li>`;
             });
 
-            // 스크립트 결합 누수 차단용 팩토리형 문자열 빌드
             const logicScriptContent = document.getElementById('core-logic').innerHTML;
 
             const htmlContent = `<!DOCTYPE html>
@@ -710,6 +757,8 @@
         <div class="stardust-wrapper" style="transform: rotate(0deg);"><div class="stardust-layer layer-1"></div></div>
         <div class="stardust-wrapper" style="transform: rotate(15deg);"><div class="stardust-layer layer-2"></div></div>
     </div>
+
+    <div class="ecg-visualizer" id="ecg-line"></div>
 
     <div id="viewer-wrapper">
         <div id="export-target" style="padding:0; width:100%; height:100%;">
@@ -756,15 +805,15 @@
         window.addEventListener('resize', resizeFit); resizeFit();
         setTimeout(() => { document.querySelectorAll('.track-item').forEach(el => el.classList.remove('anim-fade')); }, 100);
         
-        // 코어 로직 스크립트 강제 바인딩
-        ${logicScriptContent}
-        renderPlaylistUI();
+        \${logicScriptContent}
+        
+        renderPlaylistUI(); // 초기 렌더링 호출
     <\/script>
 </body>
 </html>`;
 
             const blob = new Blob([htmlContent], { type: 'text/html' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${data.pairName}_CosmicViewer.html`; a.click(); URL.revokeObjectURL(url);
-            alert("✨ 시스템 터미널 리포트: 템플릿 구문 잠금 해제 완료. 완벽하게 작동하는 HTML SHARE 뷰어가 출항했습니다!");
+            alert("✨ 심전도(ECG) 라인과 우주 먼지가 완벽하게 복원된 뷰어가 추출되었습니다!");
         });
     </script>
 </body>
