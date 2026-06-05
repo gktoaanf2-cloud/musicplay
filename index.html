@@ -756,28 +756,32 @@
                 'window.playlistData = ' + JSON.stringify(d.playlist) + ';\nwindow.base64ImgData = "' + d.imageData + '";\n',
                 logicScriptText,
                 sClose,
-                // FIX #4: viewer resizeFit — #viewer-wrapper 기준으로 올바르게 스케일
-                sOpen + '\n(function() {\n  function resizeFit() {\n    var w = document.getElementById("viewer-wrapper");\n    if(!w) return;\n    var s = Math.min(window.innerWidth/1400, window.innerHeight/850);\n    w.style.transform = "scale(" + (s>1?1:s) + ")";\n    w.style.transformOrigin = "center center";\n  }\n  window.addEventListener("resize", resizeFit);\n  if(document.readyState === "loading") { document.addEventListener("DOMContentLoaded", resizeFit); } else { resizeFit(); }\n})();\n' + sClose,
+                // viewer resizeFit: zoom 방식으로 히트박스 정확도 보장
+                sOpen + '\n(function() {\n  function resizeFit() {\n    var et = document.getElementById("export-target");\n    if(!et) return;\n    var s = Math.min(window.innerWidth/1400, window.innerHeight/850);\n    var z = s > 1 ? 1 : s;\n    et.style.zoom = z;\n    et.style.transform = "";\n  }\n  window.addEventListener("resize", resizeFit);\n  if(document.readyState === "loading") { document.addEventListener("DOMContentLoaded", resizeFit); } else { resizeFit(); }\n})();\n' + sClose,
                 '\n</body>\n</html>'
             ];
 
             var blob = new Blob([htmlBlocks.join('\n')], {type:'text/html'}); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = d.pairName + "_Cosmic_Viewer.html"; a.click(); URL.revokeObjectURL(url);
         };
         
-        // FIX #4: editor에서도 resizeFit이 #export-target 기준으로 작동
+        // transform:scale은 히트박스가 원본 좌표에 그대로 남아 클릭이 어긋남
+        // zoom은 레이아웃 자체를 줄이므로 히트박스도 정확히 따라옴
         window.resizeFit = function() {
-            var w = document.getElementById("viewer-wrapper");
             var et = document.getElementById("export-target");
-            if(w) {
-                var s = Math.min(window.innerWidth/1400, window.innerHeight/850);
-                w.style.transform = "scale(" + (s>1?1:s) + ")";
-                w.style.transformOrigin = "center center";
-            } else if(et) {
-                var s2 = Math.min(window.innerWidth/1400, window.innerHeight/850);
-                if(s2 < 1) { et.style.transform = "scale(" + s2 + ")"; et.style.transformOrigin = "center center"; } else { et.style.transform = ""; }
+            if(!et) return;
+            var s = Math.min(window.innerWidth / 1400, window.innerHeight / 850);
+            var z = s > 1 ? 1 : s;
+            et.style.zoom = z;
+            et.style.transform = "";
+            // position:fixed인 floating-tools는 zoom 영향을 안 받으므로 별도 보정
+            var ft = document.getElementById("editor-tools");
+            if(ft) {
+                ft.style.zoom = z;
+                ft.style.top = Math.round(40 * z) + "px";
+                ft.style.right = Math.round(50 * z) + "px";
             }
         };
-        window.addEventListener('resize', window.resizeFit); 
+        window.addEventListener('resize', window.resizeFit);
         
         if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', window.initApp); } else { window.initApp(); }
     </script>
