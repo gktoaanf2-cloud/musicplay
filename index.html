@@ -6,12 +6,14 @@
     <title>Pair Music Box - The Final Masterpiece</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style id="core-styles">
+        /* 북엔드 바탕 (폰트 스위치 on 시 한글 전용) */
         @font-face {
             font-family: 'BookendBatang';
             src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-2@1.0/TTBookendBatangR.woff2') format('woff2');
@@ -19,6 +21,9 @@
             font-display: swap;
         }
 
+        /* =========================================
+           1. CORE DESIGN SYSTEM 
+           ========================================= */
         :root {
             --color-1: #ffffff;
             --color-2: #cccccc;
@@ -33,12 +38,14 @@
             --base-weight: 400;
         }
 
+        /* 서브 타이틀은 언제나 프리텐다드 강제 유지 */
         .sub-title {
             font-family: 'Pretendard', sans-serif !important;
             font-size: 13px; color: var(--color-1); opacity: 0.5; text-transform: uppercase; margin-bottom: 3px; outline: none; transition: 0.3s; letter-spacing: 0.4em;
         }
         .sub-title:focus { color: var(--color-1); opacity: 1; text-shadow: 0 0 10px var(--color-1); }
 
+        /* 자간 -50 / 자평 95 세팅 */
         body.font-bodoni .track-title,
         body.font-bodoni #current-track-name { transform: scaleX(0.95); transform-origin: left center; letter-spacing: -0.05em; display: inline-block; }
         body.font-bodoni .pair-name { transform: scaleX(0.95); transform-origin: center center; letter-spacing: -0.05em; display: inline-block; }
@@ -56,6 +63,9 @@
         body.capturing { justify-content: flex-start !important; align-items: flex-start !important; }
         .capturing #export-target { transform: none !important; position: absolute !important; top: 0 !important; left: 0 !important; margin: 0 !important; background-color: var(--color-4) !important; }
 
+        /* =========================================
+           2. AMBIENT GLOW & STARDUST (우주먼지 황금 밸런스)
+           ========================================= */
         .ambient-container { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
         .ambient-blob { position: absolute; border-radius: 50%; filter: blur(120px); mix-blend-mode: screen; animation: cosmic-pulse 15s ease-in-out infinite alternate; will-change: transform, opacity; }
         .blob-1 { top: 15%; left: 20%; width: 300px; height: 300px; background: var(--color-1); opacity: 0.05; animation-duration: 20s; }
@@ -70,29 +80,56 @@
         .stardust-container { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
         .stardust-wrapper { position: absolute; inset: -50%; width: 200%; height: 200%; }
         .stardust-layer { position: absolute; inset: 0; background-repeat: repeat; }
-        .layer-1 { background-image: radial-gradient(1.5px 1.5px at 15% 25%, rgba(255,255,255,1), transparent), radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.9), transparent), radial-gradient(2px 2px at 80% 30%, rgba(255,255,255,0.8), transparent); background-size: 400px 400px; animation: stardust-fall 80s linear infinite, stardust-twinkle 4s ease-in-out infinite alternate; opacity: 0.8; }
-        .layer-2 { background-image: radial-gradient(1px 1px at 25% 85%, rgba(255,255,255,0.9), transparent), radial-gradient(1.5px 1.5px at 85% 35%, rgba(255,255,255,0.8), transparent); background-size: 550px 550px; animation: stardust-fall 100s linear infinite, stardust-twinkle 5s ease-in-out infinite alternate-reverse; opacity: 0.7; }
-        .layer-3 { background-image: radial-gradient(2px 2px at 50% 50%, rgba(255,255,255,1), transparent); background-size: 700px 700px; animation: stardust-fall 120s linear infinite, stardust-twinkle 6s ease-in-out infinite alternate; opacity: 0.6; }
+        
+        /* 보스 지시 완벽 수용: 너무 적지도, 빽빽하지도 않은 적당한 밸런스로 수정 */
+        .layer-1 {
+            background-image: 
+                radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,1), transparent),
+                radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 60% 20%, rgba(255,255,255,1), transparent),
+                radial-gradient(1.5px 1.5px at 80% 80%, rgba(255,255,255,0.7), transparent);
+            background-size: 450px 450px; animation: stardust-fall 70s linear infinite, stardust-twinkle 4s ease-in-out infinite alternate; opacity: 0.8;
+        }
+        .layer-2 {
+            background-image: 
+                radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1.5px 1.5px at 30% 10%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 70% 50%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90% 90%, rgba(255,255,255,0.5), transparent);
+            background-size: 550px 550px; animation: stardust-fall 90s linear infinite, stardust-twinkle 5s ease-in-out infinite alternate-reverse; opacity: 0.7;
+        }
+        .layer-3 {
+            background-image: 
+                radial-gradient(1.5px 1.5px at 50% 50%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 15% 15%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 85% 25%, rgba(255,255,255,0.8), transparent);
+            background-size: 650px 650px; animation: stardust-fall 110s linear infinite, stardust-twinkle 6s ease-in-out infinite alternate; opacity: 0.6;
+        }
 
         @keyframes stardust-fall { 0% { transform: translateY(0); } 100% { transform: translateY(400px); } }
         @keyframes stardust-twinkle { 0% { opacity: 0.1; filter: drop-shadow(0 0 1px rgba(255,255,255,0.1)); } 100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(255,255,255,0.9)); } }
 
-        #export-target { width: 1400px; height: 850px; display: flex; flex-direction: column; position: relative; box-sizing: border-box; padding: 50px 60px; background-color: transparent; z-index: 10; pointer-events: auto; }
+        /* =========================================
+           3. MAIN LAYOUT & TOOLBAR
+           ========================================= */
+        #export-target { width: 1400px; height: 850px; display: flex; flex-direction: column; position: relative; box-sizing: border-box; padding: 50px 60px; background-color: transparent; z-index: 10; }
         
         .main-content { display: flex; flex: 1; gap: 70px; align-items: center; position: relative; z-index: 10; margin-top: 25px; }
 
-        /* 클릭을 막는 모든 요소를 뚫고 나오도록 z-index 9999 강제 적용 */
-        .floating-tools { position: absolute; top: 40px; right: 50px; display: flex; gap: 12px; align-items: center; z-index: 9999; background: transparent; padding: 0; border: none; box-shadow: none; backdrop-filter: none; pointer-events: auto; }
+        .floating-tools { position: absolute; top: 40px; right: 50px; display: flex; gap: 12px; align-items: center; z-index: 100; background: transparent; padding: 0; border: none; box-shadow: none; backdrop-filter: none; }
         .tool-sep { color: rgba(255,255,255,0.12); font-size: 9px; font-weight: 300; pointer-events: none; }
-        .text-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 11px; cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; padding: 2px 4px; position: relative; z-index: 9999; pointer-events: auto; }
+        .text-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 11px; cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); font-family: inherit; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; padding: 2px 4px; }
         .text-btn:hover { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
         .text-btn.reset-btn:hover { color: #ff3366; text-shadow: 0 0 10px #ff3366; }
 
-        .color-picker-wrapper { position: relative; width: 12px; height: 12px; border-radius: 2px; overflow: hidden; cursor: pointer; transition: 0.3s; border: none; transform: rotate(45deg); z-index: 9999; pointer-events: auto; }
-        .color-picker-wrapper:hover { transform: rotate(45deg) scale(1.3); box-shadow: 0 0 10px var(--color-1); z-index: 10000; }
+        .color-picker-wrapper { position: relative; width: 12px; height: 12px; border-radius: 2px; overflow: hidden; cursor: pointer; transition: 0.3s; border: none; transform: rotate(45deg); }
+        .color-picker-wrapper:hover { transform: rotate(45deg) scale(1.3); box-shadow: 0 0 10px var(--color-1); z-index: 10; }
         .color-picker-wrapper input[type="color"] { position: absolute; top: -15px; left: -15px; width: 45px; height: 45px; cursor: pointer; border: none; transform: rotate(-45deg); }
         .font-controls, .color-controls, .data-controls { display: flex; gap: 10px; align-items: center;}
 
+        /* =========================================
+           4. LP & IMAGE LAYERS
+           ========================================= */
         .lp-wrapper { flex: 0 0 650px; display: flex; justify-content: center; align-items: center; position: relative; }
         .sacred-geometry { position: absolute; inset: -50px; background-position: center; background-repeat: no-repeat; pointer-events: none; z-index: 0; animation: spin-reverse 60s linear infinite; background-image: url("data:image/svg+xml,%3Csvg width='750' height='750' viewBox='0 0 750 750' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23ffffff' stroke-width='1' fill='none' stroke-opacity='0.04'%3E%3Ccircle cx='375' cy='375' r='350'/%3E%3Ccircle cx='375' cy='375' r='280'/%3E%3Ccircle cx='375' cy='375' r='180'/%3E%3Cpath d='M375 25v700M25 375h700M127 127l496 496M127 623l496-496'/%3E%3C/g%3E%3C/svg%3E"); }
 
@@ -112,9 +149,9 @@
         .lp-internal-glow { position: absolute; inset: -20px; border-radius: 50%; background: conic-gradient(from 90deg, transparent 0%, rgba(255,255,255,0.1) 25%, transparent 50%, rgba(255,255,255,0.1) 75%, transparent 100%); opacity: 0.5; pointer-events: none; z-index: 3; filter: blur(4px); mix-blend-mode: screen; }
 
         .lp-center-image-container {
-            width: 290px; height: 290px; border-radius: 50%; position: relative; z-index: 9999;
+            width: 290px; height: 290px; border-radius: 50%; position: relative; z-index: 10;
             box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.9);
-            cursor: pointer; overflow: hidden; transition: transform 0.4s; pointer-events: auto;
+            cursor: pointer; overflow: hidden; transition: transform 0.4s;
         }
         .lp-center-image-container::after {
             content: ''; position: absolute; inset: 0; border-radius: 50%;
@@ -128,17 +165,22 @@
             transition: opacity 0.8s cubic-bezier(0.25, 1, 0.25, 1); will-change: opacity;
             background-color: #050505; pointer-events: none;
         }
+        
         .lp-center-bg::before { content: ''; display: none; }
+
         #center-img-overlay { opacity: 0; }
 
-        .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; position: relative; z-index: 50; }
+        /* =========================================
+           5. PLAYLIST (슈팅스타 광선 스캔 연출 완벽 탑재)
+           ========================================= */
+        .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; position: relative; }
         
-        .pair-name { font-family: var(--font-pair); font-size: 68px; font-weight: 700; background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; outline: none; display: inline-block; transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); letter-spacing: -0.05em; position: relative; z-index: 50; pointer-events: auto;}
+        .pair-name { font-family: var(--font-pair); font-size: 68px; font-weight: 700; background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; outline: none; display: inline-block; transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); letter-spacing: -0.05em; }
 
-        .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; scroll-behavior: smooth; position: relative; z-index: 50; pointer-events: auto;}
+        .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; scroll-behavior: smooth; }
         .playlist-container::-webkit-scrollbar { display: none; }
         
-        .track-item { display: flex; align-items: center; padding: 14px 20px; background: transparent; cursor: pointer; font-size: 14px; color: var(--color-1); opacity: 0.45; position: relative; font-weight: 300; justify-content: space-between; letter-spacing: -0.05em; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: center; pointer-events: auto;}
+        .track-item { display: flex; align-items: center; padding: 14px 20px; background: transparent; cursor: pointer; font-size: 14px; color: var(--color-1); opacity: 0.45; position: relative; font-weight: 300; justify-content: space-between; letter-spacing: -0.05em; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: center; }
         .track-item.anim-fade { opacity: 0; transform: translateY(-10px); }
         .track-info { display: flex; align-items: center; flex: 1; min-width: 0; pointer-events: none; }
         .track-title { display: inline-block; transition: 0.3s; }
@@ -149,12 +191,13 @@
 
         .track-item.playing { opacity: 1; color: var(--color-1); font-weight: 500; text-shadow: 0 0 15px var(--color-1); }
         
+        /* 보스 지시 완벽 구현: 스스로 빛나는 광선이 아름답게 스캔하며 지나가는 효과 */
         .track-item.playing::after { 
             content: ''; position: absolute; bottom: 0; left: 0; width: 100% !important; height: 1.5px;
             background: linear-gradient(90deg, transparent 0%, var(--color-1) 50%, transparent 100%);
             background-size: 200% 100%;
             opacity: 0.9; 
-            box-shadow: 0 0 8px 1px var(--color-1);
+            box-shadow: 0 0 8px 1px var(--color-1); /* 자체 발광(Glow) 효과 추가 */
             animation: cyber-scan 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
             pointer-events: none;
         }
@@ -173,9 +216,9 @@
         }
         @keyframes list-ripple { 0% { transform: translate(-50%, -50%) scale(0.5) rotate(-45deg); opacity: 0.6; } 100% { transform: translate(-50%, -50%) scale(2.2) rotate(-45deg); opacity: 0; } }
 
-        .track-actions { display: flex; gap: 6px; opacity: 0; transition: 0.3s; transform: translateX(10px); align-items: center; pointer-events: auto;}
+        .track-actions { display: flex; gap: 6px; opacity: 0; transition: 0.3s; transform: translateX(10px); align-items: center;}
         .track-item:hover .track-actions { opacity: 1; transform: translateX(0); }
-        .action-btn { background: transparent; border: none; color: var(--color-1); opacity: 0.4; font-size: 10px; cursor: pointer; padding: 4px; transition: 0.3s; font-family: inherit; font-weight: bold; display: flex; align-items: center; justify-content: center; pointer-events: auto;}
+        .action-btn { background: transparent; border: none; color: var(--color-1); opacity: 0.4; font-size: 10px; cursor: pointer; padding: 4px; transition: 0.3s; font-family: inherit; font-weight: bold; display: flex; align-items: center; justify-content: center; }
         .action-btn:hover { opacity: 1; transform: scale(1.15); }
         .action-btn svg { width: 11px; height: 11px; stroke: currentColor; fill: none; pointer-events: none; }
         .action-btn.img-active { color: var(--color-1); filter: drop-shadow(0 0 5px var(--color-1)); }
@@ -184,9 +227,9 @@
         /* =========================================
            6. SOUNDBAR
            ========================================= */
-        .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 9999; gap: 20px; pointer-events: auto;}
+        .player-bar { width: 100%; height: 60px; display: flex; align-items: center; margin-top: 80px; position: relative; z-index: 10; gap: 20px;}
         .controls { display: flex; align-items: center; gap: 25px; }
-        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.4s; display: flex; align-items: center; justify-content: center; position: relative; z-index: 9999; pointer-events: auto;}
+        .control-btn { background: none; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.4s; display: flex; align-items: center; justify-content: center;}
         .control-btn:hover { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 10px var(--color-1)); }
         .control-btn.active { opacity: 1; filter: drop-shadow(0 0 10px var(--color-1)); }
         .control-btn.active svg { fill: var(--color-1); }
@@ -198,21 +241,26 @@
         .track-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-1); opacity: 0.5; letter-spacing: 2px; font-family: var(--font-pair); }
         #current-track-name { font-weight: 500; font-size: 13px; color: var(--color-1); letter-spacing: -0.05em; transform-origin: left center;}
 
-        .progress-hitbox { width: 100%; height: 24px; cursor: pointer; display: flex; align-items: center; position: relative; z-index: 9999; pointer-events: auto;}
+        .progress-hitbox { width: 100%; height: 24px; cursor: pointer; display: flex; align-items: center; position: relative; }
         .progress-bar-container { width: 100%; height: 1px; background: rgba(255,255,255,0.1); position: relative; pointer-events: none; width: 100%; }
         .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-1), var(--color-3)); box-shadow: 0 0 10px var(--color-1); position: relative; will-change: width;}
         .progress-fill::after { content: ''; position: absolute; right: -3px; top: 50%; width: 6px; height: 6px; background: var(--color-1); transform: translateY(-50%) rotate(45deg); box-shadow: 0 0 10px var(--color-1); }
 
-        .volume-wrapper { display: flex; align-items: center; gap: 10px; margin-left: 15px; opacity: 0.5; transition: 0.3s; z-index: 9999; pointer-events: auto;}
+        .volume-wrapper { display: flex; align-items: center; gap: 10px; margin-left: 15px; opacity: 0.5; transition: 0.3s; }
         .volume-wrapper:hover { opacity: 1; }
-        .volume-wrapper svg { width: 14px; height: 14px; fill: var(--color-1); pointer-events: none;}
-        .volume-slider { -webkit-appearance: none; width: 60px; height: 1px; background: rgba(255,255,255,0.1); outline: none; cursor: pointer; pointer-events: auto;}
+        .volume-wrapper svg { width: 14px; height: 14px; fill: var(--color-1); }
+        .volume-slider { -webkit-appearance: none; width: 60px; height: 1px; background: rgba(255,255,255,0.1); outline: none; cursor: pointer; }
         .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 6px; height: 6px; background: var(--color-1); transform: rotate(45deg); box-shadow: 0 0 10px var(--color-1); }
 
-        .add-form { display: flex; gap: 15px; align-items: center; margin-left: auto; z-index: 9999; pointer-events: auto;}
-        .add-form input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--color-1); padding: 4px 0; font-size: 12px; width: 110px; outline: none; transition: 0.4s; letter-spacing: -0.05em; pointer-events: auto;}
+        .add-form { display: flex; gap: 15px; align-items: center; margin-left: auto;}
+        .add-form input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--color-1); padding: 4px 0; font-size: 12px; width: 110px; outline: none; transition: 0.4s; letter-spacing: -0.05em;}
         .add-form input:focus { border-bottom-color: var(--color-1); box-shadow: 0 10px 10px -10px var(--color-1); }
-        .add-btn { position: relative; z-index: 9999; pointer-events: auto; }
+
+        /* 기하학적 X 클로즈 버튼 */
+        .geometric-close-btn { position: absolute; top: 25px; right: 25px; width: 30px; height: 30px; background: transparent; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding: 0; z-index: 10; }
+        .geometric-close-btn svg { width: 14px; height: 14px; stroke: rgba(255,255,255,0.6); stroke-width: 1.5; fill: none; transition: 0.3s; }
+        .geometric-close-btn:hover { border-color: var(--color-1); background: rgba(255,255,255,0.05); }
+        .geometric-close-btn:hover svg { stroke: var(--color-1); transform: scale(1.1) rotate(90deg); }
     </style>
 </head>
 <body>
@@ -238,10 +286,10 @@
         <div class="stardust-wrapper" style="transform: rotate(-10deg);"><div class="stardust-layer layer-3"></div></div>
     </div>
 
-    <div id="guide-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; justify-content:center; align-items:center; opacity:0; transition:0.3s; pointer-events:none;" data-html2canvas-ignore="true">
-        <div style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.95) 0%, rgba(5, 5, 10, 0.85) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 50px 40px; width: 550px; position: relative; clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px)); text-align: left; pointer-events: auto;">
-            <button onclick="window.closeGuide()" class="geometric-close-btn" style="position: absolute; top: 25px; right: 25px; width: 30px; height: 30px; background: transparent; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.3s; padding: 0; z-index: 10001; pointer-events: auto;">
-                <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; stroke: rgba(255,255,255,0.6); stroke-width: 1.5; fill: none; transition: 0.3s;"><line x1="5" y1="5" x2="19" y2="19" /><line x1="19" y1="5" x2="5" y2="19" /></svg>
+    <div id="guide-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1000; justify-content:center; align-items:center; opacity:0; transition:0.3s; pointer-events:none;" data-html2canvas-ignore="true">
+        <div style="background: linear-gradient(135deg, rgba(15, 15, 20, 0.95) 0%, rgba(5, 5, 10, 0.85) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 50px 40px; width: 550px; position: relative; clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px)); text-align: left;">
+            <button onclick="window.closeGuide()" class="geometric-close-btn">
+                <svg viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19" /><line x1="19" y1="5" x2="5" y2="19" /></svg>
             </button>
             <h2 style="font-family: 'Pretendard', sans-serif; font-size: 18px; letter-spacing: 4px; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 15px; margin:0 0 25px 0; text-shadow: 0 0 15px var(--color-1);">SYSTEM GUIDE</h2>
             <ol style="font-family: 'Pretendard', sans-serif; list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px; font-size: 13.5px; opacity: 0.9; line-height: 1.6;">
@@ -340,7 +388,7 @@
     <div id="youtube-player" style="display:none; position:absolute;"></div>
 
     <script id="master-script">
-        // 모든 변수를 window 객체에 직접 박아넣어 에디터의 메모리 충돌 에러를 원천적으로 파괴합니다.
+        // 모든 변수를 window 객체에 직접 박아넣어 에디터의 메모리 충돌(Syntax Error) 에러를 원천 파괴했습니다.
         window.base64ImgData = window.base64ImgData || ""; 
         window.playlistData = Array.isArray(window.playlistData) ? window.playlistData : [];
         window.currentPlayingIndex = window.currentPlayingIndex !== undefined ? window.currentPlayingIndex : -1;
@@ -354,11 +402,10 @@
         window.isBodoni = window.isBodoni || false; 
         window.editingTrackUid = window.editingTrackUid || null;
 
-        // 고유 ID 생성 유틸
         window.generateUid = function() { return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); };
         window.formatTime = function(s) { if(!s) return "0:00"; var m = Math.floor(s/60); var ss = Math.floor(s%60); return m + ":" + (ss<10?"0":"")+ss; };
 
-        // [YouTube API 강제 주입]
+        // [YouTube API 로드]
         if(!document.getElementById('yt-api-script')) {
             var tag = document.createElement('script'); tag.id = 'yt-api-script';
             tag.src = "https://www.youtube.com/iframe_api";
@@ -395,12 +442,12 @@
                 
                 if (event.data === YT.PlayerState.PLAYING) {
                     window.isPlaying = true; 
-                    if(lp) lp.style.animationPlayState = 'running'; if(halo) halo.style.opacity = '0.7'; waves.forEach(w => w.style.animationPlayState = 'running');
+                    if(lp) lp.style.animationPlayState = 'running'; if(halo) halo.style.opacity = '0.7'; waves.forEach(function(w) { w.style.animationPlayState = 'running'; });
                     if(iPlay) iPlay.style.display = 'none'; if(iPause) iPause.style.display = 'block';
                     window.startProgressBar();
                 } else {
                     window.isPlaying = false; 
-                    if(lp) lp.style.animationPlayState = 'paused'; if(halo) halo.style.opacity = '0.3'; waves.forEach(w => w.style.animationPlayState = 'paused');
+                    if(lp) lp.style.animationPlayState = 'paused'; if(halo) halo.style.opacity = '0.3'; waves.forEach(function(w) { w.style.animationPlayState = 'paused'; });
                     if(iPlay) iPlay.style.display = 'block'; if(iPause) iPause.style.display = 'none';
                     cancelAnimationFrame(window.animationFrameId);
                 }
@@ -410,13 +457,13 @@
             } catch(e) {}
         };
 
-        // [재생 제어 브릿지 함수]
+        // [제어 함수들]
         window.changeLPImage = function(src) {
             try {
                 var base = document.getElementById('center-img-base'); var over = document.getElementById('center-img-overlay');
                 if(!base || !over) return;
                 over.style.backgroundImage = src ? "url('" + src + "')" : "none"; over.style.opacity = '1';
-                setTimeout(() => { base.style.backgroundImage = src ? "url('" + src + "')" : "none"; over.style.opacity = '0'; }, 850);
+                setTimeout(function() { base.style.backgroundImage = src ? "url('" + src + "')" : "none"; over.style.opacity = '0'; }, 850);
             } catch(e) {}
         };
 
@@ -427,14 +474,14 @@
                 if(window.player && window.player.loadVideoById) window.player.loadVideoById(track.videoId);
                 var tName = document.getElementById('current-track-name'); if(tName) tName.textContent = track.title;
                 var img = track.image ? track.image : (window.base64ImgData || ""); window.changeLPImage(img);
-                document.querySelectorAll('.track-item').forEach((item) => {
-                    if(item.getAttribute('data-uid') === track.uid) { item.classList.add('playing'); setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50); }
+                document.querySelectorAll('.track-item').forEach(function(item) {
+                    if(item.getAttribute('data-uid') === track.uid) { item.classList.add('playing'); setTimeout(function() { item.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50); }
                     else { item.classList.remove('playing'); }
                 });
             } catch(e) {}
         };
 
-        window.playTrackByUid = function(uid) { var idx = window.playlistData.findIndex(t => t.uid === uid); if(idx !== -1) window.playTrack(idx); };
+        window.playTrackByUid = function(uid) { var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx !== -1) window.playTrack(idx); };
         window.playNext = function() { if(window.playlistData.length) window.playTrack((window.currentPlayingIndex + 1) % window.playlistData.length); };
         window.playPrev = function() { if(window.playlistData.length) window.playTrack((window.currentPlayingIndex - 1 + window.playlistData.length) % window.playlistData.length); };
         window.togglePlay = function() { if(window.currentPlayingIndex === -1 && window.playlistData.length > 0) window.playTrack(0); else if (window.player && window.player.getPlayerState) window.isPlaying ? window.player.pauseVideo() : window.player.playVideo(); };
@@ -442,8 +489,8 @@
         window.changeVolume = function(val) { if(window.player && window.player.setVolume) window.player.setVolume(val); };
 
         window.startDragProgress = function(e) { window.isDraggingProgress = true; window.moveProgress(e); };
-        window.addEventListener('mousemove', (e) => { if(window.isDraggingProgress) window.moveProgress(e); });
-        window.addEventListener('mouseup', (e) => { if(window.isDraggingProgress) { window.isDraggingProgress = false; var p = window.moveProgress(e); if(window.player && window.player.getDuration) window.player.seekTo(window.player.getDuration() * p, true); } });
+        window.addEventListener('mousemove', function(e) { if(window.isDraggingProgress) window.moveProgress(e); });
+        window.addEventListener('mouseup', function(e) { if(window.isDraggingProgress) { window.isDraggingProgress = false; var p = window.moveProgress(e); if(window.player && window.player.getDuration) window.player.seekTo(window.player.getDuration() * p, true); } });
         window.moveProgress = function(e) {
             var hb = document.getElementById('progress-hitbox'); if(!hb) return 0;
             var r = hb.getBoundingClientRect(); var p = (e.clientX - r.left) / r.width; p = Math.max(0, Math.min(1, p)); 
@@ -451,17 +498,17 @@
         };
 
         // [UI & 설정 제어 팩토리]
-        window.openGuide = function() { var m = document.getElementById('guide-modal'); if(m) { m.style.display = 'flex'; setTimeout(() => { m.style.opacity = '1'; m.style.pointerEvents = 'auto'; }, 10); } };
-        window.closeGuide = function() { var m = document.getElementById('guide-modal'); if(m) { m.style.opacity = '0'; m.style.pointerEvents = 'none'; setTimeout(() => m.style.display = 'none', 300); } };
+        window.openGuide = function() { var m = document.getElementById('guide-modal'); if(m) { m.style.display = 'flex'; setTimeout(function() { m.style.opacity = '1'; m.style.pointerEvents = 'auto'; }, 10); } };
+        window.closeGuide = function() { var m = document.getElementById('guide-modal'); if(m) { m.style.opacity = '0'; m.style.pointerEvents = 'none'; setTimeout(function() { m.style.display = 'none'; }, 300); } };
         window.changeFontSize = function(diff) { window.currentFontSize += diff; if(window.currentFontSize > 120) window.currentFontSize = 120; if(window.currentFontSize < 24) window.currentFontSize = 24; var pn = document.getElementById('pair-name-display'); if(pn) pn.style.fontSize = window.currentFontSize + 'px'; window.autoSave(); };
         window.toggleFont = function() { window.isBodoni = !window.isBodoni; if(window.isBodoni) document.body.classList.add('font-bodoni'); else document.body.classList.remove('font-bodoni'); window.autoSave(); };
         window.changeColor = function(n, val) { document.documentElement.style.setProperty('--color-'+n, val); window.autoSave(); };
 
         window.triggerLpUpload = function() { var f = document.getElementById('config-file'); if(f) f.click(); };
-        window.handleLpUpload = function(e) { var f = e.target.files[0]; if(f) { var r = new FileReader(); r.onload = (ev) => { window.base64ImgData = ev.target.result; if(window.currentPlayingIndex === -1 || !window.playlistData[window.currentPlayingIndex]?.image) window.changeLPImage(ev.target.result); window.autoSave(); }; r.readAsDataURL(f); } e.target.value = ''; };
+        window.handleLpUpload = function(e) { var f = e.target.files[0]; if(f) { var r = new FileReader(); r.onload = function(ev) { window.base64ImgData = ev.target.result; if(window.currentPlayingIndex === -1 || !window.playlistData[window.currentPlayingIndex] || !window.playlistData[window.currentPlayingIndex].image) window.changeLPImage(ev.target.result); window.autoSave(); }; r.readAsDataURL(f); } e.target.value = ''; };
 
         window.triggerTrackUpload = function(uid) { window.editingTrackUid = uid; var f = document.getElementById('track-img-file'); if(f) f.click(); };
-        window.handleTrackUpload = function(e) { var f = e.target.files[0]; if(f && window.editingTrackUid) { var r = new FileReader(); r.onload = (ev) => { var idx = window.playlistData.findIndex(t => t.uid === window.editingTrackUid); if(idx !== -1) { window.playlistData[idx].image = ev.target.result; if(window.currentPlayingIndex === idx) window.changeLPImage(ev.target.result); window.renderPlaylistUI(); window.autoSave(); window.editingTrackUid = null; } }; r.readAsDataURL(f); } e.target.value = ''; };
+        window.handleTrackUpload = function(e) { var f = e.target.files[0]; if(f && window.editingTrackUid) { var r = new FileReader(); r.onload = function(ev) { var idx = window.playlistData.findIndex(function(t) { return t.uid === window.editingTrackUid; }); if(idx !== -1) { window.playlistData[idx].image = ev.target.result; if(window.currentPlayingIndex === idx) window.changeLPImage(ev.target.result); window.renderPlaylistUI(); window.autoSave(); window.editingTrackUid = null; } }; r.readAsDataURL(f); } e.target.value = ''; };
 
         window.addTrack = function() {
             var ytU = document.getElementById('yt-url'); var ytT = document.getElementById('yt-title'); if(!ytU || !ytT) return;
@@ -471,7 +518,7 @@
             
             var btnA = document.getElementById('add-track-btn');
             if(window.editingTrackUid) { 
-                var idx = window.playlistData.findIndex(t => t.uid === window.editingTrackUid);
+                var idx = window.playlistData.findIndex(function(t) { return t.uid === window.editingTrackUid; });
                 if(idx !== -1) { window.playlistData[idx].videoId = id; window.playlistData[idx].title = title; }
                 window.editingTrackUid = null; if(btnA) { btnA.textContent = "ADD"; btnA.classList.remove('updating'); }
             } else { window.playlistData.push({ uid: window.generateUid(), videoId: id, title: title }); }
@@ -479,7 +526,7 @@
         };
 
         window.deleteTrack = function(uid) {
-            var idx = window.playlistData.findIndex(t => t.uid === uid); if(idx === -1) return;
+            var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx === -1) return;
             window.playlistData.splice(idx, 1); 
             if(window.currentPlayingIndex === idx) { 
                 if(window.player && window.player.stopVideo) window.player.stopVideo(); window.currentPlayingIndex = -1; 
@@ -492,13 +539,13 @@
         };
 
         window.deleteTrackImg = function(uid) {
-            var idx = window.playlistData.findIndex(t => t.uid === uid); if(idx === -1) return;
+            var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx === -1) return;
             delete window.playlistData[idx].image; if(window.currentPlayingIndex === idx) window.changeLPImage(window.base64ImgData); 
             window.renderPlaylistUI(); window.autoSave();
         };
 
         window.editTrackText = function(uid) {
-            var idx = window.playlistData.findIndex(t => t.uid === uid); if(idx === -1) return;
+            var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx === -1) return;
             window.editingTrackUid = uid; 
             var ytT = document.getElementById('yt-title'); var ytU = document.getElementById('yt-url'); var btnA = document.getElementById('add-track-btn');
             if(ytT) ytT.value = window.playlistData[idx].title;
@@ -507,34 +554,41 @@
         };
 
         window.moveTrack = function(uid, dir) {
-            var idx = window.playlistData.findIndex(t => t.uid === uid); if(idx === -1) return;
+            var idx = window.playlistData.findIndex(function(t) { return t.uid === uid; }); if(idx === -1) return;
             var target = idx + dir; 
             if(target >= 0 && target < window.playlistData.length) { var t = window.playlistData[idx]; window.playlistData[idx] = window.playlistData[target]; window.playlistData[target] = t; window.renderPlaylistUI(); window.autoSave(); }
         };
 
         window.getSiteData = function() {
+            var pnd = document.getElementById('pair-name-display'); var std = document.getElementById('sub-title-display');
+            var c1 = document.getElementById('config-color-1'); var c2 = document.getElementById('config-color-2');
+            var c3 = document.getElementById('config-color-3'); var c4 = document.getElementById('config-color-4');
             return {
-                pairName: document.getElementById('pair-name-display')?.textContent || "", subTitle: document.getElementById('sub-title-display')?.textContent || "",
+                pairName: pnd ? pnd.textContent : "", subTitle: std ? std.textContent : "",
                 fontSize: window.currentFontSize, 
-                color1: document.getElementById('config-color-1')?.value || "#ffffff", color2: document.getElementById('config-color-2')?.value || "#cccccc",
-                color3: document.getElementById('config-color-3')?.value || "#888888", color4: document.getElementById('config-color-4')?.value || "#030305",
+                color1: c1 ? c1.value : "#ffffff", color2: c2 ? c2.value : "#cccccc",
+                color3: c3 ? c3.value : "#888888", color4: c4 ? c4.value : "#030305",
                 isBodoni: window.isBodoni, playlist: window.playlistData, imageData: window.base64ImgData
             };
         };
-        window.autoSave = function() { try { localStorage.setItem('pair_music_box_v52', JSON.stringify(window.getSiteData())); } catch(e) {} };
+        
+        window.autoSave = function() { try { localStorage.setItem('pair_music_box_v53', JSON.stringify(window.getSiteData())); } catch(e) {} };
 
-        window.resetData = function() { if(confirm("설정을 모두 초기화하시겠습니까? (복원 불가)")) { localStorage.removeItem('pair_music_box_v52'); location.reload(); } };
+        window.resetData = function() { if(confirm("설정을 모두 초기화하시겠습니까? (복원 불가)")) { localStorage.removeItem('pair_music_box_v53'); location.reload(); } };
         window.exportJson = function() { window.autoSave(); var data = JSON.stringify(window.getSiteData()); var blob = new Blob([data], {type:'application/json'}); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = "Archive_Data.json"; a.click(); };
         window.triggerImportJson = function() { var f = document.getElementById('import-json-file'); if(f) f.click(); };
         window.importJson = function(e) {
-            var f = e.target.files[0]; if(!f) return; var r = new FileReader(); r.onload = (ev) => { 
+            var f = e.target.files[0]; if(!f) return; var r = new FileReader(); r.onload = function(ev) { 
                 try {
                     var d = JSON.parse(ev.target.result); 
                     var pn = document.getElementById('pair-name-display'); if(pn) pn.textContent = d.pairName; 
                     var st = document.getElementById('sub-title-display'); if(st) st.textContent = d.subTitle;
-                    ['1','2','3','4'].forEach(n => { var c = document.getElementById('config-color-'+n); if(c) c.value = d['color'+n]; document.documentElement.style.setProperty('--color-'+n, d['color'+n]); });
+                    ['1','2','3','4'].forEach(function(n) { var c = document.getElementById('config-color-'+n); if(c) c.value = d['color'+n]; document.documentElement.style.setProperty('--color-'+n, d['color'+n]); });
                     if(d.isBodoni) { window.isBodoni = true; document.body.classList.add('font-bodoni'); } else { window.isBodoni = false; document.body.classList.remove('font-bodoni'); }
-                    window.playlistData = (d.playlist || []).map(t => ({...t, uid: t.uid || window.generateUid()})); window.base64ImgData = d.imageData || ""; 
+                    
+                    var parsedList = d.playlist || [];
+                    window.playlistData = parsedList.map(function(t) { var newT = Object.assign({}, t); newT.uid = newT.uid ? newT.uid : window.generateUid(); return newT; });
+                    window.base64ImgData = d.imageData || ""; 
                     window.renderPlaylistUI(); window.changeLPImage(window.base64ImgData); window.autoSave();
                 } catch(err) { alert("파일 파싱에 실패했습니다."); }
             }; r.readAsText(f); e.target.value = '';
@@ -544,7 +598,8 @@
             try {
                 var list = document.getElementById('playlist'); if(!list) return;
                 list.innerHTML = ''; var isViewer = !document.getElementById('editor-tools');
-                window.playlistData.forEach((track, i) => {
+                
+                window.playlistData.forEach(function(track, i) {
                     var li = document.createElement('li'); li.className = 'track-item anim-fade'; li.setAttribute('data-uid', track.uid);
                     if (i === window.currentPlayingIndex) li.classList.add('playing');
                     
@@ -557,24 +612,28 @@
                             '<button class="action-btn move-up" onclick="event.stopPropagation(); window.moveTrack(\'' + track.uid + '\', -1)" title="위로">▲</button><button class="action-btn move-dn" onclick="event.stopPropagation(); window.moveTrack(\'' + track.uid + '\', 1)" title="아래로">▼</button><button class="action-btn del-btn" onclick="event.stopPropagation(); window.deleteTrack(\'' + track.uid + '\')" title="삭제">✕</button></div>';
                     }
                     li.innerHTML = html; list.appendChild(li);
-                    setTimeout(() => li.classList.remove('anim-fade'), 10);
+                    setTimeout(function() { li.classList.remove('anim-fade'); }, 10);
                 });
             } catch(e) {}
         };
 
-        // 초기화 데이터 로드 (에디터 전용)
+        // 초기화 함수
         window.addEventListener('DOMContentLoaded', function() {
             var isViewerGlobal = !document.getElementById('editor-tools');
             if(!isViewerGlobal) {
                 try {
-                    var s = localStorage.getItem('pair_music_box_v52');
+                    var s = localStorage.getItem('pair_music_box_v53');
                     if(s) {
                         var d = JSON.parse(s);
                         var pn = document.getElementById('pair-name-display'); if(pn) pn.textContent = d.pairName; 
                         var st = document.getElementById('sub-title-display'); if(st) st.textContent = d.subTitle;
-                        ['1','2','3','4'].forEach(n => { var c = document.getElementById('config-color-'+n); if(c) c.value = d['color'+n]; document.documentElement.style.setProperty('--color-'+n, d['color'+n]); });
+                        ['1','2','3','4'].forEach(function(n) { var c = document.getElementById('config-color-'+n); if(c) c.value = d['color'+n]; document.documentElement.style.setProperty('--color-'+n, d['color'+n]); });
                         if(d.isBodoni) { window.isBodoni = true; document.body.classList.add('font-bodoni'); } else { window.isBodoni = false; document.body.classList.remove('font-bodoni'); }
-                        window.playlistData = (d.playlist || []).map(t => ({...t, uid: t.uid || window.generateUid()})); window.base64ImgData = d.imageData || ""; 
+                        
+                        var parsedList = d.playlist || [];
+                        window.playlistData = parsedList.map(function(t) { var newT = Object.assign({}, t); newT.uid = newT.uid ? newT.uid : window.generateUid(); return newT; });
+                        
+                        window.base64ImgData = d.imageData || ""; 
                         window.renderPlaylistUI(); window.changeLPImage(window.base64ImgData);
                     } else { window.renderPlaylistUI(); window.changeLPImage(""); }
                 } catch(e) {}
@@ -583,16 +642,18 @@
             }
         });
 
-        // HTML SHARE EXPORTER
+        // HTML SHARE EXPORTER (에러 방어형 텍스트 생성)
         window.exportHtml = function() {
             window.autoSave(); var d = window.getSiteData();
             var plHtml = '';
-            d.playlist.forEach((t, i) => { 
+            d.playlist.forEach(function(t, i) { 
                 plHtml += '<li class="track-item" data-uid="' + t.uid + '"><div class="track-info" onclick="window.playTrackByUid(\'' + t.uid + '\')"><div class="diamond-mark"></div><span class="track-title">' + String(i + 1).padStart(2, '0') + ' &nbsp;&nbsp;&nbsp; ' + t.title + '</span></div></li>'; 
             });
 
-            var stylesText = document.getElementById('core-styles')?.innerHTML || '';
-            var logicScriptText = document.getElementById('master-script')?.innerHTML || '';
+            var cs = document.getElementById('core-styles');
+            var stylesText = cs ? cs.innerHTML : '';
+            var ms = document.getElementById('master-script');
+            var logicScriptText = ms ? ms.innerHTML : '';
             var bClass = d.isBodoni ? 'font-bodoni' : '';
             var sOpen = '<sc' + 'ript>'; var sClose = '</sc' + 'ript>';
             
