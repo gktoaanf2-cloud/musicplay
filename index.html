@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pair Music Box - Narrative Rewriter</title>
+    <title>Pair Music Box - Ultimate Typography</title>
     
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- 보스 픽: 렌더링 최적화 프리텐다드 가변 폰트 & 보도니 모다 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
@@ -19,13 +22,23 @@
             --color-2: #cccccc;
             --color-3: #888888;
             --color-4: #030305;
-            --font-pair: 'Pretendard', sans-serif; 
+            --font-pair: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; 
         }
 
+        /* 폰트 상속 강제 (버그 차단) */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body, input, button, textarea {
+            background-color: var(--color-4); color: #fff; 
+            font-family: var(--font-pair);
+            margin: 0; padding: 0; font-weight: 300;
+        }
+        
         body {
-            background-color: var(--color-4); color: #fff; font-family: 'Pretendard', sans-serif;
-            margin: 0; display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; overflow: hidden; font-weight: 300; transition: background-color 0.5s ease;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow: hidden; transition: background-color 0.5s ease;
         }
 
         /* 캡처 시 강제 고정용 클래스 */
@@ -53,7 +66,7 @@
            3. TOOLS & UI 
            ========================================= */
         .floating-tools { position: absolute; top: 40px; right: 50px; display: flex; gap: 15px; align-items: center; z-index: 100; }
-        .text-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 11px; cursor: pointer; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); font-family: inherit; text-transform: uppercase; letter-spacing: 2px; padding: 5px; font-weight: 600; }
+        .text-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 11px; cursor: pointer; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); text-transform: uppercase; letter-spacing: 2px; padding: 5px; font-weight: 600; }
         .text-btn:hover { color: #fff; text-shadow: 0 0 15px var(--color-1), 0 0 30px var(--color-2); transform: translateY(-1px); }
 
         .color-picker-wrapper { position: relative; width: 14px; height: 14px; border-radius: 2px; overflow: hidden; cursor: pointer; transition: 0.3s; border: none; box-shadow: 0 0 5px rgba(255,255,255,0.1); transform: rotate(45deg); }
@@ -85,41 +98,58 @@
         .lp-center-image:hover { box-shadow: 0 0 0 2px #fff, 0 0 60px var(--color-1); transform: scale(1.02); }
 
         /* =========================================
-           5. PLAYLIST (수정 버튼 등 액션 바)
+           5. PLAYLIST (타이포그래피 장인 정신)
            ========================================= */
         .playlist-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; height: 100%; }
-        .sub-title { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 6px; text-transform: uppercase; margin-bottom: 5px; outline: none; font-weight: 500; transition: 0.3s; }
+        
+        /* 서브타이틀 자간 및 장평 */
+        .sub-title { 
+            font-size: 13px; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 5px; outline: none; font-weight: 500; transition: 0.3s; 
+            letter-spacing: 0.4em; /* 서브타이틀은 보통 자간을 넓게 줍니다 */
+        }
         .sub-title:focus { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
-        .pair-name { font-family: var(--font-pair); font-size: 68px; font-weight: 700; background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; margin-bottom: 40px; outline: none; display: inline-block; transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); }
+        
+        /* 페어명 자간 조절 */
+        .pair-name { 
+            font-family: var(--font-pair); font-size: 68px; font-weight: 700; background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 40px; outline: none; display: inline-block; transition: font-size 0.2s; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); 
+            letter-spacing: -0.05em; /* 타이틀 자간 타이트하게 */
+        }
 
         .playlist-container { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
         .playlist-container::-webkit-scrollbar { display: none; }
         
         .track-item { 
-            display: flex; align-items: center; padding: 14px 20px; background: transparent; 
-            cursor: pointer; font-size: 14px; color: rgba(255,255,255,0.4); position: relative; transition: color 0.4s; font-weight: 300; letter-spacing: 1px; 
+            display: flex; align-items: center; padding: 14px 20px; background: transparent; cursor: pointer; 
+            font-size: 14px; color: rgba(255,255,255,0.5); position: relative; transition: color 0.4s; font-weight: 300; 
             justify-content: space-between; 
+            
+            /* 보스 지시: 자간 -75 (-0.075em) 완벽 적용 */
+            letter-spacing: -0.075em;
         }
         .track-info { display: flex; align-items: center; flex: 1; }
+        
+        /* 보스 지시: 장평 95% 완벽 적용 (글자 높이 유지, 가로폭만 압축) */
+        .track-title {
+            display: inline-block;
+            transform: scaleX(0.95);
+            transform-origin: left center;
+            white-space: nowrap;
+        }
+
         .track-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 1px; background: linear-gradient(90deg, var(--color-1), var(--color-3)); box-shadow: 0 0 10px var(--color-1); transition: width 0.7s cubic-bezier(0.19, 1, 0.22, 1); }
         .track-item:hover { color: #fff; }
         .track-item:hover::after { width: 100%; }
         .track-item.playing { color: #fff; font-weight: 500; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
         .track-item.playing::after { width: 100%; opacity: 0.5; }
 
-        .diamond-mark { width: 4px; height: 4px; background: #fff; transform: rotate(45deg); margin-right: 20px; opacity: 0.15; transition: 0.5s; }
+        .diamond-mark { width: 4px; height: 4px; background: #fff; transform: rotate(45deg); margin-right: 20px; opacity: 0.15; transition: 0.5s; flex-shrink: 0;}
         .track-item:hover .diamond-mark { opacity: 1; background: var(--color-1); box-shadow: 0 0 8px var(--color-1); }
         .track-item.playing .diamond-mark { opacity: 1; background: var(--color-2); box-shadow: 0 0 8px var(--color-2); }
 
-        /* [보스 픽: 리스트 관리 버튼 CSS - 수정 버튼 추가!] */
         .track-actions { display: flex; gap: 8px; opacity: 0; transition: 0.3s; transform: translateX(10px); }
         .track-item:hover .track-actions { opacity: 1; transform: translateX(0); }
-        .action-btn { 
-            background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 10px; 
-            cursor: pointer; padding: 4px; transition: 0.3s; font-family: inherit; font-weight: bold;
-        }
+        .action-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 10px; cursor: pointer; padding: 4px; transition: 0.3s; font-family: inherit; font-weight: bold; }
         .action-btn:hover { color: var(--color-1); text-shadow: 0 0 8px var(--color-1); transform: scale(1.2); }
-        /* 수정 버튼 전용 컬러 */
         .action-btn.edit-btn:hover { color: var(--color-3); text-shadow: 0 0 8px var(--color-3); }
         .action-btn.del-btn:hover { color: #ff3366; text-shadow: 0 0 8px #ff3366; }
 
@@ -137,8 +167,8 @@
         .play-pause-btn svg { width: 32px; height: 32px; fill: url(#grad-play); }
 
         .progress-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
-        .track-meta { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 2px; }
-        #current-track-name { font-weight: 500; font-size: 13px; color: #fff; letter-spacing: 1px; }
+        .track-meta { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 2px; font-family: var(--font-pair); }
+        #current-track-name { font-weight: 500; font-size: 13px; color: #fff; letter-spacing: -0.05em; transform: scaleX(0.95); transform-origin: left center;}
 
         .progress-bar-container { width: 100%; height: 1px; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; }
         .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-1), var(--color-3)); box-shadow: 0 0 10px var(--color-1); position: relative; transition: width 0.1s linear; }
@@ -151,10 +181,8 @@
         .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 6px; height: 6px; background: #fff; transform: rotate(45deg); box-shadow: 0 0 10px var(--color-1); }
 
         .add-form { display: flex; gap: 15px; align-items: center; margin-left: auto;}
-        .add-form input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 0; font-size: 12px; width: 110px; outline: none; transition: 0.4s; font-family: inherit; }
+        .add-form input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 0; font-size: 12px; width: 110px; outline: none; transition: 0.4s; letter-spacing: -0.05em;}
         .add-form input:focus { border-bottom-color: var(--color-1); box-shadow: 0 10px 10px -10px var(--color-1); }
-        
-        /* 업데이트 모드일 때 버튼 스타일 */
         .add-btn.updating { color: var(--color-1); text-shadow: 0 0 10px var(--color-1); }
 
         /* =========================================
@@ -204,11 +232,11 @@
             <button class="modal-close" id="modal-close-btn">[CLOSE]</button>
             <h2>SYSTEM_GUIDE // DEPLOY</h2>
             <ol>
-                <li><span>01</span> <div><b>세팅:</b> 페어명, 색상, 유튜브 링크, 이미지를 설정합니다.</div></li>
-                <li><span>02</span> <div><b>트랙 조작:</b> 곡에 마우스를 올려 <b style="color:#fff;">[ ✎수정 / ▲▼이동 / ✕삭제 ]</b> 할 수 있습니다.</div></li>
+                <li><span>01</span> <div><b>서사 세팅:</b> 페어명, 색상, 유튜브 링크, 이미지를 설정합니다.</div></li>
+                <li><span>02</span> <div><b>트랙 제어:</b> 곡에 마우스를 올려 <b style="color:#fff;">[ ✎수정 / ▲▼이동 / ✕삭제 ]</b> 할 수 있습니다.<br>(재생 시 트랙이 중앙으로 스르륵 스크롤됩니다.)</div></li>
                 <li><span>03</span> <div><b>HTML 추출:</b> 우측 상단의 <b style="color:var(--color-3);">[HTML SHARE]</b> 버튼을 눌러 공유용 뷰어를 다운로드합니다.</div></li>
-                <li><span>04</span> <div><b>호스팅 연동:</b> <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop (app.netlify.com/drop)</a> 사이트에 접속하여 파일을 드래그 앤 드롭합니다.</div></li>
-                <li><span>05</span> <div><b>서사 공유:</b> 생성된 URL 링크를 눌러 완성된 플레이 리스트에 접속합니다.</div></li>
+                <li><span>04</span> <div><b>호스팅 연동:</b> <a href="https://app.netlify.com/drop" target="_blank">Netlify Drop (app.netlify.com/drop)</a> 터미널에 접속하여 파일을 드래그 앤 드롭합니다.</div></li>
+                <li><span>05</span> <div><b>서사 공유:</b> 생성된 URL 링크를 앤오님께 전송합니다.</div></li>
             </ol>
         </div>
     </div>
@@ -307,7 +335,7 @@
     <input type="file" id="import-json-file" accept=".json" style="display: none;">
     <div id="youtube-player" style="display:none; position:absolute;"></div>
 
-    <!-- CORE LOGIC: 에디터/뷰어 공통 로직 -->
+    <!-- CORE LOGIC: 플레이어, 스크롤링, 동기화 -->
     <script id="core-logic">
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
@@ -380,6 +408,48 @@
             }
         }
 
+        // ==========================================
+        // [PLAYLIST ACTIONS: 재생, 삭제, 순서, 수정 위임]
+        // ==========================================
+        document.getElementById('playlist').addEventListener('click', (e) => {
+            const trackItem = e.target.closest('.track-item');
+            if(!trackItem) return;
+            const index = Array.from(trackItem.parentNode.children).indexOf(trackItem);
+
+            if(e.target.closest('.edit-btn')) { if(typeof editTrack === 'function') editTrack(e, index); } 
+            else if (e.target.closest('.up-btn')) { if(typeof moveTrackUp === 'function') moveTrackUp(e, index); } 
+            else if (e.target.closest('.down-btn')) { if(typeof moveTrackDown === 'function') moveTrackDown(e, index); } 
+            else if (e.target.closest('.del-btn')) { if(typeof deleteTrack === 'function') deleteTrack(e, index); } 
+            else { playTrack(index); }
+        });
+
+        // 스르륵 중앙 정렬
+        function playTrack(index) {
+            if (index < 0 || index >= window.playlistData.length) return;
+            currentPlayingIndex = index;
+            player.loadVideoById(window.playlistData[index].videoId);
+            document.getElementById('current-track-name').textContent = window.playlistData[index].title;
+            
+            const items = document.querySelectorAll('.track-item');
+            items.forEach((item, idx) => {
+                if(idx === currentPlayingIndex) {
+                    item.classList.add('playing');
+                    setTimeout(() => { item.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50);
+                }
+                else item.classList.remove('playing');
+            });
+        }
+
+        function playNextTrack() { playTrack(currentPlayingIndex + 1 >= window.playlistData.length ? 0 : currentPlayingIndex + 1); }
+        function playPrevTrack() { playTrack(currentPlayingIndex - 1 < 0 ? window.playlistData.length - 1 : currentPlayingIndex - 1); }
+
+        document.getElementById('btn-play-pause').addEventListener('click', () => {
+            if(currentPlayingIndex === -1 && window.playlistData.length > 0) playTrack(0);
+            else if (player && player.getPlayerState) isPlaying ? player.pauseVideo() : player.playVideo();
+        });
+        document.getElementById('btn-next').addEventListener('click', playNextTrack);
+        document.getElementById('btn-prev').addEventListener('click', playPrevTrack);
+
         document.getElementById('progress-bar').addEventListener('click', (e) => {
             if (player && player.getDuration) {
                 const rect = e.currentTarget.getBoundingClientRect();
@@ -396,107 +466,9 @@
             isLooping = !isLooping;
             e.currentTarget.classList.toggle('active', isLooping);
         });
-
-        // ==========================================
-        // [재생, 이동, 수정, 삭제 통합 이벤트 위임]
-        // ==========================================
-        document.getElementById('playlist').addEventListener('click', (e) => {
-            const trackItem = e.target.closest('.track-item');
-            if(!trackItem) return;
-            const index = Array.from(trackItem.parentNode.children).indexOf(trackItem);
-
-            if(e.target.closest('.edit-btn')) { editTrack(e, index); } 
-            else if (e.target.closest('.up-btn')) { moveTrackUp(e, index); } 
-            else if (e.target.closest('.down-btn')) { moveTrackDown(e, index); } 
-            else if (e.target.closest('.del-btn')) { deleteTrack(e, index); } 
-            else { playTrack(index); }
-        });
-
-        function playTrack(index) {
-            if (index < 0 || index >= window.playlistData.length) return;
-            currentPlayingIndex = index;
-            player.loadVideoById(window.playlistData[index].videoId);
-            document.getElementById('current-track-name').textContent = window.playlistData[index].title;
-            
-            const items = document.querySelectorAll('.track-item');
-            items.forEach((item, idx) => {
-                if(idx === currentPlayingIndex) item.classList.add('playing');
-                else item.classList.remove('playing');
-            });
-        }
-
-        function playNextTrack() { playTrack(currentPlayingIndex + 1 >= window.playlistData.length ? 0 : currentPlayingIndex + 1); }
-        function playPrevTrack() { playTrack(currentPlayingIndex - 1 < 0 ? window.playlistData.length - 1 : currentPlayingIndex - 1); }
-
-        document.getElementById('btn-play-pause').addEventListener('click', () => {
-            if(currentPlayingIndex === -1 && window.playlistData.length > 0) playTrack(0);
-            else if (player && player.getPlayerState) isPlaying ? player.pauseVideo() : player.playVideo();
-        });
-        document.getElementById('btn-next').addEventListener('click', playNextTrack);
-        document.getElementById('btn-prev').addEventListener('click', playPrevTrack);
-
-        // --- 리스트 관리 로직 ---
-        function moveTrackUp(e, index) {
-            e.stopPropagation();
-            if(index === 0) return;
-            const temp = window.playlistData[index - 1];
-            window.playlistData[index - 1] = window.playlistData[index];
-            window.playlistData[index] = temp;
-
-            if (currentPlayingIndex === index) currentPlayingIndex--;
-            else if (currentPlayingIndex === index - 1) currentPlayingIndex++;
-            
-            if(typeof renderPlaylistUI === 'function') renderPlaylistUI();
-            if(typeof autoSave === 'function') autoSave();
-        }
-
-        function moveTrackDown(e, index) {
-            e.stopPropagation();
-            if(index === window.playlistData.length - 1) return;
-            const temp = window.playlistData[index + 1];
-            window.playlistData[index + 1] = window.playlistData[index];
-            window.playlistData[index] = temp;
-
-            if (currentPlayingIndex === index) currentPlayingIndex++;
-            else if (currentPlayingIndex === index + 1) currentPlayingIndex--;
-            
-            if(typeof renderPlaylistUI === 'function') renderPlaylistUI();
-            if(typeof autoSave === 'function') autoSave();
-        }
-
-        function deleteTrack(e, index) {
-            e.stopPropagation();
-            window.playlistData.splice(index, 1);
-
-            if (currentPlayingIndex === index) {
-                if(player && player.stopVideo) player.stopVideo();
-                currentPlayingIndex = -1;
-                document.getElementById('current-track-name').textContent = "NO TRACK SELECTED";
-                document.getElementById('time-display').textContent = "0:00 / 0:00";
-                document.getElementById('progress-fill').style.width = '0%';
-            } else if (currentPlayingIndex > index) {
-                currentPlayingIndex--;
-            }
-            
-            if(typeof renderPlaylistUI === 'function') renderPlaylistUI();
-            if(typeof autoSave === 'function') autoSave();
-        }
-
-        // 보스 픽: 폼 변환 수정 기능
-        let editingTrackIndex = -1;
-        function editTrack(e, index) {
-            e.stopPropagation();
-            editingTrackIndex = index;
-            document.getElementById('yt-title').value = window.playlistData[index].title;
-            document.getElementById('yt-url').value = "https://youtu.be/" + window.playlistData[index].videoId;
-            
-            const addBtn = document.getElementById('add-track-btn');
-            addBtn.textContent = "UPDATE";
-            addBtn.classList.add('updating');
-        }
     </script>
 
-    <!-- EDITOR LOGIC (편집 전용 시스템) -->
+    <!-- EDITOR LOGIC (편집, 저장, 내보내기 전용) -->
     <script id="editor-logic">
         const guideModal = document.getElementById('guide-modal');
         document.getElementById('guide-btn').addEventListener('click', () => { guideModal.style.display = 'flex'; setTimeout(() => guideModal.classList.add('show'), 10); });
@@ -505,6 +477,7 @@
         let base64ImgData = "https://via.placeholder.com/300?text=UPLOAD";
         let currentFontSize = 68;
         let isBodoni = false;
+        let editingTrackIndex = -1;
         const root = document.documentElement;
 
         function getSiteData() {
@@ -518,7 +491,7 @@
             };
         }
 
-        function autoSave() { try { localStorage.setItem('pair_music_box_v24', JSON.stringify(getSiteData())); } catch(e) {} }
+        function autoSave() { try { localStorage.setItem('pair_music_box_v26', JSON.stringify(getSiteData())); } catch(e) { console.warn("AutoSave Failed:", e); } }
 
         function applyDataToUI(data) {
             if(data.pairName) document.getElementById('pair-name-display').textContent = data.pairName;
@@ -548,13 +521,13 @@
                 li.className = 'track-item';
                 if (index === currentPlayingIndex) li.classList.add('playing');
                 
+                // 보스 요청: 자간과 장평을 완벽히 적용하기 위한 타이틀 래퍼 구조
                 let innerHtmlStr = `
                     <div class="track-info">
                         <div class="diamond-mark"></div>
                         <span class="track-title">${String(index + 1).padStart(2, '0')} &nbsp;&nbsp;&nbsp; ${track.title}</span>
                     </div>`;
                 
-                // 뷰어가 아닐 때만 컨트롤 삽입
                 if(!isViewer) {
                     innerHtmlStr += `
                     <div class="track-actions">
@@ -566,10 +539,13 @@
                 }
                 li.innerHTML = innerHtmlStr;
                 listContainer.appendChild(li);
+                
+                if (index === currentPlayingIndex) {
+                    setTimeout(() => { li.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50);
+                }
             });
         }
 
-        // Add & Update 트랙 통합 처리
         document.getElementById('add-track-btn').addEventListener('click', () => {
             const urlInput = document.getElementById('yt-url').value;
             const title = document.getElementById('yt-title').value.trim() || "UNKNOWN TRACK";
@@ -578,26 +554,72 @@
             if (!finalId) return alert("유효한 유튜브 링크가 아닙니다.");
             
             if (editingTrackIndex > -1) {
-                // 수정 모드
                 window.playlistData[editingTrackIndex] = { videoId: finalId, title };
-                
                 if (currentPlayingIndex === editingTrackIndex && player && player.loadVideoById) {
                     player.loadVideoById(finalId);
                     document.getElementById('current-track-name').textContent = title;
                 }
-                
                 editingTrackIndex = -1;
                 const addBtn = document.getElementById('add-track-btn');
                 addBtn.textContent = "ADD";
                 addBtn.classList.remove('updating');
             } else {
-                // 추가 모드
                 window.playlistData.push({ videoId: finalId, title });
             }
             
             document.getElementById('yt-url').value = ''; document.getElementById('yt-title').value = '';
             renderPlaylistUI(); autoSave();
         });
+
+        // 리스트 관리 함수
+        function moveTrackUp(e, index) {
+            e.stopPropagation();
+            if(index === 0) return;
+            const temp = window.playlistData[index - 1];
+            window.playlistData[index - 1] = window.playlistData[index];
+            window.playlistData[index] = temp;
+
+            if (currentPlayingIndex === index) currentPlayingIndex--;
+            else if (currentPlayingIndex === index - 1) currentPlayingIndex++;
+            renderPlaylistUI(); autoSave();
+        }
+
+        function moveTrackDown(e, index) {
+            e.stopPropagation();
+            if(index === window.playlistData.length - 1) return;
+            const temp = window.playlistData[index + 1];
+            window.playlistData[index + 1] = window.playlistData[index];
+            window.playlistData[index] = temp;
+
+            if (currentPlayingIndex === index) currentPlayingIndex++;
+            else if (currentPlayingIndex === index + 1) currentPlayingIndex--;
+            renderPlaylistUI(); autoSave();
+        }
+
+        function deleteTrack(e, index) {
+            e.stopPropagation();
+            window.playlistData.splice(index, 1);
+            if (currentPlayingIndex === index) {
+                if(player && player.stopVideo) player.stopVideo();
+                currentPlayingIndex = -1;
+                document.getElementById('current-track-name').textContent = "NO TRACK SELECTED";
+                document.getElementById('time-display').textContent = "0:00 / 0:00";
+                document.getElementById('progress-fill').style.width = '0%';
+            } else if (currentPlayingIndex > index) {
+                currentPlayingIndex--;
+            }
+            renderPlaylistUI(); autoSave();
+        }
+
+        function editTrack(e, index) {
+            e.stopPropagation();
+            editingTrackIndex = index;
+            document.getElementById('yt-title').value = window.playlistData[index].title;
+            document.getElementById('yt-url').value = "https://youtu.be/" + window.playlistData[index].videoId;
+            
+            const addBtn = document.getElementById('add-track-btn');
+            addBtn.textContent = "UPDATE"; addBtn.classList.add('updating');
+        }
 
         ['1', '2', '3', '4'].forEach(num => { document.getElementById(`config-color-${num}`).addEventListener('input', e => { root.style.setProperty(`--color-${num}`, e.target.value); autoSave(); }); });
         document.getElementById('font-toggle-btn').addEventListener('click', () => { isBodoni = !isBodoni; root.style.setProperty('--font-pair', isBodoni ? "'Bodoni Moda', serif" : "'Pretendard', sans-serif"); autoSave(); });
@@ -630,14 +652,14 @@
                 let parsed;
                 try { parsed = JSON.parse(event.target.result); } catch(err) { alert("❌ 파일 형식이 잘못되었거나 손상되었습니다."); e.target.value = ''; return; }
                 try { applyDataToUI(parsed); } catch(err) { alert("❌ 데이터 적용 중 오류가 발생했습니다."); e.target.value = ''; return; }
-                try { autoSave(); alert("✨ 성공적으로 데이터를 복원했습니다."); } catch(err) { alert("⚠️ 데이터는 정상적으로 불러왔지만, 이미지 용량이 커서 브라우저 캐시에 자동 저장되지는 않았습니다."); }
+                try { autoSave(); alert("✨ 성공적으로 서사 데이터를 복원했습니다."); } catch(err) { alert("⚠️ 데이터는 정상적으로 불러왔지만, 이미지 용량이 커서 브라우저 캐시에 자동 저장되지는 않았습니다."); }
                 e.target.value = '';
             };
             reader.readAsText(file);
         });
 
         window.onload = () => {
-            const saved = localStorage.getItem('pair_music_box_v24');
+            const saved = localStorage.getItem('pair_music_box_v26');
             if(saved) { try { applyDataToUI(JSON.parse(saved)); } catch(e) {} }
             else { renderPlaylistUI(); }
         };
@@ -648,7 +670,6 @@
             const data = getSiteData();
             const fp = data.isBodoni ? "'Bodoni Moda', serif" : "'Pretendard', sans-serif";
             
-            // 뷰어 환경용 HTML 태그를 별도로 구성 (삭제 버튼 등 제거)
             let viewerPlaylistHtml = '';
             data.playlist.forEach((track, index) => {
                 viewerPlaylistHtml += `
@@ -667,13 +688,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${data.pairName} - Cosmic Playlist</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
     <style>
         :root { --color-1: ${data.color1} !important; --color-2: ${data.color2} !important; --color-3: ${data.color3} !important; --color-4: ${data.color4} !important; --font-pair: ${fp} !important; }
-        html, body { background-color: var(--color-4) !important; width: 100%; height: 100%; margin: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        html, body { background-color: var(--color-4) !important; width: 100%; height: 100%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         #viewer-wrapper { width: 1400px; height: 850px; transform-origin: center center; position: relative; }
         ${document.getElementById('core-styles').innerHTML}
     </style>
@@ -773,6 +794,7 @@
             const blob = new Blob([htmlContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = `${data.pairName}_CosmicViewer.html`; a.click(); URL.revokeObjectURL(url);
+            alert("✨ 보스. 극강의 타이포그래피가 적용된 HTML 뷰어가 추출되었습니다.");
         });
     </script>
 </body>
