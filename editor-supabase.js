@@ -5,6 +5,10 @@
 // ============================================
 
 (function() {
+    // 기존 initApp이 localStorage에서 엉뚱한 데이터를 불러오는 걸 방지
+    // (진짜 데이터는 Supabase에서 가져옴)
+    try { localStorage.removeItem('pair_music_box_v53'); } catch(e) {}
+
     // URL에서 플레이리스트 ID 파싱
     var params = new URLSearchParams(window.location.search);
     var PL_ID = params.get('id');
