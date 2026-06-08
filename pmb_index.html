@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pair Music Box — Enter</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --c1: #ffffff; --c2: #cccccc; --c3: #888888; --c4: #030305; }
+body { background: var(--c4); color: var(--c1); font-family: 'Pretendard', sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+
+/* 별먼지 배경 (기존 디자인 재사용) */
+.stardust { position: fixed; inset: -50%; width: 200%; height: 200%; pointer-events: none; z-index: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,1), transparent),
+    radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 60% 20%, rgba(255,255,255,1), transparent),
+    radial-gradient(1.5px 1.5px at 80% 80%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1.5px 1.5px at 70% 50%, rgba(255,255,255,0.5), transparent);
+  background-size: 450px 450px;
+  animation: dust-drift 80s linear infinite, dust-twinkle 5s ease-in-out infinite alternate;
+}
+@keyframes dust-drift { 0%{transform:translateY(0)} 100%{transform:translateY(300px)} }
+@keyframes dust-twinkle { 0%{opacity:.15} 100%{opacity:.9} }
+
+.ambient { position: fixed; border-radius: 50%; filter: blur(120px); mix-blend-mode: screen; pointer-events: none; z-index: 0; animation: pulse 20s ease-in-out infinite alternate; }
+.amb-1 { top: 20%; left: 25%; width: 300px; height: 300px; background: var(--c1); opacity: 0.04; }
+.amb-2 { bottom: 20%; right: 20%; width: 350px; height: 350px; background: var(--c2); opacity: 0.03; animation-delay: -7s; }
+@keyframes pulse { 0%{transform:scale(.9);opacity:.02} 100%{transform:translate(30px,20px) scale(1.1);opacity:.06} }
+
+/* 인증 카드 */
+.auth-wrap { position: relative; z-index: 10; width: 420px; max-width: 92vw; }
+.auth-header { text-align: center; margin-bottom: 48px; }
+.auth-header h1 { font-family: 'Chakra Petch', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 6px; color: var(--c3); text-transform: uppercase; margin-bottom: 12px; }
+.auth-header .title { font-size: 38px; font-weight: 200; letter-spacing: -0.03em; background: linear-gradient(135deg, var(--c1), var(--c2), var(--c3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.auth-card { border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); padding: 40px 36px; position: relative; }
+.auth-card::before, .auth-card::after { content: ""; position: absolute; width: 14px; height: 14px; pointer-events: none; }
+.auth-card::before { top: -1px; left: -1px; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.3); }
+.auth-card::after { bottom: -1px; right: -1px; border-bottom: 1px solid rgba(255,255,255,0.15); border-right: 1px solid rgba(255,255,255,0.15); }
+
+/* 탭 전환 */
+.tab-row { display: flex; gap: 0; margin-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.tab-btn { flex: 1; background: none; border: none; color: var(--c3); font-family: 'Chakra Petch', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 3px; padding: 12px 0; cursor: pointer; transition: 0.3s; text-transform: uppercase; position: relative; }
+.tab-btn:hover { color: var(--c1); }
+.tab-btn.active { color: var(--c1); }
+.tab-btn.active::after { content: ""; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--c1), transparent); }
+
+/* 폼 */
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-family: 'Chakra Petch', sans-serif; font-size: 9px; font-weight: 600; letter-spacing: 3px; color: var(--c3); text-transform: uppercase; margin-bottom: 8px; }
+.form-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.12); color: var(--c1); font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 300; padding: 10px 0; outline: none; transition: 0.4s; letter-spacing: -0.02em; }
+.form-input:focus { border-bottom-color: var(--c1); box-shadow: 0 8px 16px -12px rgba(255,255,255,0.2); }
+.form-input::placeholder { color: rgba(255,255,255,0.15); }
+
+/* 버튼 */
+.submit-btn { width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--c1); font-family: 'Chakra Petch', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 4px; padding: 16px; cursor: pointer; transition: 0.4s; text-transform: uppercase; margin-top: 12px; position: relative; }
+.submit-btn:hover { border-color: var(--c1); background: rgba(255,255,255,0.04); box-shadow: 0 0 30px rgba(255,255,255,0.08); }
+.submit-btn:disabled { opacity: 0.3; pointer-events: none; }
+
+/* 메시지 */
+.msg { font-size: 12px; text-align: center; margin-top: 16px; min-height: 18px; transition: 0.3s; }
+.msg.error { color: #ff4466; } .msg.ok { color: #66ffaa; }
+
+/* 로딩 */
+.loading { display: none; text-align: center; padding: 20px; }
+.loading.show { display: block; }
+.spinner { display: inline-block; width: 6px; height: 6px; background: var(--c1); transform: rotate(45deg); animation: spin-load 1s ease-in-out infinite; }
+@keyframes spin-load { 0%{transform:rotate(45deg) scale(1);opacity:1} 50%{transform:rotate(225deg) scale(0.6);opacity:0.3} 100%{transform:rotate(405deg) scale(1);opacity:1} }
+
+.footer-note { text-align: center; margin-top: 28px; font-size: 11px; color: var(--c3); opacity: 0.5; letter-spacing: 2px; font-family: 'Chakra Petch', sans-serif; }
+</style>
+</head>
+<body>
+
+<div class="stardust"></div>
+<div class="ambient amb-1"></div>
+<div class="ambient amb-2"></div>
+
+<div class="auth-wrap">
+    <div class="auth-header">
+        <h1>Pair Music Box</h1>
+        <div class="title">ENTER THE COSMOS</div>
+    </div>
+
+    <div class="auth-card">
+        <div class="tab-row">
+            <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+            <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="form-login">
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="email" id="login-email" placeholder="your@email.com" autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input class="form-input" type="password" id="login-pw" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <button class="submit-btn" onclick="doLogin()">Enter</button>
+        </div>
+
+        <!-- SIGNUP -->
+        <div id="form-signup" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">Invite Code</label>
+                <input class="form-input" type="text" id="signup-code" placeholder="초대 코드를 입력하세요" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nickname</label>
+                <input class="form-input" type="text" id="signup-nick" placeholder="사이트에 표시될 이름" maxlength="20" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="email" id="signup-email" placeholder="your@email.com" autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input class="form-input" type="password" id="signup-pw" placeholder="6자 이상" autocomplete="new-password">
+            </div>
+            <button class="submit-btn" onclick="doSignup()">Create Account</button>
+        </div>
+
+        <div class="loading" id="loading"><div class="spinner"></div></div>
+        <div class="msg" id="msg"></div>
+    </div>
+
+    <div class="footer-note">COSMIC ARCHIVE SYSTEM</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
+<script>
+// 이미 로그인됐으면 대시보드로
+redirectIfLoggedIn();
+
+const msgEl = document.getElementById('msg');
+const loadEl = document.getElementById('loading');
+
+function showMsg(text, type) { msgEl.textContent = text; msgEl.className = 'msg ' + type; }
+function showLoad(on) { loadEl.className = on ? 'loading show' : 'loading'; }
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', (tab === 'login' ? i === 0 : i === 1));
+    });
+    document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('form-signup').style.display = tab === 'signup' ? 'block' : 'none';
+    msgEl.textContent = '';
+}
+
+async function doLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const pw = document.getElementById('login-pw').value;
+    if (!email || !pw) return showMsg('이메일과 비밀번호를 입력해주세요.', 'error');
+
+    showLoad(true); showMsg('', '');
+    const { error } = await _supabase.auth.signInWithPassword({ email, password: pw });
+    showLoad(false);
+
+    if (error) {
+        showMsg('로그인 실패: 이메일 또는 비밀번호를 확인해주세요.', 'error');
+    } else {
+        showMsg('환영합니다!', 'ok');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 600);
+    }
+}
+
+async function doSignup() {
+    const code = document.getElementById('signup-code').value.trim();
+    const nick = document.getElementById('signup-nick').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const pw = document.getElementById('signup-pw').value;
+
+    if (!code) return showMsg('초대 코드를 입력해주세요.', 'error');
+    if (!nick) return showMsg('닉네임을 입력해주세요.', 'error');
+    if (!email) return showMsg('이메일을 입력해주세요.', 'error');
+    if (pw.length < 6) return showMsg('비밀번호는 6자 이상이어야 합니다.', 'error');
+
+    showLoad(true); showMsg('', '');
+
+    // 1) 초대 코드 확인
+    const { data: codeData, error: codeErr } = await _supabase
+        .from('invite_codes')
+        .select('id, used_count, max_uses')
+        .eq('code', code)
+        .eq('is_active', true)
+        .single();
+
+    if (codeErr || !codeData) {
+        showLoad(false);
+        return showMsg('유효하지 않은 초대 코드입니다.', 'error');
+    }
+    if (codeData.max_uses && codeData.used_count >= codeData.max_uses) {
+        showLoad(false);
+        return showMsg('초대 코드 사용 횟수가 초과되었습니다.', 'error');
+    }
+
+    // 2) 회원가입
+    const { data: authData, error: authErr } = await _supabase.auth.signUp({
+        email,
+        password: pw,
+        options: { data: { nickname: nick } }
+    });
+
+    if (authErr) {
+        showLoad(false);
+        return showMsg('가입 실패: ' + authErr.message, 'error');
+    }
+
+    // 3) 초대 코드 사용 카운트 증가
+    await _supabase
+        .from('invite_codes')
+        .update({ used_count: (codeData.used_count || 0) + 1 })
+        .eq('id', codeData.id);
+
+    showLoad(false);
+    showMsg('가입 완료! 환영합니다, ' + nick + '님!', 'ok');
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+}
+
+// Enter 키 지원
+document.querySelectorAll('#form-login .form-input').forEach(el => {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+});
+document.querySelectorAll('#form-signup .form-input').forEach(el => {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') doSignup(); });
+});
+</script>
+</body>
+</html>
