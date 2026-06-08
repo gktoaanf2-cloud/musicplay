@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pmb-v3';
+const CACHE_NAME = 'pmb-v3b';
 const ASSETS = [
   '/index.html',
   '/dashboard.html',
@@ -6,6 +6,7 @@ const ASSETS = [
   '/viewer.html',
   '/supabase-config.js',
   '/editor-supabase.js',
+  '/mobile.css',
   '/manifest.json'
 ];
 

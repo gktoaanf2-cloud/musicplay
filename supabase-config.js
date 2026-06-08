@@ -16,6 +16,8 @@ const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     if (!document.querySelector('meta[name="theme-color"]')) {
         var tc = document.createElement('meta'); tc.name = 'theme-color'; tc.content = '#030305'; document.head.appendChild(tc);
     }
+    // 모바일 반응형 CSS 자동 로드
+    var mob = document.createElement('link'); mob.rel = 'stylesheet'; mob.href = 'mobile.css'; document.head.appendChild(mob);
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(function(e) { console.log('SW:', e); });
     }
