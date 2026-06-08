@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMB — ARCH Admin</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--c1:#fff;--c3:#888;--c4:#030305;--hud:'Chakra Petch',sans-serif;}
+body{background:var(--c4);color:var(--c1);font-family:'Pretendard',sans-serif;min-height:100vh;display:flex;justify-content:center;padding:60px 20px;}
+.wrap{width:600px;max-width:100%;}
+h1{font-family:var(--hud);font-size:13px;font-weight:600;letter-spacing:5px;color:var(--c3);margin-bottom:8px;}
+h2{font-size:28px;font-weight:200;margin-bottom:40px;letter-spacing:-0.02em;}
+.section{margin-bottom:40px;border:1px solid rgba(255,255,255,.06);padding:24px;}
+.section::before{content:'';display:block;width:10px;height:10px;border-top:1px solid rgba(255,255,255,.2);border-left:1px solid rgba(255,255,255,.2);margin-bottom:16px;}
+.lab{font-family:var(--hud);font-size:9px;font-weight:600;letter-spacing:3px;color:var(--c3);margin-bottom:6px;text-transform:uppercase;}
+.inp{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.1);color:var(--c1);font-size:13px;padding:10px 0;outline:none;font-family:'Pretendard',sans-serif;transition:.3s;margin-bottom:16px;}
+.inp:focus{border-color:var(--c1);}
+.row{display:flex;gap:12px;}
+.row>*{flex:1;}
+.btn{background:none;border:1px solid rgba(255,255,255,.15);color:var(--c1);font-family:var(--hud);font-size:11px;font-weight:600;letter-spacing:3px;padding:14px;cursor:pointer;transition:.3s;text-transform:uppercase;width:100%;}
+.btn:hover{border-color:var(--c1);background:rgba(255,255,255,.03);}
+.btn.del{border-color:rgba(255,0,102,.2);color:#f06;}.btn.del:hover{border-color:#f06;background:rgba(255,0,102,.03);}
+.msg{font-size:11px;color:#6f6;margin-top:8px;min-height:16px;font-family:var(--hud);letter-spacing:1px;}
+.msg.err{color:#f06;}
+.preview{font-size:11px;color:var(--c3);margin-top:4px;font-family:var(--hud);letter-spacing:1px;}
+.track-list{margin-top:20px;display:flex;flex-direction:column;gap:6px;}
+.track-row{display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);transition:.3s;}
+.track-row:hover{border-color:rgba(255,255,255,.1);}
+.track-thumb{width:48px;height:27px;background-size:cover;background-position:center;background-color:#111;flex-shrink:0;}
+.track-info{flex:1;min-width:0;}
+.track-info b{font-size:12px;font-weight:500;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.track-info span{font-size:9px;color:var(--c3);letter-spacing:1px;}
+.track-del{background:none;border:none;color:var(--c3);font-size:11px;cursor:pointer;transition:.3s;padding:4px 8px;flex-shrink:0;}.track-del:hover{color:#f06;}
+.back{position:fixed;top:20px;left:20px;background:none;border:none;color:rgba(255,255,255,.3);font-size:11px;cursor:pointer;font-family:var(--hud);letter-spacing:2px;transition:.3s;}.back:hover{color:var(--c1);}
+</style>
+</head>
+<body>
+<button class="back" onclick="location.href='dashboard.html'">← BACK</button>
+<div class="wrap">
+<h1>ARCH ADMIN</h1>
+<h2>사운드트랙 관리</h2>
+
+<div class="section">
+<div class="lab">유튜브 링크 (붙여넣으면 ID 자동 추출)</div>
+<input class="inp" id="yt-link" placeholder="https://www.youtube.com/watch?v=..." oninput="parseLink()">
+<div class="preview" id="link-preview"></div>
+
+<div class="row">
+<div><div class="lab">곡 제목</div><input class="inp" id="f-title" placeholder="곡 제목"></div>
+<div><div class="lab">캐릭터 / 아티스트</div><input class="inp" id="f-artist" placeholder="캐릭터명"></div>
+</div>
+<div class="row">
+<div><div class="lab">카테고리</div><input class="inp" id="f-cat" placeholder="예: Season 1 OST" value="OST"></div>
+<div><div class="lab">정렬 순서</div><input class="inp" id="f-pos" type="number" placeholder="1" value="0"></div>
+</div>
+<div class="lab">커스텀 이미지 URL (선택, 비우면 유튜브 썸네일)</div>
+<input class="inp" id="f-img" placeholder="https://...">
+
+<button class="btn" onclick="addTrack()">+ 트랙 등록</button>
+<div class="msg" id="msg"></div>
+</div>
+
+<div class="section">
+<div class="lab">등록된 ARCH 트랙</div>
+<button class="btn" onclick="loadTracks()" style="margin-bottom:12px;">새로고침</button>
+<div class="track-list" id="track-list"></div>
+</div>
+</div>
+
+<script src="supabase-config.js"></script>
+<script>
+var videoId='';
+
+function parseLink(){
+  var v=document.getElementById('yt-link').value.trim();
+  var m=v.match(/(?:youtu\.be\/|v=|embed\/)([^"&?\/\s]{11})/);
+  videoId=m?m[1]:(v.length===11?v:'');
+  var p=document.getElementById('link-preview');
+  if(videoId){p.textContent='✓ ID: '+videoId;p.style.color='#6f6';}
+  else if(v){p.textContent='✕ 유효하지 않은 링크';p.style.color='#f06';}
+  else{p.textContent='';}
+}
+
+async function addTrack(){
+  if(!videoId)return showMsg('유튜브 링크를 먼저 입력해주세요.','err');
+  var title=document.getElementById('f-title').value.trim();
+  if(!title)return showMsg('곡 제목을 입력해주세요.','err');
+
+  var r=await _supabase.from('arch_tracks').insert({
+    video_id:videoId,
+    title:title,
+    artist:document.getElementById('f-artist').value.trim(),
+    category:document.getElementById('f-cat').value.trim()||'OST',
+    position:parseInt(document.getElementById('f-pos').value)||0,
+    image_url:document.getElementById('f-img').value.trim()||''
+  });
+  if(r.error){showMsg('에러: '+r.error.message,'err');return;}
+  showMsg('✓ "'+title+'" 등록 완료!','');
+  document.getElementById('yt-link').value='';document.getElementById('f-title').value='';
+  document.getElementById('f-artist').value='';document.getElementById('f-img').value='';
+  document.getElementById('link-preview').textContent='';videoId='';
+  loadTracks();
+}
+
+function showMsg(t,cls){var m=document.getElementById('msg');m.textContent=t;m.className='msg '+(cls||'');}
+
+async function loadTracks(){
+  var r=await _supabase.from('arch_tracks').select('*').order('category').order('position');
+  var list=document.getElementById('track-list');
+  if(!r.data||!r.data.length){list.innerHTML='<div style="color:var(--c3);font-size:11px;padding:20px;text-align:center;opacity:.5;">등록된 트랙이 없습니다</div>';return;}
+  list.innerHTML=r.data.map(function(t){
+    var thumb=t.image_url||('https://img.youtube.com/vi/'+t.video_id+'/mqdefault.jpg');
+    return '<div class="track-row"><div class="track-thumb" style="background-image:url('+thumb+')"></div><div class="track-info"><b>'+esc(t.title)+'</b><span>'+esc(t.artist||'')+' · '+esc(t.category||'')+'</span></div><button class="track-del" onclick="delTrack(\''+t.id+'\',\''+esc(t.title).replace(/'/g,"\\'")+'\')">✕ 삭제</button></div>';
+  }).join('');
+}
+
+async function delTrack(id,name){
+  if(!confirm('"'+name+'" 삭제?'))return;
+  await _supabase.from('arch_tracks').delete().eq('id',id);
+  loadTracks();
+}
+
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+
+(async function(){
+  var user=await getCurrentUser();
+  if(!user){location.href='index.html';return;}
+  loadTracks();
+})();
+</script>
+</body>
+</html>
