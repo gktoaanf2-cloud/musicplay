@@ -198,6 +198,24 @@
             tools.querySelectorAll('.text-btn').forEach(function(b) {
                 if (b.textContent.trim() === 'SHARE') b.textContent = 'LINK';
             });
+
+            // 기본 썸네일 삭제 버튼 추가 (LINK 옆)
+            var shareBtn = null;
+            tools.querySelectorAll('.text-btn').forEach(function(b) { if (b.textContent.trim() === 'LINK') shareBtn = b; });
+            if (shareBtn) {
+                var delImgBtn = document.createElement('button');
+                delImgBtn.className = 'text-btn reset-btn';
+                delImgBtn.textContent = 'DEL IMG';
+                delImgBtn.title = '기본 커버 이미지 삭제';
+                delImgBtn.onclick = async function() {
+                    if (!window.base64ImgData) return;
+                    if (!confirm('기본 커버 이미지를 삭제하시겠습니까?')) return;
+                    window.base64ImgData = '';
+                    window.changeLPImage('');
+                    window.autoSave();
+                };
+                shareBtn.parentNode.insertBefore(delImgBtn, shareBtn.nextSibling);
+            }
         }
     });
 })();

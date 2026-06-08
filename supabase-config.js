@@ -8,6 +8,19 @@ const SUPABASE_KEY = 'sb_publishable_z7m5HVzuiUhBzRKIAuOKZQ_y4PFw-6B';
 
 const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// PWA 자동 등록 (모든 페이지에서 실행)
+(function() {
+    if (!document.querySelector('link[rel="manifest"]')) {
+        var m = document.createElement('link'); m.rel = 'manifest'; m.href = 'manifest.json'; document.head.appendChild(m);
+    }
+    if (!document.querySelector('meta[name="theme-color"]')) {
+        var tc = document.createElement('meta'); tc.name = 'theme-color'; tc.content = '#030305'; document.head.appendChild(tc);
+    }
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(function(e) { console.log('SW:', e); });
+    }
+})();
+
 // 현재 로그인 유저 가져오기
 async function getCurrentUser() {
     const { data: { user } } = await _supabase.auth.getUser();
