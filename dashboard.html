@@ -171,8 +171,12 @@ async function createPlaylist() {
     }).select('id').single();
 
     if (error) { toast('생성 실패: ' + error.message); return; }
-    window.location.href = 'editor.html?id=' + data.id;
+    toast('새 플레이리스트 생성!');
+    loadData();
 }
+
+// 브라우저 뒤로가기/캐시 복원 시 데이터 새로고침
+window.addEventListener('pageshow', function(e) { if (e.persisted) loadData(); });
 
 // 플레이리스트 삭제
 async function deletePlaylist(id, name) {
