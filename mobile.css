@@ -1,0 +1,299 @@
+/* ============================================
+   PAIR MUSIC BOX v3.0 — Mobile Responsive
+   supabase-config.js에서 자동 로드
+   데스크톱 디자인은 건드리지 않음
+   ============================================ */
+
+/* 태블릿 + 모바일 공통 */
+@media (max-width: 960px) {
+
+  /* 에디터/뷰어: 고정 크기 해제, 자연 플로우 */
+  #export-target {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh;
+    padding: 24px 20px 120px !important;
+    zoom: 1 !important;
+    transform: none !important;
+  }
+
+  /* 메인 콘텐츠: 가로 → 세로 */
+  .main-content {
+    flex-direction: column !important;
+    gap: 24px !important;
+    margin-top: 10px !important;
+    align-items: center !important;
+  }
+
+  /* LP: 스케일 다운 (내부 비율 보존) */
+  .lp-wrapper {
+    flex: none !important;
+    width: 100% !important;
+    max-width: 320px;
+    height: 320px;
+    position: relative !important;
+  }
+  .lp-spin-master {
+    width: 310px !important;
+    height: 310px !important;
+  }
+  .lp-record {
+    width: 300px !important;
+    height: 300px !important;
+  }
+  .lp-center-image-container {
+    width: 130px !important;
+    height: 130px !important;
+  }
+  .lp-soundwaves {
+    width: 310px !important;
+    height: 310px !important;
+  }
+  .lp-halo-ring {
+    inset: 2px !important;
+  }
+  .sacred-geometry {
+    inset: -25px !important;
+    background-size: 360px 360px !important;
+  }
+
+  /* 플레이리스트 영역 */
+  .playlist-wrapper {
+    width: 100% !important;
+    flex: none !important;
+    align-items: center;
+  }
+  .pair-name {
+    font-size: 36px !important;
+    text-align: center !important;
+    width: 100%;
+  }
+  .sub-title {
+    text-align: center !important;
+    font-size: 11px !important;
+  }
+  .playlist-container {
+    max-height: 45vh !important;
+  }
+  .track-item {
+    padding: 12px 14px !important;
+    font-size: 13px !important;
+  }
+  .diamond-mark {
+    margin-right: 14px !important;
+  }
+  .track-actions {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* 플레이어 바 */
+  .player-bar {
+    margin-top: 24px !important;
+    flex-wrap: wrap !important;
+    gap: 14px !important;
+    height: auto !important;
+    padding-bottom: 16px;
+  }
+  .controls {
+    gap: 18px !important;
+  }
+  .progress-wrapper {
+    width: 100% !important;
+    order: 10;
+  }
+  .volume-wrapper {
+    display: none !important;
+  }
+
+  /* 에디터: 곡 추가 폼 */
+  .add-form {
+    width: 100% !important;
+    margin-left: 0 !important;
+    order: 11;
+  }
+  .add-form input {
+    flex: 1;
+    min-width: 0 !important;
+    width: auto !important;
+  }
+
+  /* 에디터: 플로팅 도구 바 */
+  .floating-tools {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-bottom: 8px;
+    padding: 10px 0 !important;
+  }
+  .color-picker-wrapper {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* 뷰어: 상단 바 */
+  .viewer-bar {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    margin-bottom: 10px;
+    padding: 10px 0;
+  }
+
+  /* 대시보드 */
+  .container {
+    padding: 30px 16px 60px !important;
+  }
+  .topbar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .pl-card {
+    padding: 16px !important;
+  }
+  .pl-actions {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .pl-meta {
+    display: none !important;
+  }
+
+  /* 로그인 */
+  .auth-wrap {
+    padding: 0 16px;
+  }
+  .auth-header .title {
+    font-size: 28px !important;
+  }
+  .auth-card {
+    padding: 30px 24px !important;
+  }
+
+  /* 스타더스트: 모바일 성능 최적화 */
+  .stardust-wrapper,
+  .stardust-container .stardust-wrapper {
+    animation-duration: 120s !important;
+  }
+  .layer-3 {
+    display: none !important;
+  }
+
+  /* 모바일 렌더링 최적화: 깜박임 방지 */
+  .lp-record {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(3,3,5,0.95) !important;
+  }
+  .lp-internal-glow {
+    display: none !important;
+  }
+  .lp-halo-ring {
+    filter: none !important;
+    opacity: 0.15 !important;
+  }
+  .ambient-blob {
+    filter: blur(80px) !important;
+    animation: none !important;
+  }
+  .progress-fill {
+    will-change: width;
+    transform: translateZ(0);
+  }
+  .lp-spin-master {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+}
+
+/* 작은 모바일 */
+@media (max-width: 480px) {
+  .lp-wrapper {
+    max-width: 260px;
+    height: 260px;
+  }
+  .lp-spin-master {
+    width: 250px !important;
+    height: 250px !important;
+  }
+  .lp-record {
+    width: 240px !important;
+    height: 240px !important;
+  }
+  .lp-center-image-container {
+    width: 105px !important;
+    height: 105px !important;
+  }
+  .lp-soundwaves {
+    width: 250px !important;
+    height: 250px !important;
+  }
+  .pair-name {
+    font-size: 28px !important;
+  }
+  .track-item {
+    padding: 10px 10px !important;
+    font-size: 12px !important;
+  }
+  .diamond-mark {
+    margin-right: 10px !important;
+  }
+  .player-bar {
+    gap: 10px !important;
+  }
+  .controls {
+    gap: 14px !important;
+  }
+  .floating-tools .text-btn {
+    font-size: 9px !important;
+    letter-spacing: 1px !important;
+  }
+  .tool-sep {
+    display: none !important;
+  }
+  .auth-header .title {
+    font-size: 24px !important;
+  }
+  .pl-name {
+    font-size: 14px !important;
+  }
+  .create-btn {
+    padding: 16px !important;
+    font-size: 10px !important;
+  }
+}
+
+/* 모바일 터치 UX 개선 */
+@media (hover: none) and (pointer: coarse) {
+  .track-item {
+    padding: 14px !important;
+  }
+  .control-btn {
+    padding: 8px !important;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .control-btn svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+  .play-pause-btn svg {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  .act-btn, .viewer-btn, .top-btn {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+  }
+  .progress-hitbox {
+    height: 36px !important;
+  }
+}
